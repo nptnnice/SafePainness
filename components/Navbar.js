@@ -1,4 +1,4 @@
-import { Text, Flex } from '@chakra-ui/react'
+import { Text, Flex, Image } from '@chakra-ui/react'
 
 export default () => {
   let navbar = {
@@ -11,6 +11,10 @@ export default () => {
     position: 'fixed',
     zIndex: '100',
     top: 0,
+  }
+  let logo = {
+    width: '160px',
+    height: 'auto',
   }
   let menuFlex = {
     alignItems: 'center',
@@ -45,7 +49,7 @@ export default () => {
 
   return (
     <Flex sx={navbar}>
-      <Text sx={signup}>Logo</Text>
+      <Image sx={logo} src="/images/Logo.png" />
       <Flex sx={menuFlex}>
         <Text sx={signup}>Sign Up</Text>
         <Text sx={login}>Login</Text>

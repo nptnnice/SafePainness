@@ -1,9 +1,17 @@
-import { Text, Box, Center } from '@chakra-ui/react'
+import { Text, Box, Button } from '@chakra-ui/react'
+import { layout } from './style'
+import HeadBox from '../components/HeadBox'
+import Feature from '../components/Feature'
+import Team from '../components/Team'
 
 export default function Home() {
   return (
-    <Box className="layout">
-      <Text>Coming soon ...</Text>
-    </Box>
+    <>
+      <HeadBox />
+      <Box sx={layout}>
+        <Feature />
+      </Box>
+      <Team />
+    </>
   )
 }
