@@ -1,5 +1,5 @@
 import { Text, Flex, VStack, Image, Box } from '@chakra-ui/react'
-import { headingText, boldText, normalText } from '../pages/style'
+import globalStyle from '../pages/style'
 
 export default () => {
   let imgStyle = {
@@ -14,26 +14,27 @@ export default () => {
   }
   let section = {
     textAlign: 'center',
+    marginTop: '80px',
   }
 
   return (
     <Box sx={section}>
-      <Text sx={headingText}>Get to know about us</Text>
+      <Text sx={globalStyle.headingText}>Get to know about us</Text>
       <Flex sx={flexStyle}>
         <VStack>
           <Image sx={imgStyle} src="/images/historyTaking.png" />
-          <Text sx={boldText}>Feature 1</Text>
-          <Text sx={normalText}>Easy history taking</Text>
+          <Text sx={globalStyle.boldText}>Feature 1</Text>
+          <Text sx={globalStyle.normalText}>Easy history taking</Text>
         </VStack>
         <VStack>
           <Image sx={imgStyle} src="/images/tracking.png" />
-          <Text sx={boldText}>Feature 2</Text>
-          <Text sx={normalText}>Symptom tracking</Text>
+          <Text sx={globalStyle.boldText}>Feature 2</Text>
+          <Text sx={globalStyle.normalText}>Symptom tracking</Text>
         </VStack>
         <VStack>
           <Image sx={imgStyle} src="/images/feedback.png" />
-          <Text sx={boldText}>Feature 3</Text>
-          <Text sx={normalText}>Giving feedback</Text>
+          <Text sx={globalStyle.boldText}>Feature 3</Text>
+          <Text sx={globalStyle.normalText}>Giving feedback</Text>
         </VStack>
       </Flex>
     </Box>

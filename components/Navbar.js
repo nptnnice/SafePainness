@@ -1,8 +1,9 @@
 import { Text, Flex, Image } from '@chakra-ui/react'
+import globalStyle from '../pages/style'
 
 export default () => {
   let navbar = {
-    backgroundColor: '#1E2836',
+    backgroundColor: globalStyle.lightBlack,
     height: '72px',
     width: '100%',
     justifyContent: 'space-between',
@@ -15,6 +16,7 @@ export default () => {
   let logo = {
     width: '160px',
     height: 'auto',
+    cursor: 'pointer',
   }
   let menuFlex = {
     alignItems: 'center',
@@ -28,7 +30,7 @@ export default () => {
     cursor: 'pointer',
     transition: 'all 0.1s ease',
     _hover: {
-      color: '#62C4C3',
+      color: globalStyle.turqoise,
     },
   }
   let login = {
@@ -49,7 +51,16 @@ export default () => {
 
   return (
     <Flex sx={navbar}>
-      <Image sx={logo} src="/images/Logo.png" />
+      <Image
+        sx={logo}
+        src="/images/Logo.png"
+        onClick={() => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          })
+        }}
+      />
       <Flex sx={menuFlex}>
         <Text sx={signup}>Sign Up</Text>
         <Text sx={login}>Login</Text>

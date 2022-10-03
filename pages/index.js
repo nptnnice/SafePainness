@@ -1,4 +1,4 @@
-import { Text, Box, Button } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { layout } from './style'
 import HeadBox from '../components/HeadBox'
 import Feature from '../components/Feature'
