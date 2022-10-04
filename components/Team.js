@@ -1,5 +1,6 @@
 import { Text, Flex, VStack, Image, Box } from '@chakra-ui/react'
-import globalStyle from '../pages/style'
+import globalStyle from '../style'
+import colour from '../colour'
 
 export default () => {
   let imgStyle = {
@@ -18,7 +19,7 @@ export default () => {
   let section = {
     textAlign: 'center',
     marginTop: '80px',
-    backgroundColor: globalStyle.lightGrey,
+    backgroundColor: colour.lightGrey,
     padding: '80px',
   }
 

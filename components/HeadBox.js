@@ -1,9 +1,10 @@
 import { Text, Box, Button } from '@chakra-ui/react'
-import globalStyle from '../pages/style'
+import globalStyle from '../style'
+import colour from '../colour'
 
 export default () => {
   let headBox = {
-    backgroundColor: globalStyle.lightBlue,
+    backgroundColor: colour.lightBlue,
     width: '100%',
     textAlign: 'center',
     padding: '150px 0 100px',
@@ -23,8 +24,8 @@ export default () => {
     margin: '16px auto 32px',
   }
   let btn = {
-    backgroundColor: globalStyle.lightYellow,
-    color: globalStyle.lightBlack,
+    backgroundColor: colour.lightYellow,
+    color: colour.lightBlack,
     padding: '32px 40px',
     fontFamily: 'Lato',
     fontSize: '22px',

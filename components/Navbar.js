@@ -1,9 +1,10 @@
 import { Text, Flex, Image } from '@chakra-ui/react'
-import globalStyle from '../pages/style'
+import globalStyle from '../style'
+import colour from '../colour'
 
 export default () => {
   let navbar = {
-    backgroundColor: globalStyle.lightBlack,
+    backgroundColor: colour.lightBlack,
     height: '72px',
     width: '100%',
     justifyContent: 'space-between',
@@ -30,7 +31,7 @@ export default () => {
     cursor: 'pointer',
     transition: 'all 0.1s ease',
     _hover: {
-      color: globalStyle.turqoise,
+      color: colour.turqoise,
     },
   }
   let login = {

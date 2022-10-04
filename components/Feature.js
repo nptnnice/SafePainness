@@ -1,5 +1,5 @@
 import { Text, Flex, VStack, Image, Box } from '@chakra-ui/react'
-import globalStyle from '../pages/style'
+import globalStyle from '../style'
 
 export default () => {
   let imgStyle = {
