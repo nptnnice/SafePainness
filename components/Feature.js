@@ -1,5 +1,5 @@
 import { Text, Flex, VStack, Image, Box } from '@chakra-ui/react'
-import globalStyle from '../style'
+import GlobalStyle from '../Style'
 
 export default () => {
   let imgStyle = {
@@ -19,22 +19,22 @@ export default () => {
 
   return (
     <Box sx={section}>
-      <Text sx={globalStyle.headingText}>Get to know about us</Text>
+      <Text sx={GlobalStyle.headingText}>Get to know about us</Text>
       <Flex sx={flexStyle}>
         <VStack>
           <Image sx={imgStyle} src="/images/historyTaking.png" />
-          <Text sx={globalStyle.boldText}>Feature 1</Text>
-          <Text sx={globalStyle.normalText}>Easy history taking</Text>
+          <Text sx={GlobalStyle.boldText}>Feature 1</Text>
+          <Text sx={GlobalStyle.normalText}>Easy history taking</Text>
         </VStack>
         <VStack>
           <Image sx={imgStyle} src="/images/tracking.png" />
-          <Text sx={globalStyle.boldText}>Feature 2</Text>
-          <Text sx={globalStyle.normalText}>Symptom tracking</Text>
+          <Text sx={GlobalStyle.boldText}>Feature 2</Text>
+          <Text sx={GlobalStyle.normalText}>Symptom tracking</Text>
         </VStack>
         <VStack>
           <Image sx={imgStyle} src="/images/feedback.png" />
-          <Text sx={globalStyle.boldText}>Feature 3</Text>
-          <Text sx={globalStyle.normalText}>Giving feedback</Text>
+          <Text sx={GlobalStyle.boldText}>Feature 3</Text>
+          <Text sx={GlobalStyle.normalText}>Giving feedback</Text>
         </VStack>
       </Flex>
     </Box>

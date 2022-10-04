@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react'
-import { layout } from '../style'
+import GlobalStyle from '../Style'
 import HeadBox from '../components/HeadBox'
 import Feature from '../components/Feature'
 import Team from '../components/Team'
@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <HeadBox />
-      <Box sx={layout}>
+      <Box sx={GlobalStyle.layout}>
         <Feature />
       </Box>
       <Team />

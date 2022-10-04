@@ -1,6 +1,6 @@
 import { Text, Flex, VStack, Image, Box } from '@chakra-ui/react'
-import globalStyle from '../style'
-import colour from '../colour'
+import GlobalStyle from '../Style'
+import Colour from '../Colour'
 
 export default () => {
   let imgStyle = {
@@ -19,33 +19,33 @@ export default () => {
   let section = {
     textAlign: 'center',
     marginTop: '80px',
-    backgroundColor: colour.lightGrey,
+    backgroundColor: Colour.lightGrey,
     padding: '80px',
   }
 
   return (
     <Box sx={section}>
-      <Text sx={globalStyle.headingText}>TEAM</Text>
+      <Text sx={GlobalStyle.headingText}>TEAM</Text>
       <Flex sx={flexStyle}>
         <VStack>
           <Image sx={imgStyle} src="/images/petch.JPG" />
-          <Text sx={globalStyle.boldText}>63070501045</Text>
-          <Text sx={globalStyle.normalText}>Piyachart Chailaemlak</Text>
+          <Text sx={GlobalStyle.boldText}>63070501045</Text>
+          <Text sx={GlobalStyle.normalText}>Piyachart Chailaemlak</Text>
         </VStack>
         <VStack>
           <Image sx={imgStyle} src="/images/nice.JPG" />
-          <Text sx={globalStyle.boldText}>63070501055</Text>
-          <Text sx={globalStyle.normalText}>Pakamon Trakarnkittikul</Text>
+          <Text sx={GlobalStyle.boldText}>63070501055</Text>
+          <Text sx={GlobalStyle.normalText}>Pakamon Trakarnkittikul</Text>
         </VStack>
         <VStack>
           <Image sx={imgStyle} src="/images/mook.JPG" />
-          <Text sx={globalStyle.boldText}>63070501066</Text>
-          <Text sx={globalStyle.normalText}>Somying Phetdenlarp</Text>
+          <Text sx={GlobalStyle.boldText}>63070501066</Text>
+          <Text sx={GlobalStyle.normalText}>Somying Phetdenlarp</Text>
         </VStack>
         <VStack>
           <Image sx={imgStyle} src="/images/bank.JPG" />
-          <Text sx={globalStyle.boldText}>63070501086</Text>
-          <Text sx={globalStyle.normalText}>Kittipak Eksakulkla</Text>
+          <Text sx={GlobalStyle.boldText}>63070501086</Text>
+          <Text sx={GlobalStyle.normalText}>Kittipak Eksakulkla</Text>
         </VStack>
       </Flex>
     </Box>

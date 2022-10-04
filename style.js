@@ -1,4 +1,4 @@
-import colour from './colour'
+import Colour from './Colour'
 
 const layout = {
   width: '80%',
@@ -8,16 +8,16 @@ const headingText = {
   fontFamily: 'Lato',
   fontSize: '36px',
   fontWeight: 'bold',
-  color: colour.lightBlack,
+  color: Colour.lightBlack,
 }
 const boldText = {
-  color: colour.black,
+  color: Colour.black,
   fontFamily: 'IBM Plex Sans',
   fontWeight: 'bold',
   fontSize: '20px',
 }
 const normalText = {
-  color: colour.black,
+  color: Colour.black,
   fontFamily: 'IBM Plex Sans',
   fontWeight: 'semi-bold',
   fontSize: '20px',
