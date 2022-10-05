@@ -1,7 +1,8 @@
 import { Box, Text, Progress } from '@chakra-ui/react'
 import Colour from '../Colour'
 
-export default () => {
+export default ({ progress }) => {
+  console.log(progress)
   let section = {
     backgroundColor: Colour.lightBlue,
     width: '100%',
@@ -21,7 +22,7 @@ export default () => {
   return (
     <Box sx={section}>
       <Text sx={headText}>HISTORY TAKING</Text>
-      <Progress value={50} sx={progressStyle} colorScheme="cyan" />
+      <Progress value={progress} sx={progressStyle} colorScheme="cyan" />
     </Box>
   )
 }
