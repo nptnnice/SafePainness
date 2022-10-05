@@ -10,7 +10,7 @@ export default () => {
     alignItems: 'center',
     padding: '0 40px',
     position: 'fixed',
-    zIndex: '100',
+    zIndex: '100000',
     top: 0,
   }
   let logo = {

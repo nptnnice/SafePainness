@@ -13,14 +13,40 @@ const headingText = {
 const boldText = {
   color: Colour.black,
   fontFamily: 'IBM Plex Sans',
-  fontWeight: 'bold',
+  fontWeight: 'Bold',
   fontSize: '20px',
 }
 const normalText = {
   color: Colour.black,
   fontFamily: 'IBM Plex Sans',
-  fontWeight: 'semi-bold',
+  fontWeight: '500',
   fontSize: '20px',
+}
+const bgColor = {
+  backgroundColor: Colour.lightGrey,
+  width: '100%',
+  // height: '100%',
+}
+const formBox = {
+  backgroundColor: Colour.white,
+  width: '100%',
+  padding: '40px 40px 80px',
+  borderRadius: '12px',
+  marginTop: '16px',
+}
+const description = {
+  color: Colour.lightBlue,
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: '500',
+  fontSize: '16px',
+}
+const inputStyle = {
+  color: Colour.black,
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: '400',
+  fontSize: '16px',
+  border: '2px solid',
+  borderColor: Colour.grey,
 }
 
 export default {
@@ -28,4 +54,8 @@ export default {
   headingText,
   boldText,
   normalText,
+  bgColor,
+  formBox,
+  description,
+  inputStyle,
 }
