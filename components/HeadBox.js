@@ -1,7 +1,12 @@
 import { Text, Box, Button } from '@chakra-ui/react'
 import Colour from '../Colour'
+import LoginModal from './LoginModal'
+import { useState } from 'react'
 
 export default () => {
+  const [open, setOpen] = useState(false)
+  const handleClick = () => setOpen(!open)
+
   let headBox = {
     backgroundColor: Colour.lightBlue,
     width: '100%',
@@ -44,7 +49,10 @@ export default () => {
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua.
       </Text>
-      <Button sx={btn}>Start tracking</Button>
+      <Button sx={btn} onClick={handleClick}>
+        Start tracking
+      </Button>
+      <LoginModal isOpen={open} onClose={handleClick} />
     </Box>
   )
 }

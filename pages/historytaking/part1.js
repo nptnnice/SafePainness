@@ -177,7 +177,7 @@ export default () => {
           </VStack>
 
           <Link href="/historytaking/part2">
-            <Button rightIcon={<ArrowForwardIcon />} sx={GlobalStyle.btnNext}>
+            <Button rightIcon={<ArrowForwardIcon />} sx={GlobalStyle.blueBtn}>
               Next
             </Button>
           </Link>

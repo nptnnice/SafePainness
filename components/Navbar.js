@@ -1,7 +1,12 @@
 import { Text, Flex, Image } from '@chakra-ui/react'
 import Colour from '../Colour'
+import LoginModal from './LoginModal'
+import { useState } from 'react'
+import Link from 'next/link'
 
 export default () => {
+  const [open, setOpen] = useState(false)
+
   let navbar = {
     backgroundColor: Colour.lightBlack,
     height: '72px',
@@ -51,20 +56,25 @@ export default () => {
 
   return (
     <Flex sx={navbar}>
-      <Image
-        sx={logo}
-        src="/images/Logo.png"
-        onClick={() => {
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-          })
-        }}
-      />
+      <Link href="/">
+        <Image
+          sx={logo}
+          src="/images/Logo.png"
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth',
+            })
+          }}
+        />
+      </Link>
       <Flex sx={menuFlex}>
         <Text sx={signup}>Sign Up</Text>
-        <Text sx={login}>Login</Text>
+        <Text sx={login} onClick={() => setOpen(true)}>
+          Login
+        </Text>
       </Flex>
+      <LoginModal isOpen={open} onClose={() => setOpen(false)} />
     </Flex>
   )
 }

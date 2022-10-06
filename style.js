@@ -51,7 +51,7 @@ const inputStyle = {
   borderColor: Colour.grey,
   height: '48px',
 }
-const btnNext = {
+const blueBtn = {
   backgroundColor: Colour.lightBlue,
   color: Colour.white,
   padding: '30px 40px',
@@ -65,10 +65,11 @@ const btnNext = {
   transition: 'all 0.2s ease',
   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
   _hover: {
-    transform: 'scale(1.05)',
+    backgroundColor: Colour.turqoise,
+    borderColor: Colour.turqoise,
   },
 }
-const btnBack = {
+const whiteBtn = {
   color: Colour.lightBlue,
   padding: '30px 40px',
   fontFamily: 'Lato',
@@ -81,8 +82,28 @@ const btnBack = {
   transition: 'all 0.2s ease',
   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
   _hover: {
-    transform: 'scale(1.05)',
+    borderColor: Colour.turqoise,
+    color: Colour.turqoise,
   },
+}
+const blueBtn2 = {
+  backgroundColor: Colour.lightBlue,
+  color: Colour.white,
+  padding: '28px 56px',
+  fontFamily: 'Lato',
+  fontSize: '20px',
+  fontWeight: 'bold',
+  borderRadius: '40px',
+  boxSizing: 'border-box',
+  transition: 'all 0.2s ease',
+  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+  _hover: {
+    backgroundColor: Colour.turqoise,
+  },
+}
+const modalStyle = {
+  borderRadius: '24px',
+  padding: '40px 20px',
 }
 
 export default {
@@ -94,6 +115,8 @@ export default {
   formBox,
   description,
   inputStyle,
-  btnNext,
-  btnBack,
+  blueBtn,
+  whiteBtn,
+  blueBtn2,
+  modalStyle,
 }

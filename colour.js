@@ -1,5 +1,6 @@
 export default {
   lightBlue: '#5193B3',
+  darkBlue: '#467890',
   turqoise: '#62C4C3',
   lightYellow: '#F8D49B',
   cream: 'F8E6CB',
