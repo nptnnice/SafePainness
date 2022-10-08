@@ -2,7 +2,7 @@ import Colour from './Colour'
 
 const layout = {
   width: '80%',
-  margin: '80px auto 0',
+  margin: '100px auto 0',
   maxWidth: '900px',
   paddingBottom: '120px',
 }
@@ -72,8 +72,8 @@ const blueBtn = {
   transition: 'all 0.2s ease',
   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
   _hover: {
-    backgroundColor: Colour.turqoise,
-    borderColor: Colour.turqoise,
+    backgroundColor: Colour.turquoise,
+    borderColor: Colour.turquoise,
   },
 }
 const whiteBtn = {
@@ -89,8 +89,8 @@ const whiteBtn = {
   transition: 'all 0.2s ease',
   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
   _hover: {
-    borderColor: Colour.turqoise,
-    color: Colour.turqoise,
+    borderColor: Colour.turquoise,
+    color: Colour.turquoise,
   },
 }
 const blueBtn2 = {
@@ -105,7 +105,7 @@ const blueBtn2 = {
   transition: 'all 0.2s ease',
   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
   _hover: {
-    backgroundColor: Colour.turqoise,
+    backgroundColor: Colour.turquoise,
   },
 }
 const modalStyle = {
@@ -126,5 +126,5 @@ export default {
   whiteBtn,
   blueBtn2,
   modalStyle,
-  normalTextNoColor
+  normalTextNoColor,
 }
