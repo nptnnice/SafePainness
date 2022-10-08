@@ -24,6 +24,13 @@ const normalText = {
   fontWeight: '500',
   fontSize: '18px',
 }
+
+const normalTextNoColor = {
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: '500',
+  fontSize: '18px',
+}
+
 const bgColor = {
   backgroundColor: Colour.lightGrey,
   width: '100%',
@@ -119,4 +126,5 @@ export default {
   whiteBtn,
   blueBtn2,
   modalStyle,
+  normalTextNoColor
 }
