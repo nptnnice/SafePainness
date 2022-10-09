@@ -16,8 +16,8 @@ export default () => {
     boxSizing: 'border-box',
     transition: 'all 0.1s ease',
     _hover: {
-      backgroundColor: Colour.turqoise,
-      borderColor: Colour.turqoise,
+      backgroundColor: Colour.turquoise,
+      borderColor: Colour.turquoise,
       transform: 'scale(1.05)',
     },
   }

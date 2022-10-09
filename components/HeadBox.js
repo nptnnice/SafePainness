@@ -38,7 +38,7 @@ export default () => {
     transition: 'all 0.2s ease',
     filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
     _hover: {
-      transform: 'scale(1.02)',
+      backgroundColor: Colour.yellow,
     },
   }
 

@@ -3,7 +3,6 @@ import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import Style from '../Style'
 
-
 /*
 <SimpleGrid columns={2} marginLeft='319px'>
                 <Box>
@@ -23,6 +22,24 @@ import Style from '../Style'
             </SimpleGrid>
 */
 export default () => {
+  let whiteBtn = {
+    color: Colour.lightBlue,
+    padding: '30px 40px',
+    width: '35%',
+    fontFamily: 'Lato',
+    fontSize: '22px',
+    fontWeight: 'bold',
+    borderRadius: '40px',
+    border: '4px solid',
+    borderColor: Colour.lightBlue,
+    boxSizing: 'border-box',
+    transition: 'all 0.2s ease',
+    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+    _hover: {
+      borderColor: Colour.turquoise,
+      color: Colour.turquoise,
+    },
+  }
 
     let whiteBtn = {
         color: Colour.lightBlue,

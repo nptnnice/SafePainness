@@ -13,18 +13,24 @@ export default () => {
         width: '90%',
         merginLeft: '90px'
     }
-
-    let DividerCSS = {
-        margin: 'auto',
-        alignItems: 'center',
-        marginTop: '30px',
-        width: '90%',
-    }
-    return (
-        <>  
-            <Text sx={GlobalStyle.headingText} marginTop= '101px' marginLeft='200px'>Create Patient Account</Text>
-            <Progress sx={Line} colorScheme='#D3D3D3' height='3px' size='sm' value={100} />
-
-        </>
-    )    
+  let DividerCSS = {
+    margin: 'auto',
+    alignItems: 'center',
+    marginTop: '30px',
+    width: '90%',
+  }
+  return (
+    <>
+      <Text sx={GlobalStyle.headingText} marginTop="101px" marginLeft="200px">
+        Create Patient Account
+      </Text>
+      <Progress
+        sx={Line}
+        colorScheme="#D3D3D3"
+        height="3px"
+        size="sm"
+        value={100}
+      />
+    </>
+  )
 }

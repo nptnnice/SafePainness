@@ -35,7 +35,7 @@ export default () => {
     cursor: 'pointer',
     transition: 'all 0.1s ease',
     _hover: {
-      color: Colour.turqoise,
+      color: Colour.turquoise,
     },
   }
   let login = {

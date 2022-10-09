@@ -4,7 +4,6 @@ import Colour from '../Colour'
 
 //220 px
 export default () => {
-
   return (
     <>
       <Text sx={GlobalStyle.headingText} marginTop="101px" marginLeft="200px">

@@ -9,12 +9,12 @@ import {
   Input,
   Button,
   HStack,
-} from '@chakra-ui/react'
-import GlobalStyle from '../../Style'
-import Colour from '../../Colour'
-import HeadForm from '../../components/HeadForm'
-import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
-import Link from 'next/link'
+} from "@chakra-ui/react";
+import GlobalStyle from "../../Style";
+import Colour from "../../Colour";
+import HeadForm from "../../components/HeadForm";
+import { ArrowForwardIcon, ArrowBackIcon } from "@chakra-ui/icons";
+import Link from "next/link";
 
 export default () => {
   return (
@@ -56,5 +56,5 @@ export default () => {
         </VStack>
       </Box>
     </Box>
-  )
-}
+  );
+};
