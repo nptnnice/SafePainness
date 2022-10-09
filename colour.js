@@ -1,11 +1,13 @@
 export default {
-  lightBlue: '#5193B3',
-  turqoise: '#62C4C3',
-  lightYellow: '#F8D49B',
-  cream: 'F8E6CB',
-  lightBlack: '#1E2836',
-  lightGrey: '#F3F4F6',
-  white: '#fff',
-  black: '#000',
-  grey: '#D9D9D9',
-}
+  lightBlue: "#5193B3",
+  turqoise: "#62C4C3",
+  lightYellow: "#F8D49B",
+  darkYellow: "#F8C26E",
+  lightRed: "#C46262",
+  cream: "F8E6CB",
+  lightBlack: "#1E2836",
+  lightGrey: "#F3F4F6",
+  white: "#fff",
+  black: "#000",
+  grey: "#D9D9D9",
+};
