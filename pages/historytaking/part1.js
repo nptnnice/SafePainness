@@ -141,7 +141,7 @@ export default () => {
                   <SliderMark value={9}>9</SliderMark>
                   <SliderMark value={10}>10</SliderMark>
                   <SliderTrack bg={Colour.grey}>
-                    <SliderFilledTrack bg={Colour.turqoise} />
+                    <SliderFilledTrack bg={Colour.turquoise} />
                   </SliderTrack>
                   <SliderThumb boxSize={6} />
                 </Slider>
@@ -168,7 +168,7 @@ export default () => {
                   <SliderMark value={9}>9</SliderMark>
                   <SliderMark value={10}>10</SliderMark>
                   <SliderTrack bg={Colour.grey}>
-                    <SliderFilledTrack bg={Colour.turqoise} />
+                    <SliderFilledTrack bg={Colour.turquoise} />
                   </SliderTrack>
                   <SliderThumb boxSize={6} />
                 </Slider>
@@ -177,7 +177,7 @@ export default () => {
           </VStack>
 
           <Link href="/historytaking/part2">
-            <Button rightIcon={<ArrowForwardIcon />} sx={GlobalStyle.btnNext}>
+            <Button rightIcon={<ArrowForwardIcon />} sx={GlobalStyle.blueBtn}>
               Next
             </Button>
           </Link>

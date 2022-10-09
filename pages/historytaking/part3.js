@@ -43,12 +43,12 @@ export default () => {
 
           <HStack spacing={8}>
             <Link href="/historytaking/part2">
-              <Button leftIcon={<ArrowBackIcon />} sx={GlobalStyle.btnBack}>
+              <Button leftIcon={<ArrowBackIcon />} sx={GlobalStyle.whiteBtn}>
                 Back
               </Button>
             </Link>
             {/* <Link href="/historytaking/part2"> */}
-            <Button rightIcon={<ArrowForwardIcon />} sx={GlobalStyle.btnNext}>
+            <Button rightIcon={<ArrowForwardIcon />} sx={GlobalStyle.blueBtn}>
               Next
             </Button>
             {/* </Link> */}
