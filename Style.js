@@ -2,9 +2,9 @@ import Colour from './Colour'
 
 const layout = {
   width: '80%',
-  margin: '100px auto 0',
+  margin: '0 auto',
   maxWidth: '900px',
-  paddingBottom: '120px',
+  padding: '100px 0 120px',
 }
 const headingText = {
   fontFamily: 'Lato',
@@ -58,6 +58,7 @@ const description = {
   marginBottom: '8px',
 }
 const inputStyle = {
+  backgroundColor: Colour.white,
   color: Colour.lightBlack,
   fontFamily: 'IBM Plex Sans',
   fontWeight: '400',
