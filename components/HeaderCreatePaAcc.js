@@ -9,7 +9,6 @@ import Colour from '../Colour'
 export default () => {
     let Line = {
         margin: 'auto',
-        alignItems: 'center',
         marginTop: '30px',
         width: '90%',
         merginLeft: '90px'
