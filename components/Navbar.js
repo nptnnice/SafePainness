@@ -69,7 +69,9 @@ export default () => {
         />
       </Link>
       <Flex sx={menuFlex}>
-        <Text sx={signup}>Sign Up</Text>
+      <Link href='/createPatientAcc'>
+          <Text sx={signup}>Sign Up</Text>
+      </Link>
         <Text sx={login} onClick={() => setOpen(true)}>
           Login
         </Text>

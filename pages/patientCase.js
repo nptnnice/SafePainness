@@ -39,7 +39,7 @@ export default () => {
     <Box sx={GlobalStyle.bgColor}>
       <PatientHeader />
       <Box sx={GlobalStyle.layout}>
-        <HStack sx={GlobalStyle.recordBox} spacing={10} align="left">
+        <HStack sx={GlobalStyle.tabBox} spacing={10} align="left">
           <Image sx={imageStyle} src="/images/nice.JPG" />
           <VStack sx={vStackStyle}>
             <HStack sx={hStackStyle}>
@@ -68,15 +68,15 @@ export default () => {
           <Spacer />
           <Button sx={GlobalStyle.turqBtn}>+ Add Case</Button>
         </Flex>
-        <VStack sx={GlobalStyle.recordBox}>
+        <VStack sx={GlobalStyle.tabBox}>
           <Box sx={caseBox}>
-            <Text sx={GlobalStyle.normalText}>Case XXXX:</Text>
+            <Text sx={GlobalStyle.normalText}>Temp</Text>
           </Box>
           <Box sx={caseBox}>
-            <Text sx={GlobalStyle.normalText}>Case XXXX:</Text>
+            <Text sx={GlobalStyle.normalText}>Temp</Text>
           </Box>
           <Box sx={caseBox}>
-            <Text sx={GlobalStyle.normalText}>Case XXXX:</Text>
+            <Text sx={GlobalStyle.normalText}>Temp</Text>
           </Box>
         </VStack>
       </Box>
