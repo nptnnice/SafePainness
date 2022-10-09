@@ -16,32 +16,43 @@ export default () => {
             <Text sx={GlobalStyle.headingText} marginTop= '12%' marginLeft='280px'>Basic Information</Text>
             <Image marginTop='8%' marginLeft='40%' sx={imgStyle} src="/images/Cutting.png" />
         </Flex>
-        <FormControl isRequired>
             <SimpleGrid columns={2} spacing={5} marginTop='-5px' marginLeft='319px'>
-                <Box>
-                    <FormLabel width='80%'  sx={GlobalStyle.normalText}>First Name</FormLabel>
-                    <Input width='80%' type="text" style={GlobalStyle.inputText} />
-                </Box>
-                <Box>
-                    <FormLabel width='80%'  sx={GlobalStyle.normalText}>Last Name</FormLabel>
-                    <Input width='80%' type="text" style={GlobalStyle.inputText} />
-                </Box>
-                <Box>
-                    <FormLabel width='80%'  sx={GlobalStyle.normalText}>Username</FormLabel>
-                    <Input width='80%' type="text" style={GlobalStyle.inputText} />
-                </Box>
-                <Box>
-                    <FormLabel width='80%'  sx={GlobalStyle.normalText}>Password</FormLabel>
-                    <Input width='80%' type="password" style={GlobalStyle.inputText} />
-                </Box>
-                <Box>
-                    <FormLabel width='80%' sx={GlobalStyle.normalText}>Date of birth</FormLabel>
-                    <Input width='80%' placeholder="Select Date"size="md"type="date"/>  
-                </Box>
-                <Box>
-                    <FormLabel width='80%' sx={GlobalStyle.normalText}>Citizen ID</FormLabel>
-                    <Input width='80%' type="number" style={GlobalStyle.inputText} />
-                </Box>
+                <FormControl isRequired>
+                    <Box>
+                        <FormLabel width='80%'  sx={GlobalStyle.normalText}>First Name</FormLabel>
+                        <Input width='80%' type="text" style={GlobalStyle.inputText} />
+                    </Box>
+                </FormControl>
+                <FormControl isRequired>
+                    <Box>
+                        <FormLabel width='80%'  sx={GlobalStyle.normalText}>Last Name</FormLabel>
+                        <Input width='80%' type="text" style={GlobalStyle.inputText} />
+                    </Box>
+                </FormControl>
+                <FormControl isRequired>
+                    <Box>
+                        <FormLabel width='80%'  sx={GlobalStyle.normalText}>Username</FormLabel>
+                        <Input width='80%' type="text" style={GlobalStyle.inputText} />
+                    </Box>
+                </FormControl>
+                <FormControl isRequired>
+                    <Box>
+                        <FormLabel width='80%'  sx={GlobalStyle.normalText}>Password</FormLabel>
+                        <Input width='80%' type="password" style={GlobalStyle.inputText} />
+                    </Box>
+                </FormControl>
+                <FormControl isRequired>
+                    <Box>
+                        <FormLabel width='80%' sx={GlobalStyle.normalText}>Date of birth</FormLabel>
+                        <Input width='80%' placeholder="Select Date"size="md"type="date"/>  
+                    </Box>
+                </FormControl>
+                <FormControl isRequired>
+                    <Box>
+                        <FormLabel width='80%' sx={GlobalStyle.normalText}>Citizen ID</FormLabel>
+                        <Input width='80%' type="number" style={GlobalStyle.inputText} />
+                    </Box>
+                </FormControl>
             </SimpleGrid>
             <SimpleGrid column={1} spacing={5} marginTop='20px' marginLeft='319px' >
                 <Box>
@@ -54,7 +65,7 @@ export default () => {
                     <Input width='60%' type="text" style={GlobalStyle.inputText} />
                 </Box>
             </SimpleGrid>
-        </FormControl>
+        
         </Box>
     )
 }

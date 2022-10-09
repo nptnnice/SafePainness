@@ -7,14 +7,12 @@ import Colour from '../Colour'
 //<Divider sx={DividerCSS}/>
 
 export default () => {
-  let Line = {
-    margin: 'auto',
-    alignItems: 'center',
-    marginTop: '30px',
-    width: '90%',
-    merginLeft: '90px',
-  }
-
+    let Line = {
+        margin: 'auto',
+        marginTop: '30px',
+        width: '90%',
+        merginLeft: '90px'
+    }
   let DividerCSS = {
     margin: 'auto',
     alignItems: 'center',
