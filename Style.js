@@ -13,13 +13,13 @@ const headingText = {
   color: Colour.lightBlack,
 }
 const boldText = {
-  color: Colour.black,
+  color: Colour.lightBlack,
   fontFamily: 'IBM Plex Sans',
   fontWeight: 'Bold',
   fontSize: '18px',
 }
 const normalText = {
-  color: Colour.black,
+  color: Colour.lightBlack,
   fontFamily: 'IBM Plex Sans',
   fontWeight: '500',
   fontSize: '18px',
@@ -50,7 +50,7 @@ const description = {
   marginBottom: '8px',
 }
 const inputStyle = {
-  color: Colour.black,
+  color: Colour.lightBlack,
   fontFamily: 'IBM Plex Sans',
   fontWeight: '400',
   fontSize: '18px',
@@ -112,6 +112,52 @@ const modalStyle = {
   borderRadius: '24px',
   padding: '40px 20px',
 }
+const greyNormalText = {
+  color: Colour.darkGrey,
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: '500',
+  fontSize: '18px',
+}
+const yellowBtn = {
+  backgroundColor: Colour.lightYellow,
+  color: Colour.black,
+  padding: '24px 32px',
+  fontFamily: 'Lato',
+  fontSize: '18px',
+  fontWeight: 'bold',
+  borderRadius: '12px',
+  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+  _hover: {
+    backgroundColor: Colour.yellow,
+  },
+}
+const turquoiseBtn = {
+  backgroundColor: Colour.turquoise,
+  color: Colour.white,
+  padding: '24px 32px',
+  fontFamily: 'Lato',
+  fontSize: '18px',
+  fontWeight: 'bold',
+  borderRadius: '12px',
+  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+  _hover: {
+    backgroundColor: Colour.lightBlue,
+  },
+}
+const recordBox = {
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  border: '2px solid',
+  borderColor: Colour.grey,
+  borderRadius: '12px',
+  padding: '24px',
+  marginBottom: '12px',
+  cursor: 'pointer',
+  transition: 'all 0.1s ease-out',
+  _hover: {
+    borderColor: Colour.turquoise,
+  },
+}
 
 export default {
   layout,
@@ -127,4 +173,8 @@ export default {
   blueBtn2,
   modalStyle,
   normalTextNoColor,
+  greyNormalText,
+  yellowBtn,
+  turquoiseBtn,
+  recordBox,
 }
