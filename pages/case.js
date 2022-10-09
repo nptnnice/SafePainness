@@ -9,72 +9,50 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-} from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
-<<<<<<< HEAD
-import PatientHeader from '../components/PatientHeader'
-=======
-import SummaryBox from '../components/SummaryBox'
-import Dashboard from '../components/Dashboard'
-import Records from '../components/Records'
-import Feedbacks from '../components/Feedbacks'
->>>>>>> 4c306c1010346a1046170f36f4cc2a1848060125
+} from "@chakra-ui/react";
+import GlobalStyle from "../Style";
+import Colour from "../Colour";
+import SummaryBox from "../components/SummaryBox";
+import Dashboard from "../components/Dashboard";
+import Records from "../components/Records";
+import Feedbacks from "../components/Feedbacks";
 
 export default () => {
   let diagnosisFlex = {
-    alignItems: 'center',
-    gap: '16px',
-    width: '80%',
-  }
+    alignItems: "center",
+    gap: "16px",
+    width: "80%",
+  };
   let tabBox = {
     backgroundColor: Colour.white,
-    border: '1px solid',
+    border: "1px solid",
     borderColor: Colour.lightGrey,
-    borderRadius: '0 0 24px 24px',
-    padding: '40px 20px',
-    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
-  }
+    borderRadius: "0 0 24px 24px",
+    padding: "40px 20px",
+    filter: "drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))",
+  };
   let tabSelected = {
-    fontFamily: 'Lato',
-    fontSize: '20px',
-    fontWeight: 'bold',
+    fontFamily: "Lato",
+    fontSize: "20px",
+    fontWeight: "bold",
     color: Colour.lightBlack,
-    borderRadius: '12px 12px 0 0',
+    borderRadius: "12px 12px 0 0",
     _selected: {
       backgroundColor: Colour.lightBlue,
       color: Colour.white,
     },
-  }
+  };
   let section = {
-    marginTop: '56px',
-    position: 'relative',
-  }
+    marginTop: "56px",
+    position: "relative",
+  };
   let btnPosition = {
-    position: 'absolute',
-    right: '0',
-    top: '-24px',
-  }
+    position: "absolute",
+    right: "0",
+    top: "-24px",
+  };
 
   return (
-<<<<<<< HEAD
-    <>
-      <PatientHeader />
-      <Box sx={GlobalStyle.layout}>
-        <Flex sx={diagnosisFlex}>
-          <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
-            Case XXXX:
-          </Text>
-          <Input
-            placeholder="Disease name"
-            sx={GlobalStyle.inputStyle}
-            width="50%"
-          />
-          <Button sx={yellowBtn}>Confirm diagnosis</Button>
-        </Flex>
-      </Box>
-    </>
-=======
     <Box sx={GlobalStyle.layout}>
       {/* Confirm diagnosis */}
       <Flex sx={diagnosisFlex}>
@@ -126,6 +104,5 @@ export default () => {
         </Tabs>
       </Box>
     </Box>
->>>>>>> 4c306c1010346a1046170f36f4cc2a1848060125
-  )
-}
+  );
+};

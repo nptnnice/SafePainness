@@ -22,7 +22,7 @@ export default () => {
     },
   };
   let buttonStyle2 = {
-    backgroundColor: Colour.turqoise,
+    backgroundColor: Colour.turquoise,
     borderRadius: "48px",
     boxShadow: "md",
     color: "#fff",
