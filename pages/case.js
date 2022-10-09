@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
+import PatientHeader from '../components/PatientHeader'
 
 export default () => {
   let yellowBtn = {
@@ -34,18 +35,21 @@ export default () => {
   }
 
   return (
-    <Box sx={GlobalStyle.layout}>
-      <Flex sx={diagnosisFlex}>
-        <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
-          Case XXXX:
-        </Text>
-        <Input
-          placeholder="Disease name"
-          sx={GlobalStyle.inputStyle}
-          width="50%"
-        />
-        <Button sx={yellowBtn}>Confirm diagnosis</Button>
-      </Flex>
-    </Box>
+    <>
+      <PatientHeader />
+      <Box sx={GlobalStyle.layout}>
+        <Flex sx={diagnosisFlex}>
+          <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
+            Case XXXX:
+          </Text>
+          <Input
+            placeholder="Disease name"
+            sx={GlobalStyle.inputStyle}
+            width="50%"
+          />
+          <Button sx={yellowBtn}>Confirm diagnosis</Button>
+        </Flex>
+      </Box>
+    </>
   )
 }

@@ -42,6 +42,14 @@ const formBox = {
   borderRadius: '12px',
   marginTop: '16px',
 }
+const recordBox = {
+  backgroundColor: Colour.white,
+  width: '100%',
+  padding: '50px 80px',
+  borderRadius: '12px',
+  marginTop: '16px',
+  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+}
 const description = {
   color: Colour.lightBlue,
   fontFamily: 'IBM Plex Sans',
@@ -108,6 +116,24 @@ const blueBtn2 = {
     backgroundColor: Colour.turquoise,
   },
 }
+const turqBtn = {
+  backgroundColor: Colour.turquoise,
+  color: Colour.white,
+  padding: '24px 24px',
+  fontFamily: 'Lato',
+  fontSize: '22px',
+  fontWeight: 'bold',
+  borderRadius: '12px',
+  border: '4px solid',
+  borderColor: Colour.turquoise,
+  boxSizing: 'border-box',
+  transition: 'all 0.2s ease',
+  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+  _hover: {
+    backgroundColor: Colour.lightBlue,
+    borderColor: Colour.lightBlue,
+  },
+}
 const modalStyle = {
   borderRadius: '24px',
   padding: '40px 20px',
@@ -120,11 +146,13 @@ export default {
   normalText,
   bgColor,
   formBox,
+  recordBox,
   description,
   inputStyle,
   blueBtn,
   whiteBtn,
   blueBtn2,
+  turqBtn,
   modalStyle,
   normalTextNoColor,
 }
