@@ -12,14 +12,10 @@ import {
 } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
-<<<<<<< HEAD
-import PatientHeader from '../components/PatientHeader'
-=======
 import SummaryBox from '../components/SummaryBox'
 import Dashboard from '../components/Dashboard'
 import Records from '../components/Records'
 import Feedbacks from '../components/Feedbacks'
->>>>>>> 4c306c1010346a1046170f36f4cc2a1848060125
 
 export default () => {
   let diagnosisFlex = {
@@ -57,24 +53,6 @@ export default () => {
   }
 
   return (
-<<<<<<< HEAD
-    <>
-      <PatientHeader />
-      <Box sx={GlobalStyle.layout}>
-        <Flex sx={diagnosisFlex}>
-          <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
-            Case XXXX:
-          </Text>
-          <Input
-            placeholder="Disease name"
-            sx={GlobalStyle.inputStyle}
-            width="50%"
-          />
-          <Button sx={yellowBtn}>Confirm diagnosis</Button>
-        </Flex>
-      </Box>
-    </>
-=======
     <Box sx={GlobalStyle.layout}>
       {/* Confirm diagnosis */}
       <Flex sx={diagnosisFlex}>
@@ -126,6 +104,5 @@ export default () => {
         </Tabs>
       </Box>
     </Box>
->>>>>>> 4c306c1010346a1046170f36f4cc2a1848060125
   )
 }
