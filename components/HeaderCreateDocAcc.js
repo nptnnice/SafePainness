@@ -6,10 +6,10 @@ import Colour from '../Colour'
 export default () => {
   return (
     <>
-      <Text sx={GlobalStyle.headingText} marginTop="101px" marginLeft="200px">
+      <Text sx={GlobalStyle.headingText} marginTop="48px"  marginLeft='-81px'>
         Create Doctor Account
       </Text>
-      <Divider width='90%'margin='auto' merginLeft='90px' marginTop='2%'/>
+      <Divider width='1200px' marginLeft='-168px' marginTop='4%'/>    
     </>
   )
 }

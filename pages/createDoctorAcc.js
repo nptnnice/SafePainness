@@ -1,21 +1,15 @@
-import { Text, Flex, VStack, Image, Box } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import HeaderCreateDocAcc from '../components/HeaderCreateDocAcc'
 import InputBasicInfo from '../components/InputBasicInfo'
-import ConfirmInfo from '../components/ConfirmInfo'
 import GlobalStyle from '../Style'
 
 
 export default () => {
 
-    let Center = {
-        justifyContent: 'center',
-        alignItems: 'center',
-    }
     return (
-        <Box sx={Center}>
+        <Box sx={GlobalStyle.layout}>
             <HeaderCreateDocAcc/>
             <InputBasicInfo/>
-            <ConfirmInfo/>
         </Box>
     )    
 }
