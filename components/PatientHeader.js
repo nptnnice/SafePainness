@@ -7,13 +7,16 @@ export default () => {
     backgroundColor: Colour.lightBlue,
     width: '100%',
     textAlign: 'left',
-    padding: '150px 10% 2% 20%',
+    padding: '150px 0 40px',
   }
   let headText = {
     fontFamily: 'Lato',
     fontSize: '36px',
     fontWeight: 'bold',
     color: Colour.white,
+    width: '80%',
+    margin: '0 auto',
+    maxWidth: '900px',
   }
   return (
     <Box sx={headBox}>
