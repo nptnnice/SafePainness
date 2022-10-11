@@ -117,24 +117,24 @@ const blueBtn2 = {
     backgroundColor: Colour.turquoise,
   },
 }
-const turqBtn = {
-  backgroundColor: Colour.turquoise,
-  color: Colour.white,
-  padding: '24px 24px',
-  fontFamily: 'Lato',
-  fontSize: '22px',
-  fontWeight: 'bold',
-  borderRadius: '12px',
-  border: '4px solid',
-  borderColor: Colour.turquoise,
-  boxSizing: 'border-box',
-  transition: 'all 0.2s ease',
-  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
-  _hover: {
-    backgroundColor: Colour.lightBlue,
-    borderColor: Colour.lightBlue,
-  },
-}
+// const turqBtn = {
+//   backgroundColor: Colour.turquoise,
+//   color: Colour.white,
+//   padding: '24px 24px',
+//   fontFamily: 'Lato',
+//   fontSize: '22px',
+//   fontWeight: 'bold',
+//   borderRadius: '12px',
+//   border: '4px solid',
+//   borderColor: Colour.turquoise,
+//   boxSizing: 'border-box',
+//   transition: 'all 0.2s ease',
+//   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+//   _hover: {
+//     backgroundColor: Colour.lightBlue,
+//     borderColor: Colour.lightBlue,
+//   },
+// }
 const modalStyle = {
   borderRadius: '24px',
   padding: '40px 20px',
@@ -199,7 +199,7 @@ export default {
   blueBtn,
   whiteBtn,
   blueBtn2,
-  turqBtn,
+  // turqBtn,
   modalStyle,
   normalTextNoColor,
   greyNormalText,
