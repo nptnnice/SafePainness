@@ -1,29 +1,15 @@
-import { Text, Progress } from '@chakra-ui/react'
+import { Text, Divider } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
 
 //220 px
 export default () => {
-  let Line = {
-    margin: 'auto',
-    alignItems: 'center',
-    marginTop: '30px',
-    width: '90%',
-    merginLeft: '90px',
-  }
-
   return (
     <>
-      <Text sx={GlobalStyle.headingText} marginTop="101px" marginLeft="200px">
+      <Text sx={GlobalStyle.headingText} marginTop="48px"  marginLeft='-81px'>
         Create Doctor Account
       </Text>
-      <Progress
-        sx={Line}
-        colorScheme="#D3D3D3"
-        height="3px"
-        size="sm"
-        value={100}
-      />
+      <Divider width='1200px' marginLeft='-168px' marginTop='4%'/>    
     </>
   )
 }
