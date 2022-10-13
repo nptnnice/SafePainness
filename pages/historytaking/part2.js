@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import GlobalStyle from '../../Style'
 import Colour from '../../Colour'
-import HeadForm from '../../components/HeadForm'
+import FormProgress from '../../components/FormProgress'
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
 
@@ -26,7 +26,7 @@ export default () => {
 
   return (
     <Box sx={GlobalStyle.bgColor}>
-      <HeadForm progress={40} />
+      <FormProgress progress={40} />
       <Box sx={GlobalStyle.layout}>
         <Text sx={GlobalStyle.boldText}>Part 2: Time</Text>
         <VStack spacing={16}>

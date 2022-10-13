@@ -22,7 +22,7 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
 export default ({ isOpen, onClose }) => {
   const [show, setShow] = useState(false)
-  const handleClick = () => setShow(!show)
+  const handlePassword = () => setShow(!show)
 
   let header = {
     fontFamily: 'Lato',
@@ -83,9 +83,9 @@ export default ({ isOpen, onClose }) => {
               />
               <InputRightElement>
                 {show ? (
-                  <ViewIcon sx={iconInput} onClick={handleClick} />
+                  <ViewIcon sx={iconInput} onClick={handlePassword} />
                 ) : (
-                  <ViewOffIcon sx={iconInput} onClick={handleClick} />
+                  <ViewOffIcon sx={iconInput} onClick={handlePassword} />
                 )}
               </InputRightElement>
             </InputGroup>
@@ -94,7 +94,7 @@ export default ({ isOpen, onClose }) => {
 
         <ModalFooter sx={footModal}>
           <VStack spacing={6}>
-            <Button sx={GlobalStyle.blueBtn2}>Log in</Button>
+            <Button sx={GlobalStyle.blueBtn}>Log in</Button>
             <Text sx={clickText}>Forgot password?</Text>
           </VStack>
         </ModalFooter>

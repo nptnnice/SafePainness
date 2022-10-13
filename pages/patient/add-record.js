@@ -12,12 +12,15 @@ import {
   SliderThumb,
   SliderMark,
 } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
+import GlobalStyle from '../../Style'
+import Colour from '../../Colour'
+import HeadBox from '../../components/HeadCenter'
+import Head from 'next/head'
 
 export default () => {
   return (
     <Box sx={GlobalStyle.bgColor}>
+      <HeadBox topic="symptom tracking" />
       <Box sx={GlobalStyle.layout}>
         <VStack sx={GlobalStyle.formBox} align="left" spacing={16}>
           {/* Symptom */}

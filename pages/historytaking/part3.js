@@ -9,17 +9,17 @@ import {
   Input,
   Button,
   HStack,
-} from "@chakra-ui/react";
-import GlobalStyle from "../../Style";
-import Colour from "../../Colour";
-import HeadForm from "../../components/HeadForm";
-import { ArrowForwardIcon, ArrowBackIcon } from "@chakra-ui/icons";
-import Link from "next/link";
+} from '@chakra-ui/react'
+import GlobalStyle from '../../Style'
+import Colour from '../../Colour'
+import FormProgress from '../../components/FormProgress'
+import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
+import Link from 'next/link'
 
 export default () => {
   return (
     <Box sx={GlobalStyle.bgColor}>
-      <HeadForm progress={60} />
+      <FormProgress progress={60} />
       <Box sx={GlobalStyle.layout}>
         <Text sx={GlobalStyle.boldText}>Part 3: Exacerbating Factors</Text>
         <VStack spacing={16}>
@@ -56,5 +56,5 @@ export default () => {
         </VStack>
       </Box>
     </Box>
-  );
-};
+  )
+}

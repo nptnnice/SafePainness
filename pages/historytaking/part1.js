@@ -22,7 +22,7 @@ import {
 } from '@chakra-ui/react'
 import GlobalStyle from '../../Style'
 import Colour from '../../Colour'
-import HeadForm from '../../components/HeadForm'
+import FormProgress from '../../components/FormProgress'
 import BodySelector from '../../components/BodySelector'
 import PainList from '../../components/PainList'
 import { ArrowForwardIcon } from '@chakra-ui/icons'
@@ -47,7 +47,7 @@ export default () => {
 
   return (
     <Box sx={GlobalStyle.bgColor}>
-      <HeadForm progress={0} />
+      <FormProgress progress={0} />
       <Box sx={GlobalStyle.layout}>
         <Text sx={GlobalStyle.boldText}>
           Part 1: Symptoms and Associated Symptoms

@@ -10,10 +10,10 @@ import {
   chakra,
   Avatar,
 } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
-import PatientHeader from '../components/PatientHeader'
-import CaseSection from '../components/CaseSection'
+import GlobalStyle from '../../Style'
+import Colour from '../../Colour'
+import PatientHeader from '../../components/PatientHeader'
+import CaseSection from '../../components/CaseSection'
 
 export default () => {
   let smallBoldText = {

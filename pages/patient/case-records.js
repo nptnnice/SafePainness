@@ -10,14 +10,14 @@ import {
   Tab,
   TabPanel,
 } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
-import SummaryBox from '../components/SummaryBox'
-import Dashboard from '../components/Dashboard'
-import Records from '../components/Records'
-import Feedbacks from '../components/Feedbacks'
-import PatientHeader from '../components/PatientHeader'
-import ConfirmModal from '../components/ConfirmModal'
+import GlobalStyle from '../../Style'
+import Colour from '../../Colour'
+import SummaryBox from '../../components/SummaryBox'
+import Dashboard from '../../components/Dashboard'
+import Records from '../../components/Records'
+import Feedbacks from '../../components/Feedbacks'
+import PatientHeader from '../../components/PatientHeader'
+import ConfirmModal from '../../components/ConfirmModal'
 import { useState } from 'react'
 import Link from 'next/link'
 

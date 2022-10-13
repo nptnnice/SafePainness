@@ -1,14 +1,90 @@
 import Colour from './Colour'
 
+// bg
+const bgColor = {
+  backgroundColor: Colour.lightGrey,
+  width: '100%',
+}
+
+// layout
 const layout = {
   width: '80%',
   margin: '0 auto',
   maxWidth: '900px',
-  padding: '100px 0 120px',
+  padding: '64px 0 240px',
+  position: 'relative',
+}
+
+// Box
+const formBox = {
+  backgroundColor: Colour.white,
+  width: '100%',
+  padding: '40px 80px 80px',
+  borderRadius: '12px',
+  marginTop: '16px',
+}
+const infoBox = {
+  width: '100%',
+  borderRadius: '12px',
+  backgroundColor: Colour.white,
+  padding: '40px 24px',
+  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+}
+const tabBox = {
+  backgroundColor: Colour.white,
+  border: '1px solid',
+  borderColor: Colour.lightGrey,
+  borderRadius: '0 24px 24px 24px',
+  padding: '40px 20px',
+  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+}
+const tabSelected = {
+  fontFamily: 'Lato',
+  fontSize: '20px',
+  fontWeight: 'bold',
+  color: Colour.lightBlack,
+  borderRadius: '12px 12px 0 0',
+  _selected: {
+    backgroundColor: Colour.lightBlue,
+    color: Colour.white,
+  },
+}
+const modalStyle = {
+  borderRadius: '24px',
+  padding: '40px 20px',
+}
+const recordBox = {
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  border: '2px solid',
+  borderColor: Colour.grey,
+  borderRadius: '12px',
+  padding: '24px',
+  marginBottom: '12px',
+  cursor: 'pointer',
+  transition: 'all 0.1s ease-out',
+  _hover: {
+    borderColor: Colour.turquoise,
+  },
+}
+const headBox = {
+  backgroundColor: Colour.lightBlue,
+  width: '100%',
+  padding: '140px 0 24px',
+}
+
+// text
+const headText = {
+  color: Colour.white,
+  fontFamily: 'Lato',
+  fontSize: '32px',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  textTransform: 'uppercase',
 }
 const headingText = {
   fontFamily: 'Lato',
-  fontSize: '36px',
+  fontSize: '28px',
   fontWeight: 'bold',
   color: Colour.lightBlack,
 }
@@ -18,37 +94,23 @@ const boldText = {
   fontWeight: 'Bold',
   fontSize: '18px',
 }
+const labelText = {
+  color: Colour.lightBlack,
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: 'medium',
+  fontSize: '18px',
+}
+const greyMediumText = {
+  color: Colour.darkGrey,
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: 'medium',
+  fontSize: '18px',
+}
 const normalText = {
   color: Colour.lightBlack,
   fontFamily: 'IBM Plex Sans',
   fontWeight: '500',
   fontSize: '18px',
-}
-
-const normalTextNoColor = {
-  fontFamily: 'IBM Plex Sans',
-  fontWeight: '500',
-  fontSize: '18px',
-}
-
-const bgColor = {
-  backgroundColor: Colour.lightGrey,
-  width: '100%',
-}
-const formBox = {
-  backgroundColor: Colour.white,
-  width: '100%',
-  padding: '40px 80px 80px',
-  borderRadius: '12px',
-  marginTop: '16px',
-}
-const tabBox = {
-  backgroundColor: Colour.white,
-  width: '100%',
-  padding: '50px 80px',
-  borderRadius: '12px',
-  marginTop: '16px',
-  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
 }
 const description = {
   color: Colour.lightBlue,
@@ -57,27 +119,30 @@ const description = {
   fontSize: '18px',
   marginBottom: '8px',
 }
+
+// input
 const inputStyle = {
   backgroundColor: Colour.white,
   color: Colour.lightBlack,
   fontFamily: 'IBM Plex Sans',
-  fontWeight: '400',
+  fontWeight: 'regular',
   fontSize: '18px',
-  border: '2px solid',
+  border: '1px solid',
   borderColor: Colour.grey,
   height: '48px',
 }
+
+// button
 const blueBtn = {
   backgroundColor: Colour.lightBlue,
   color: Colour.white,
-  padding: '30px 40px',
+  padding: '24px 48px',
   fontFamily: 'Lato',
-  fontSize: '22px',
+  fontSize: '20px',
   fontWeight: 'bold',
-  borderRadius: '40px',
+  borderRadius: '48px',
   border: '4px solid',
   borderColor: Colour.lightBlue,
-  boxSizing: 'border-box',
   transition: 'all 0.2s ease',
   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
   _hover: {
@@ -87,14 +152,13 @@ const blueBtn = {
 }
 const whiteBtn = {
   color: Colour.lightBlue,
-  padding: '30px 40px',
+  padding: '24px 48px',
   fontFamily: 'Lato',
-  fontSize: '22px',
+  fontSize: '20px',
   fontWeight: 'bold',
-  borderRadius: '40px',
+  borderRadius: '48px',
   border: '4px solid',
   borderColor: Colour.lightBlue,
-  boxSizing: 'border-box',
   transition: 'all 0.2s ease',
   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
   _hover: {
@@ -102,48 +166,44 @@ const whiteBtn = {
     color: Colour.turquoise,
   },
 }
-const blueBtn2 = {
-  backgroundColor: Colour.lightBlue,
+const editBtn = {
+  backgroundColor: Colour.lightYellow,
   color: Colour.white,
-  padding: '28px 56px',
+  padding: '24px 32px',
   fontFamily: 'Lato',
-  fontSize: '20px',
+  fontSize: '18px',
   fontWeight: 'bold',
-  borderRadius: '40px',
-  boxSizing: 'border-box',
-  transition: 'all 0.2s ease',
+  borderRadius: '48px',
   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
   _hover: {
-    backgroundColor: Colour.turquoise,
+    backgroundColor: Colour.yellow,
   },
 }
-// const turqBtn = {
-//   backgroundColor: Colour.turquoise,
-//   color: Colour.white,
-//   padding: '24px 24px',
-//   fontFamily: 'Lato',
-//   fontSize: '22px',
-//   fontWeight: 'bold',
-//   borderRadius: '12px',
-//   border: '4px solid',
-//   borderColor: Colour.turquoise,
-//   boxSizing: 'border-box',
-//   transition: 'all 0.2s ease',
-//   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
-//   _hover: {
-//     backgroundColor: Colour.lightBlue,
-//     borderColor: Colour.lightBlue,
-//   },
-// }
-const modalStyle = {
-  borderRadius: '24px',
-  padding: '40px 20px',
-}
-const greyNormalText = {
-  color: Colour.darkGrey,
-  fontFamily: 'IBM Plex Sans',
-  fontWeight: '500',
+const cancelBtn = {
+  backgroundColor: Colour.lightRed,
+  color: Colour.white,
+  padding: '24px 32px',
+  fontFamily: 'Lato',
   fontSize: '18px',
+  fontWeight: 'bold',
+  borderRadius: '48px',
+  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+  _hover: {
+    backgroundColor: Colour.red,
+  },
+}
+const saveBtn = {
+  backgroundColor: Colour.turquoise,
+  color: Colour.white,
+  padding: '24px 32px',
+  fontFamily: 'Lato',
+  fontSize: '18px',
+  fontWeight: 'bold',
+  borderRadius: '48px',
+  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+  _hover: {
+    backgroundColor: Colour.lightBlue,
+  },
 }
 const yellowBtn = {
   backgroundColor: Colour.lightYellow,
@@ -171,39 +231,62 @@ const turquoiseBtn = {
     backgroundColor: Colour.lightBlue,
   },
 }
-const recordBox = {
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  border: '2px solid',
-  borderColor: Colour.grey,
+const fileBtn = {
+  backgroundColor: Colour.lightGrey,
+  color: Colour.black,
+  padding: '24px 32px',
+  fontFamily: 'Lato',
+  fontSize: '18px',
+  fontWeight: 'bold',
   borderRadius: '12px',
-  padding: '24px',
-  marginBottom: '12px',
-  cursor: 'pointer',
-  transition: 'all 0.1s ease-out',
-  _hover: {
-    borderColor: Colour.turquoise,
-  },
+  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+}
+
+// etc
+const divider = {
+  width: '100%',
+  height: '1px',
+  backgroundColor: Colour.grey,
+}
+const profileImg = {
+  width: '160px',
+  height: '160px',
+  borderRadius: '50%',
+  objectFit: 'scale-down',
+}
+let btnBox = {
+  position: 'absolute',
+  right: '0',
+  bottom: '120px',
 }
 
 export default {
-  layout,
-  headingText,
-  boldText,
-  normalText,
   bgColor,
+  layout,
+  infoBox,
   formBox,
   tabBox,
+  tabSelected,
+  modalStyle,
+  recordBox,
+  headBox,
+  headText,
+  headingText,
+  boldText,
+  labelText,
+  greyMediumText,
+  normalText,
   description,
   inputStyle,
   blueBtn,
   whiteBtn,
-  blueBtn2,
-  // turqBtn,
-  modalStyle,
-  normalTextNoColor,
-  greyNormalText,
+  editBtn,
+  cancelBtn,
+  saveBtn,
   yellowBtn,
   turquoiseBtn,
-  recordBox,
+  fileBtn,
+  divider,
+  profileImg,
+  btnBox,
 }
