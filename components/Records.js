@@ -8,8 +8,8 @@ export default () => {
       {RecordList.map((record) => {
         return (
           <Flex sx={GlobalStyle.recordBox}>
-            <Text sx={GlobalStyle.normalText}>Record #{record.id}</Text>
-            <Text sx={GlobalStyle.greyNormalText}>{record.date}</Text>
+            <Text sx={GlobalStyle.boldText}>Record #{record.id}</Text>
+            <Text sx={GlobalStyle.greyMediumText}>{record.date}</Text>
           </Flex>
         )
       })}

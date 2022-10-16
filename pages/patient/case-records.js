@@ -16,108 +16,97 @@ import SummaryBox from '../../components/SummaryBox'
 import Dashboard from '../../components/Dashboard'
 import Records from '../../components/Records'
 import Feedbacks from '../../components/Feedbacks'
-import PatientHeader from '../../components/PatientHeader'
+import HeadInfo from '../../components/HeadInfo'
 import ConfirmModal from '../../components/ConfirmModal'
 import { useState } from 'react'
 import Link from 'next/link'
 
 export default () => {
-  const [showModal, setShowModal] = useState(false)
-  const handleClick = () => setShowModal(!showModal)
-
   let diagnosisFlex = {
-    alignItems: 'center',
+    alignItems: { base: 'flex-start', md: 'center' },
     gap: '16px',
-    width: '80%',
+    width: '100%',
+    flexDirection: { base: 'column', md: 'row' },
   }
-  let tabBox = {
-    backgroundColor: Colour.white,
-    border: '1px solid',
-    borderColor: Colour.lightGrey,
-    borderRadius: '0 0 24px 24px',
-    padding: '40px 20px',
-    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+  let section1 = {
+    marginTop: { base: '40px', md: '56px' },
+    position: 'relative',
   }
-  let tabSelected = {
-    fontFamily: 'Lato',
-    fontSize: '20px',
-    fontWeight: 'bold',
-    color: Colour.lightBlack,
-    borderRadius: '12px 12px 0 0',
-    _selected: {
-      backgroundColor: Colour.lightBlue,
-      color: Colour.white,
-    },
-  }
-  let section = {
-    marginTop: '56px',
+  let section2 = {
+    marginTop: { base: '72px', md: '56px' },
     position: 'relative',
   }
   let btnPosition = {
     position: 'absolute',
     right: '0',
-    top: '-24px',
+    top: { base: '-50px', md: '-24px' },
   }
 
+  const [showModal, setShowModal] = useState(false)
+  const handleClick = () => setShowModal(!showModal)
+
   return (
-    <>
-      <PatientHeader />
+    <Box sx={GlobalStyle.bgColor}>
+      <HeadInfo
+        name="Patient ID"
+        patientID="XXXXXX"
+        caseID="XXXX"
+        caseName="Grammar addict"
+        doctor="Alan Smith"
+      />
+
       <Box sx={GlobalStyle.layout}>
-        {/* Confirm diagnosis */}
+        {/* ==================== Confirm diagnosis ==================== */}
         <Flex sx={diagnosisFlex}>
           <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
             Case XXXX:
           </Text>
-          <Input
-            placeholder="Disease name"
-            sx={GlobalStyle.inputStyle}
-            width="50%"
-          />
+          <Input placeholder="Disease name" sx={GlobalStyle.inputStyle} />
           <Button sx={GlobalStyle.yellowBtn} onClick={handleClick}>
             Confirm diagnosis
           </Button>
         </Flex>
         <ConfirmModal isOpen={showModal} onClose={handleClick} />
 
-        {/* Dashboard & Summary */}
-        <Tabs variant="unstyled" sx={section}>
+        {/* ==================== Dashboard & Summary ==================== */}
+        <Tabs variant="unstyled" sx={section1}>
           <TabList>
-            <Tab sx={tabSelected}>Dashboard</Tab>
-            <Tab sx={tabSelected}>Summary</Tab>
+            <Tab sx={GlobalStyle.tabSelected}>Summary</Tab>
+            <Tab sx={GlobalStyle.tabSelected}>Dashboard</Tab>
           </TabList>
           <TabPanels>
-            <TabPanel sx={tabBox}>
-              <Dashboard />
-            </TabPanel>
-            <TabPanel sx={tabBox}>
+            <TabPanel sx={GlobalStyle.tabBox}>
               <SummaryBox />
+            </TabPanel>
+            <TabPanel sx={GlobalStyle.tabBox}>
+              <Dashboard />
             </TabPanel>
           </TabPanels>
         </Tabs>
 
-        {/* Records & Feedbacks */}
-        <Box sx={section}>
-          <Link href="/addRecord">
+        {/* ==================== Records & Feedbacks ==================== */}
+        <Box sx={section2}>
+          <Link href="/patient/add-record">
             <Box sx={btnPosition}>
               <Button sx={GlobalStyle.turquoiseBtn}>+ Add Record</Button>
             </Box>
           </Link>
           <Tabs variant="unstyled">
             <TabList>
-              <Tab sx={tabSelected}>Records</Tab>
-              <Tab sx={tabSelected}>Feedbacks</Tab>
+              <Tab sx={GlobalStyle.tabSelected}>Records</Tab>
+              <Tab sx={GlobalStyle.tabSelected}>Feedbacks</Tab>
             </TabList>
             <TabPanels>
-              <TabPanel sx={tabBox}>
+              <TabPanel sx={GlobalStyle.tabBox}>
                 <Records />
               </TabPanel>
-              <TabPanel sx={tabBox}>
+              <TabPanel sx={GlobalStyle.tabBox}>
                 <Feedbacks />
               </TabPanel>
             </TabPanels>
           </Tabs>
         </Box>
       </Box>
-    </>
+    </Box>
   )
 }

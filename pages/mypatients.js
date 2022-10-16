@@ -14,33 +14,29 @@ import {
   Td,
   TableContainer,
   Avatar,
+  VStack,
 } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import { SearchIcon } from '@chakra-ui/icons'
+import HeadCenter from '../components/HeadCenter'
 
 export default () => {
   let iconStyle = {
     color: Colour.darkGrey,
     marginTop: '8px',
+    boxSize: { base: '20px', md: '24px' },
   }
   let flexStyle = {
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: '48px',
-  }
-  let section = {
-    backgroundColor: Colour.white,
-    border: '2px solid',
-    borderColor: Colour.grey,
-    borderRadius: '12px',
-    padding: '16px 24px',
-    marginTop: '48px',
+    gap: '16px',
+    width: '100%',
   }
   let textBtn = {
-    fontFamily: 'Lato',
-    fontSize: '18px',
-    fontWeight: 'bold',
+    fontFamily: 'IBM Plex Sans',
+    fontSize: { sm: '16px', md: '18px' },
+    fontWeight: 'medium',
     color: Colour.lightBlack,
     cursor: 'pointer',
     transition: 'all 0.1s',
@@ -56,48 +52,52 @@ export default () => {
   }
 
   return (
-    <Box sx={GlobalStyle.layout}>
-      <Flex sx={flexStyle}>
-        {/* Search box */}
-        <InputGroup>
-          <Input sx={GlobalStyle.inputStyle} placeholder="Search patient" />
-          <InputRightElement
-            children={<SearchIcon sx={iconStyle} boxSize={6} />}
-          />
-        </InputGroup>
-        <Button sx={GlobalStyle.turquoiseBtn}>New appointment</Button>
-      </Flex>
+    <>
+      <HeadCenter topic="My Patients" />
+      <VStack sx={GlobalStyle.layout} spacing={8}>
+        <Flex sx={flexStyle}>
+          {/* ==================== Search box ==================== */}
+          <InputGroup>
+            <Input sx={GlobalStyle.inputStyle} placeholder="Search patient" />
+            <InputRightElement children={<SearchIcon sx={iconStyle} />} />
+          </InputGroup>
+          <Button sx={GlobalStyle.turquoiseBtn}>+ appointment</Button>
+        </Flex>
 
-      {/* Patient table */}
-      <Box sx={section}>
-        <TableContainer>
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th sx={GlobalStyle.boldText}>Patient ID</Th>
-                <Th sx={GlobalStyle.boldText}>Name</Th>
-                <Th isNumeric></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              <Tr>
-                <Td sx={GlobalStyle.normalText}>XXXXXX</Td>
-                <Td sx={GlobalStyle.normalText}>Pakamon Mumu</Td>
-                <Td isNumeric>
-                  <Avatar src="/images/petch.JPG" />
-                </Td>
-              </Tr>
-            </Tbody>
-          </Table>
-        </TableContainer>
-      </Box>
+        {/* ==================== Patient table ==================== */}
+        <Box sx={GlobalStyle.infoBox}>
+          <TableContainer>
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th sx={GlobalStyle.boldText}>Patient ID</Th>
+                  <Th sx={GlobalStyle.boldText}>Name</Th>
+                  <Th isNumeric></Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                <Tr>
+                  <Td sx={GlobalStyle.labelText}>XXXXXX</Td>
+                  <Td sx={GlobalStyle.labelText}>Pakamon Mumu</Td>
+                  <Td isNumeric>
+                    <Avatar
+                      src="/images/petch.JPG"
+                      sx={GlobalStyle.profileImgSmall}
+                    />
+                  </Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Box>
 
-      {/* Button */}
-      <Flex sx={btnFlex}>
-        <Text sx={textBtn}>Previous</Text>
-        <Text sx={GlobalStyle.normalText}>1</Text>
-        <Text sx={textBtn}>Next</Text>
-      </Flex>
-    </Box>
+        {/* ==================== Button ==================== */}
+        <Flex sx={btnFlex}>
+          <Text sx={textBtn}>Previous</Text>
+          <Text sx={GlobalStyle.regularText}>1</Text>
+          <Text sx={textBtn}>Next</Text>
+        </Flex>
+      </VStack>
+    </>
   )
 }

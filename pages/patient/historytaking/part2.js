@@ -11,11 +11,11 @@ import {
   RadioGroup,
   Stack,
   Button,
-  HStack,
+  ButtonGroup,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../Style'
-import Colour from '../../Colour'
-import FormProgress from '../../components/FormProgress'
+import GlobalStyle from '../../../Style'
+import Colour from '../../../Colour'
+import FormProgress from '../../../components/FormProgress'
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
 
@@ -30,57 +30,57 @@ export default () => {
       <Box sx={GlobalStyle.layout}>
         <Text sx={GlobalStyle.boldText}>Part 2: Time</Text>
         <VStack spacing={16}>
-          <VStack spacing={16} align="left" sx={GlobalStyle.formBox}>
-            {/* Question 7 */}
+          <VStack spacing={16} align="start" sx={GlobalStyle.formBox}>
+            {/* ==================== Question 7 ==================== */}
             <FormControl isRequired>
-              <FormLabel sx={GlobalStyle.normalText}>
+              <FormLabel sx={GlobalStyle.labelText}>
                 7. How long have you have this pain?
               </FormLabel>
               <Input sx={GlobalStyle.inputStyle} />
             </FormControl>
 
-            {/* Question 8 */}
+            {/* ==================== Question 8 ==================== */}
             <FormControl isRequired>
-              <FormLabel sx={GlobalStyle.normalText}>
+              <FormLabel sx={GlobalStyle.labelText}>
                 8. Is the pain constant or intermittent?
               </FormLabel>
               <RadioGroup>
                 <Stack direction="row" gap={16}>
                   <Radio sx={borderStyle} value="constant">
-                    <Text sx={GlobalStyle.normalText}>Constant</Text>
+                    <Text sx={GlobalStyle.labelText}>Constant</Text>
                   </Radio>
                   <Radio sx={borderStyle} value="intermittent">
-                    <Text sx={GlobalStyle.normalText}>intermittent</Text>
+                    <Text sx={GlobalStyle.labelText}>intermittent</Text>
                   </Radio>
                 </Stack>
               </RadioGroup>
             </FormControl>
 
-            {/* Question 9 */}
+            {/* ==================== Question 9 ==================== */}
             <FormControl isRequired>
-              <FormLabel sx={GlobalStyle.normalText}>
+              <FormLabel sx={GlobalStyle.labelText}>
                 9. What time of the day that the pain is worse?
               </FormLabel>
-              <Text sx={GlobalStyle.description}>
-                (e.g. in the morning, afternoon, after work, at night, during
-                work, etc)
-              </Text>
               <Input sx={GlobalStyle.inputStyle} />
+              <FormHelperText sx={GlobalStyle.greyMediumText}>
+                e.g. in the morning, afternoon, after work, at night, during
+                work, etc
+              </FormHelperText>
             </FormControl>
           </VStack>
 
-          <HStack spacing={8}>
-            <Link href="/historytaking/part1">
+          <ButtonGroup sx={GlobalStyle.btnGroup}>
+            <Link href="./part1">
               <Button leftIcon={<ArrowBackIcon />} sx={GlobalStyle.whiteBtn}>
                 Back
               </Button>
             </Link>
-            <Link href="/historytaking/part3">
+            <Link href="./part3">
               <Button rightIcon={<ArrowForwardIcon />} sx={GlobalStyle.blueBtn}>
                 Next
               </Button>
             </Link>
-          </HStack>
+          </ButtonGroup>
         </VStack>
       </Box>
     </Box>

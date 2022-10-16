@@ -8,8 +8,8 @@ export default () => {
       {FeedbackList.map((feedback) => {
         return (
           <Flex sx={GlobalStyle.recordBox}>
-            <Text sx={GlobalStyle.normalText}>Feedback #{feedback.id}</Text>
-            <Text sx={GlobalStyle.greyNormalText}>{feedback.date}</Text>
+            <Text sx={GlobalStyle.boldText}>Feedback #{feedback.id}</Text>
+            <Text sx={GlobalStyle.greyMediumText}>{feedback.date}</Text>
           </Flex>
         )
       })}

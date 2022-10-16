@@ -20,11 +20,9 @@ import HeadCenter from '../components/HeadCenter'
 import Colour from '../Colour'
 import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import Link from 'next/link'
 
 export default () => {
-  const [show, setShow] = useState(false)
-  const handlePassword = () => setShow(!show)
-
   let flexStyle = {
     gap: '24px',
     width: '100%',
@@ -35,14 +33,17 @@ export default () => {
     marginTop: '8px',
   }
 
+  const [show, setShow] = useState(false)
+  const handlePassword = () => setShow(!show)
+
   return (
     <>
       <HeadCenter topic="Create Patient Account" />
 
       <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
-        {/* Basic information */}
+        {/* ==================== Basic information ==================== */}
         <Text sx={GlobalStyle.headingText}>Basic Information</Text>
-        <SimpleGrid columns={2} spacing="24px" width="100%">
+        <SimpleGrid columns={{ base: 1, sm: 2 }} sx={GlobalStyle.gridStyle}>
           <FormControl isRequired>
             <FormLabel sx={GlobalStyle.labelText}>First Name</FormLabel>
             <Input sx={GlobalStyle.inputStyle} />
@@ -91,7 +92,9 @@ export default () => {
             </FormControl>
 
             <FormControl isRequired>
-              <FormLabel sx={GlobalStyle.labelText}>Blood group</FormLabel>
+              <FormLabel sx={GlobalStyle.labelText} whiteSpace="nowrap">
+                Blood group
+              </FormLabel>
               <Select placeholder="Choose" sx={GlobalStyle.inputStyle}>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
@@ -134,7 +137,7 @@ export default () => {
 
         <Box sx={GlobalStyle.divider}></Box>
 
-        {/* Contact information */}
+        {/* ==================== Contact information ==================== */}
         <Text sx={GlobalStyle.headingText}>Contact Information</Text>
         <Flex sx={flexStyle}>
           <FormControl isRequired>
@@ -153,10 +156,12 @@ export default () => {
           </FormControl>
         </Flex>
 
-        {/* Button */}
+        {/* ==================== Button ==================== */}
         <Box sx={GlobalStyle.btnBox}>
-          <ButtonGroup gap={4}>
-            <Button sx={GlobalStyle.whiteBtn}>Cancel</Button>
+          <ButtonGroup sx={GlobalStyle.btnGroup}>
+            <Link href="/">
+              <Button sx={GlobalStyle.whiteBtn}>Cancel</Button>
+            </Link>
             <Button sx={GlobalStyle.blueBtn}>Create</Button>
           </ButtonGroup>
         </Box>

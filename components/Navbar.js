@@ -13,24 +13,24 @@ export default () => {
     width: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '0 40px',
+    padding: { base: '0 24px', md: '0 40px' },
     position: 'fixed',
     zIndex: '100000',
     top: 0,
   }
   let logo = {
-    width: '160px',
+    width: { base: '120px', md: '160px' },
     height: 'auto',
     cursor: 'pointer',
   }
   let menuFlex = {
     alignItems: 'center',
-    gap: '24px',
+    gap: { base: '16px', md: '24px' },
   }
   let signup = {
     color: '#fff',
     fontFamily: 'Lato',
-    fontSize: '18px',
+    fontSize: { base: '16px', md: '18px' },
     fontWeight: 'semi-bold',
     cursor: 'pointer',
     transition: 'all 0.1s ease',
@@ -41,11 +41,11 @@ export default () => {
   let login = {
     color: '#fff',
     fontFamily: 'Lato',
-    fontSize: '18px',
+    fontSize: { base: '16px', md: '18px' },
     fontWeight: 'semi-bold',
     border: '3px solid #62C4C3',
     borderRadius: '32px',
-    padding: '4px 40px',
+    padding: { base: '4px 24px', md: '4px 40px' },
     boxSizing: 'border-box',
     cursor: 'pointer',
     transition: 'all 0.1s ease',
@@ -69,9 +69,9 @@ export default () => {
         />
       </Link>
       <Flex sx={menuFlex}>
-      <Link href='/createDoctorAcc'>
+        <Link href="/createDoctorAcc">
           <Text sx={signup}>Sign Up</Text>
-      </Link>
+        </Link>
         <Text sx={login} onClick={() => setOpen(true)}>
           Login
         </Text>

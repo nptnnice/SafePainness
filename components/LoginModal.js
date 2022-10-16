@@ -26,14 +26,14 @@ export default ({ isOpen, onClose }) => {
 
   let header = {
     fontFamily: 'Lato',
-    fontSize: '32px',
+    fontSize: { base: '28px', md: '32px' },
     fontWeight: 'bold',
     color: Colour.darkBlack,
     textAlign: 'center',
   }
   let subText = {
     fontFamily: 'Lato',
-    fontSize: '18px',
+    fontSize: { base: '16px', md: '18px' },
     fontWeight: '400',
     color: Colour.darkBlack,
     textAlign: 'center',
@@ -43,7 +43,7 @@ export default ({ isOpen, onClose }) => {
     color: Colour.lightBlue,
     fontFamily: 'IBM Plex Sans',
     fontWeight: '500',
-    fontSize: '18px',
+    fontSize: { base: '16px', md: '18px' },
     cursor: 'pointer',
     _hover: {
       textDecoration: 'underline',
@@ -70,12 +70,12 @@ export default ({ isOpen, onClose }) => {
         <ModalCloseButton />
         <ModalBody pb={6}>
           <FormControl>
-            <FormLabel sx={GlobalStyle.normalText}>Username</FormLabel>
+            <FormLabel sx={GlobalStyle.labelText}>Username</FormLabel>
             <Input sx={GlobalStyle.inputStyle} />
           </FormControl>
 
           <FormControl mt={4}>
-            <FormLabel sx={GlobalStyle.normalText}>Password</FormLabel>
+            <FormLabel sx={GlobalStyle.labelText}>Password</FormLabel>
             <InputGroup>
               <Input
                 sx={GlobalStyle.inputStyle}
@@ -93,7 +93,7 @@ export default ({ isOpen, onClose }) => {
         </ModalBody>
 
         <ModalFooter sx={footModal}>
-          <VStack spacing={6}>
+          <VStack spacing={4}>
             <Button sx={GlobalStyle.blueBtn}>Log in</Button>
             <Text sx={clickText}>Forgot password?</Text>
           </VStack>

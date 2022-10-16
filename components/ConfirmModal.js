@@ -8,6 +8,7 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  ButtonGroup,
   chakra,
   Flex,
 } from '@chakra-ui/react'
@@ -19,46 +20,7 @@ export default ({ isOpen, onClose }) => {
   const [showModal, setShowModal] = useState(false)
   const handleClick = () => setShowModal(!showModal)
 
-  let header = {
-    fontFamily: 'Lato',
-    fontSize: '32px',
-    fontWeight: 'bold',
-    color: Colour.darkBlack,
-  }
-  let whiteBtn = {
-    backgroundColor: Colour.white,
-    color: Colour.lightBlue,
-    fontFamily: 'Lato',
-    fontSize: '18px',
-    fontWeight: 'bold',
-    border: '3px solid',
-    borderColor: Colour.lightBlue,
-    borderRadius: '48px',
-    padding: '24px 40px',
-    _hover: {
-      borderColor: Colour.turquoise,
-      color: Colour.turquoise,
-    },
-  }
-  let blueBtn = {
-    backgroundColor: Colour.lightBlue,
-    color: Colour.white,
-    fontFamily: 'Lato',
-    fontSize: '18px',
-    fontWeight: 'bold',
-    border: '2px solid',
-    borderColor: Colour.lightBlue,
-    borderRadius: '48px',
-    padding: '24px 40px',
-    _hover: {
-      backgroundColor: Colour.turquoise,
-      borderColor: Colour.turquoise,
-      color: Colour.white,
-    },
-  }
   let btnFlex = {
-    justifyContent: 'center',
-    alignItems: 'center',
     gap: '16px',
     margin: '24px auto 0',
   }
@@ -68,39 +30,39 @@ export default ({ isOpen, onClose }) => {
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent sx={GlobalStyle.modalStyle}>
-          <ModalHeader sx={header}>Confirm Diagnosis</ModalHeader>
+          <ModalHeader sx={GlobalStyle.headingText}>
+            Confirm Diagnosis
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text sx={GlobalStyle.greyNormalText}>
-              Case: <chakra.span sx={GlobalStyle.normalText}>XXXX</chakra.span>
+            <Text sx={GlobalStyle.greyMediumText}>
+              Case: <chakra.span sx={GlobalStyle.labelText}>XXXX</chakra.span>
             </Text>
-            <Text sx={GlobalStyle.greyNormalText}>
+            <Text sx={GlobalStyle.greyMediumText}>
               Patient ID:{' '}
-              <chakra.span sx={GlobalStyle.normalText}>XXXXXX</chakra.span>
+              <chakra.span sx={GlobalStyle.labelText}>XXXXXX</chakra.span>
             </Text>
-            <Text sx={GlobalStyle.greyNormalText}>
+            <Text sx={GlobalStyle.greyMediumText}>
               Patient name:{' '}
-              <chakra.span sx={GlobalStyle.normalText}>
-                Pakamon Mumu
-              </chakra.span>
+              <chakra.span sx={GlobalStyle.labelText}>Pakamon Mumu</chakra.span>
             </Text>
-            <Text sx={GlobalStyle.greyNormalText}>
+            <Text sx={GlobalStyle.greyMediumText}>
               Disease name:{' '}
-              <chakra.span sx={GlobalStyle.normalText}>
+              <chakra.span sx={GlobalStyle.labelText}>
                 Grammar addict
               </chakra.span>
             </Text>
           </ModalBody>
 
           <ModalFooter>
-            <Flex sx={btnFlex}>
-              <Button sx={whiteBtn} onClick={handleClick}>
+            <ButtonGroup sx={btnFlex}>
+              <Button sx={GlobalStyle.whiteBtn} onClick={handleClick}>
                 Cancel
               </Button>
-              <Button sx={blueBtn} onClick={handleClick}>
+              <Button sx={GlobalStyle.blueBtn} onClick={handleClick}>
                 Confirm
               </Button>
-            </Flex>
+            </ButtonGroup>
           </ModalFooter>
         </ModalContent>
       </Modal>

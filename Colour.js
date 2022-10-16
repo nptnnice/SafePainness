@@ -1,8 +1,9 @@
 export default {
-  lightBlue: '#5193B3',
   turquoise: '#62C4C3',
-  lightYellow: '#F8D49B',
-  yellow: '#FEBF5C',
+  lightBlue: '#5193B3',
+  darkBlue: '#0275AC',
+  lightYellow: '#FFBE56',
+  darkYellow: '#FF8B20',
   lightRed: '#FF8484',
   red: '#F84747',
   cream: '#F8E6CB',

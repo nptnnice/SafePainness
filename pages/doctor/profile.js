@@ -2,8 +2,6 @@ import {
   Text,
   Box,
   Flex,
-  Grid,
-  GridItem,
   Input,
   Avatar,
   Tabs,
@@ -16,6 +14,8 @@ import {
   VStack,
   Button,
   ButtonGroup,
+  Grid,
+  GridItem,
 } from '@chakra-ui/react'
 import HeadCenter from '../../components/HeadCenter'
 import GlobalStyle from '../../Style'
@@ -23,6 +23,11 @@ import { useState } from 'react'
 import { useToast } from '@chakra-ui/react'
 
 export default () => {
+  let flexStyle = {
+    gap: '24px',
+    flexDirection: { base: 'column', md: 'row' },
+  }
+
   const toast = useToast()
   const [isEdit, setIsEdit] = useState(false)
 
@@ -31,17 +36,12 @@ export default () => {
       title: 'Profile updated.',
       description: 'Your profile has been updated.',
       status: 'success',
-      duration: 2000,
+      duration: 3000,
       isClosable: true,
     })
     setTimeout(() => {
       window.location.reload()
-    }, 3000)
-  }
-
-  let flexStyle = {
-    gap: '24px',
-    marginBottom: '24px',
+    }, 4000)
   }
 
   return (
@@ -50,13 +50,13 @@ export default () => {
 
       <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
         <Text sx={GlobalStyle.headingText}>Doctor ID: XXXXXX</Text>
-        {/* Basic information */}
+        {/* ==================== Basic information ==================== */}
         <Box sx={GlobalStyle.infoBox}>
           <Flex sx={flexStyle}>
             <Avatar sx={GlobalStyle.profileImg} src="/images/profile.JPG" />
 
             <Box flex="1">
-              <Grid templateColumns="repeat(2, 1fr)" gap="24px">
+              <Grid sx={GlobalStyle.gridStyle}>
                 <FormControl>
                   <FormLabel sx={GlobalStyle.labelText}>First name</FormLabel>
                   <Input sx={GlobalStyle.inputStyle} />
@@ -83,7 +83,7 @@ export default () => {
                   <FormLabel sx={GlobalStyle.labelText}>Phone number</FormLabel>
                   <Input sx={GlobalStyle.inputStyle} />
                 </FormControl>
-                <GridItem colSpan={2}>
+                <GridItem colSpan={{ base: 1, sm: 2 }}>
                   <FormControl>
                     <FormLabel sx={GlobalStyle.labelText}>Email</FormLabel>
                     <Input sx={GlobalStyle.inputStyle} />
@@ -94,7 +94,7 @@ export default () => {
           </Flex>
         </Box>
 
-        {/* Medical information */}
+        {/* ==================== Medical information ==================== */}
         <Tabs variant="enclosed" width="100%">
           <TabList>
             <Tab sx={GlobalStyle.tabSelected}>Medical Information</Tab>
@@ -117,7 +117,7 @@ export default () => {
           </TabPanels>
         </Tabs>
 
-        {/* Button */}
+        {/* ==================== Button ==================== */}
         <Box sx={GlobalStyle.btnBox}>
           {!isEdit ? (
             <Button sx={GlobalStyle.editBtn} onClick={() => setIsEdit(!isEdit)}>

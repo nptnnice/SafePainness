@@ -29,7 +29,7 @@ export default () => {
       <Text sx={GlobalStyle.boldText} marginBottom="16px">
         PAIN SEVERITY PROGRESS
       </Text>
-      <Box width="80%" margin="0 auto">
+      <Box width="100%" margin="0 auto">
         <Line data={data} />
       </Box>
     </>

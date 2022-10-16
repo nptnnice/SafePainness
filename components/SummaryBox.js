@@ -1,10 +1,9 @@
-import { Text, chakra, SimpleGrid, Flex } from '@chakra-ui/react'
-import { Global } from '@emotion/react'
+import { Text, SimpleGrid, Flex } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 
 export default () => {
   let gridStyle = {
-    columnGap: '24px',
+    columnGap: { base: '10px', md: '24px' },
     rowGap: '8px',
   }
   let flexStyle = {
@@ -12,67 +11,72 @@ export default () => {
     justifyContent: 'space-between',
     marginBottom: '16px',
   }
+
   return (
     <>
       <Flex sx={flexStyle}>
         <Text sx={GlobalStyle.boldText}>HISTORY TAKING RESPONSE</Text>
-        <Text sx={GlobalStyle.description}>Recorded: 24/09/22</Text>
+        <Text sx={GlobalStyle.description} textAlign="right">
+          Recorded: 24/09/22
+        </Text>
       </Flex>
-      <SimpleGrid columns={2} sx={gridStyle}>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Site: <chakra.span sx={GlobalStyle.normalText}>Head</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Onset: <chakra.span sx={GlobalStyle.normalText}>Accident</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Onset Type:{' '}
-          <chakra.span sx={GlobalStyle.normalText}>Gradual</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Characteristics:{' '}
-          <chakra.span sx={GlobalStyle.normalText}>
-            Throbbing, Heavy
-          </chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Radiation: <chakra.span sx={GlobalStyle.normalText}>Neck</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Associated Symptoms:{' '}
-          <chakra.span sx={GlobalStyle.normalText}>Nausea</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Pain Scale (now):{' '}
-          <chakra.span sx={GlobalStyle.normalText}>4</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Pain Scale (past 7 days):{' '}
-          <chakra.span sx={GlobalStyle.normalText}>5</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Pain Period:{' '}
-          <chakra.span sx={GlobalStyle.normalText}>7 days</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Pain Occurence:{' '}
-          <chakra.span sx={GlobalStyle.normalText}>Intermittent</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Worse Time:{' '}
-          <chakra.span sx={GlobalStyle.normalText}>At night</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Experience: <chakra.span sx={GlobalStyle.normalText}>No</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          Exacerbating Factors:{' '}
-          <chakra.span sx={GlobalStyle.normalText}>Stress</chakra.span>
-        </Text>
-        <Text sx={GlobalStyle.greyNormalText}>
-          How to relieve:{' '}
-          <chakra.span sx={GlobalStyle.normalText}>Sleep</chakra.span>
-        </Text>
+      <SimpleGrid columns={{ base: 1, md: 2 }} sx={gridStyle}>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Site: </Text>
+          <Text sx={GlobalStyle.regularText}>Head</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Onset: </Text>
+          <Text sx={GlobalStyle.regularText}>Accident</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Onset Type: </Text>
+          <Text sx={GlobalStyle.regularText}>Gradual</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Characterisitics: </Text>
+          <Text sx={GlobalStyle.regularText}>Throbbing, Heavy</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Radiation: </Text>
+          <Text sx={GlobalStyle.regularText}>Neck</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Associated Symptoms: </Text>
+          <Text sx={GlobalStyle.regularText}>Nausea</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Pain Scale (now): </Text>
+          <Text sx={GlobalStyle.regularText}>4</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Pain Scale (past 7 days): </Text>
+          <Text sx={GlobalStyle.regularText}>5</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Pain Period: </Text>
+          <Text sx={GlobalStyle.regularText}>7 days</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Pain Occurence: </Text>
+          <Text sx={GlobalStyle.regularText}>Intermittent</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Worse Time: </Text>
+          <Text sx={GlobalStyle.regularText}>At night</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Experience: </Text>
+          <Text sx={GlobalStyle.regularText}>No</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>Exacerbating Factors: </Text>
+          <Text sx={GlobalStyle.regularText}>Stress</Text>
+        </Flex>
+        <Flex sx={GlobalStyle.spanFlex2}>
+          <Text sx={GlobalStyle.labelText}>How to relieve: </Text>
+          <Text sx={GlobalStyle.regularText}>Sleep</Text>
+        </Flex>
       </SimpleGrid>
     </>
   )

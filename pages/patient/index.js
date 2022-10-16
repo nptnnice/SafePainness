@@ -1,67 +1,27 @@
-import {
-  Box,
-  Text,
-  Image,
-  Flex,
-  Spacer,
-  VStack,
-  HStack,
-  Button,
-  chakra,
-  Avatar,
-} from '@chakra-ui/react'
+import { Box, Text, Flex, VStack, Button, Avatar } from '@chakra-ui/react'
 import GlobalStyle from '../../Style'
 import Colour from '../../Colour'
-import PatientHeader from '../../components/PatientHeader'
-import CaseSection from '../../components/CaseSection'
+import HeadInfo from '../../components/HeadInfo'
+import PatientInfo from '../../components/PatientInfo'
+import Link from 'next/link'
 
 export default () => {
-  let smallBoldText = {
-    color: Colour.lightBlack,
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: 'bold',
-    fontSize: '22px',
-  }
-  let boldText = {
-    color: Colour.lightBlack,
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: 'Bold',
-    fontSize: '28px',
-  }
-  let normalText = {
-    color: Colour.lightBlack,
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: '500',
-    fontSize: '18px',
-  }
   let flexStyle = {
-    marginTop: '30px',
-    alignItems: 'center',
-  }
-  let imageStyle = {
-    borderRadius: '50%',
-    boxSize: '64px',
-    objectFit: 'cover',
+    margin: { base: '32px 0 16px', md: '48px 0 20px' },
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
   }
   let onTrack = {
     color: Colour.lightYellow,
     fontFamily: 'Lato',
     fontWeight: 'Bold',
-    fontSize: '28px',
+    fontSize: { base: '22px', md: '26px' },
   }
   let stopTrack = {
     color: Colour.turquoise,
     fontFamily: 'Lato',
     fontWeight: 'Bold',
-    fontSize: '28px',
-  }
-  let tabBox = {
-    backgroundColor: Colour.white,
-    width: '100%',
-    padding: '40px 20px',
-    borderRadius: '12px',
-    marginTop: '16px',
-    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+    fontSize: { base: '22px', md: '26px' },
   }
   let caseBox = {
     alignItems: 'center',
@@ -69,7 +29,7 @@ export default () => {
     border: '2px solid',
     borderColor: Colour.grey,
     borderRadius: '12px',
-    padding: '8px 24px',
+    padding: { base: '8px 16px', md: '8px 20px' },
     marginBottom: '12px',
     cursor: 'pointer',
     transition: 'all 0.1s ease-out',
@@ -78,45 +38,65 @@ export default () => {
       borderColor: Colour.turquoise,
     },
   }
+  let doctorText = {
+    color: Colour.lightBlack,
+    textAlign: 'right',
+    fontFamily: 'IBM Plex Sans',
+    fontWeight: 'medium',
+    fontSize: { base: '14px', md: '16px' },
+    display: { base: 'none', md: 'block' },
+  }
   return (
     <Box sx={GlobalStyle.bgColor}>
-      <PatientHeader />
+      <HeadInfo
+        name="Patient ID"
+        patientID="XXXXXX"
+        caseID="XXXX"
+        caseName="Grammar addict"
+        doctor="Alan Smith"
+      />
+
       <Box sx={GlobalStyle.layout}>
-        <CaseSection />
+        <PatientInfo />
+
         <Flex sx={flexStyle}>
-          <Text sx={boldText}>My Cases</Text>
-          <Spacer />
-          <Button sx={GlobalStyle.turquoiseBtn}>+ Add Case</Button>
+          <Text sx={GlobalStyle.headingText}>My Cases</Text>
+          <Link href="/historytaking/part1">
+            <Button sx={GlobalStyle.turquoiseBtn}>+ Add Case</Button>
+          </Link>
         </Flex>
-        <Box sx={tabBox}>
+
+        <Box sx={GlobalStyle.infoBox}>
+          <Link href="/patient/case-records">
+            <Flex sx={caseBox}>
+              <VStack align="start" spacing={1}>
+                <Flex sx={GlobalStyle.spanFlex}>
+                  <Text sx={GlobalStyle.boldText}>Case XXXX:</Text>
+                  <Text sx={GlobalStyle.boldText}>Disease name</Text>
+                </Flex>
+                <Text sx={onTrack}>On Track</Text>
+              </VStack>
+              <VStack align="end" spacing={1}>
+                <Avatar
+                  sx={GlobalStyle.profileImgSmall}
+                  src="/images/nice.JPG"
+                />
+                <Text sx={doctorText}>Dr.Alan Smith</Text>
+              </VStack>
+            </Flex>
+          </Link>
+
           <Flex sx={caseBox}>
-            <VStack align="start">
-              <Text sx={smallBoldText}>Case XXXX: Disease name</Text>
-              <Text sx={onTrack}>On Track</Text>
+            <VStack align="start" spacing={1}>
+              <Flex sx={GlobalStyle.spanFlex}>
+                <Text sx={GlobalStyle.boldText}>Case XXXX:</Text>
+                <Text sx={GlobalStyle.boldText}>Disease name</Text>
+              </Flex>
+              <Text sx={stopTrack}>Stop Track</Text>
             </VStack>
-            <VStack align="end">
-              <Avatar sx={imageStyle} src="/images/nice.JPG" />
-              <Text sx={normalText}>Dr.Alan Smith</Text>
-            </VStack>
-          </Flex>
-          <Flex sx={caseBox}>
-            <VStack align="start">
-              <Text sx={smallBoldText}>Case XXXX: Disease name</Text>
-              <Text sx={onTrack}>On Track</Text>
-            </VStack>
-            <VStack align="end">
-              <Avatar sx={imageStyle} src="/images/nice.JPG" />
-              <Text sx={normalText}>Dr.Alan Smith</Text>
-            </VStack>
-          </Flex>
-          <Flex sx={caseBox}>
-            <VStack align="start">
-              <Text sx={smallBoldText}>Case XXXX: Disease name</Text>
-              <Text sx={stopTrack}>Stop Tracking</Text>
-            </VStack>
-            <VStack align="end">
-              <Avatar sx={imageStyle} src="/images/nice.JPG" />
-              <Text sx={normalText}>Dr.Alan Smith</Text>
+            <VStack align="end" spacing={1}>
+              <Avatar sx={GlobalStyle.profileImgSmall} src="/images/nice.JPG" />
+              <Text sx={doctorText}>Dr.Alan Smith</Text>
             </VStack>
           </Flex>
         </Box>

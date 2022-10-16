@@ -3,6 +3,8 @@ import {
   Box,
   Flex,
   Input,
+  InputGroup,
+  InputRightElement,
   Textarea,
   Avatar,
   Tabs,
@@ -15,15 +17,35 @@ import {
   VStack,
   Button,
   ButtonGroup,
+  SimpleGrid,
+  Select,
 } from '@chakra-ui/react'
 import HeadCenter from '../../components/HeadCenter'
 import GlobalStyle from '../../Style'
+import Colour from '../../Colour'
 import { useState } from 'react'
 import { useToast } from '@chakra-ui/react'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
 export default () => {
+  let flexStyle1 = {
+    gap: '24px',
+    flexDirection: { base: 'column', md: 'row' },
+  }
+  let flexStyle2 = {
+    gap: '24px',
+    flexDirection: { base: 'column', sm: 'row' },
+  }
+  let iconInput = {
+    color: Colour.lightBlack,
+    cursor: 'pointer',
+    marginTop: '8px',
+  }
+
   const toast = useToast()
   const [isEdit, setIsEdit] = useState(false)
+  const [show, setShow] = useState(false)
+  const handlePassword = () => setShow(!show)
 
   const onSaveClick = () => {
     toast({
@@ -38,74 +60,93 @@ export default () => {
     }, 3000)
   }
 
-  let flexStyle = {
-    gap: '24px',
-    marginBottom: '24px',
-  }
-
   return (
     <Box sx={GlobalStyle.bgColor}>
       <HeadCenter topic="my profile" />
 
       <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
         <Text sx={GlobalStyle.headingText}>Patient ID: XXXXXX</Text>
-        {/* Basic information */}
+        {/* ==================== Basic information ==================== */}
         <Box sx={GlobalStyle.infoBox}>
-          <Flex sx={flexStyle}>
+          <Flex sx={flexStyle1}>
             <Avatar sx={GlobalStyle.profileImg} src="/images/profile.JPG" />
 
             <Box flex="1">
-              <Flex sx={flexStyle}>
-                <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>First name</FormLabel>
+              <SimpleGrid
+                columns={{ base: 1, sm: 2 }}
+                sx={GlobalStyle.gridStyle}
+              >
+                <FormControl isRequired>
+                  <FormLabel sx={GlobalStyle.labelText}>First Name</FormLabel>
                   <Input sx={GlobalStyle.inputStyle} />
                 </FormControl>
-                <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>Last name</FormLabel>
+
+                <FormControl isRequired>
+                  <FormLabel sx={GlobalStyle.labelText}>Last Name</FormLabel>
                   <Input sx={GlobalStyle.inputStyle} />
                 </FormControl>
-              </Flex>
-              <Flex sx={flexStyle}>
-                <FormControl>
+
+                <FormControl isRequired>
                   <FormLabel sx={GlobalStyle.labelText}>Username</FormLabel>
                   <Input sx={GlobalStyle.inputStyle} />
                 </FormControl>
-                <FormControl>
+
+                <FormControl isRequired>
                   <FormLabel sx={GlobalStyle.labelText}>Password</FormLabel>
-                  <Input sx={GlobalStyle.inputStyle} />
+                  <InputGroup>
+                    <Input
+                      sx={GlobalStyle.inputStyle}
+                      type={show ? 'text' : 'password'}
+                    />
+                    <InputRightElement>
+                      {show ? (
+                        <ViewIcon sx={iconInput} onClick={handlePassword} />
+                      ) : (
+                        <ViewOffIcon sx={iconInput} onClick={handlePassword} />
+                      )}
+                    </InputRightElement>
+                  </InputGroup>
                 </FormControl>
-              </Flex>
-              <Flex sx={flexStyle}>
-                <FormControl isReadOnly>
+
+                <FormControl isRequired>
                   <FormLabel sx={GlobalStyle.labelText}>
                     Date of birth
                   </FormLabel>
-                  <Input sx={GlobalStyle.inputStyle} type="date" />
+                  <Input type="date" sx={GlobalStyle.inputStyle} />
                 </FormControl>
-                <FormControl isReadOnly>
-                  <FormLabel sx={GlobalStyle.labelText}>Sex</FormLabel>
-                  <Input sx={GlobalStyle.inputStyle} />
-                </FormControl>
-                <FormControl isReadOnly>
-                  <FormLabel sx={GlobalStyle.labelText}>Blood group</FormLabel>
-                  <Input sx={GlobalStyle.inputStyle} />
-                </FormControl>
-              </Flex>
-              <Flex sx={flexStyle}>
-                <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>Phone number</FormLabel>
-                  <Input sx={GlobalStyle.inputStyle} />
-                </FormControl>
-                <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>Email</FormLabel>
-                  <Input sx={GlobalStyle.inputStyle} />
-                </FormControl>
-              </Flex>
+
+                <Flex sx={flexStyle2}>
+                  <FormControl isRequired>
+                    <FormLabel sx={GlobalStyle.labelText}>Sex</FormLabel>
+                    <Select placeholder="Choose" sx={GlobalStyle.inputStyle}>
+                      <option value="female">Female</option>
+                      <option value="male">Male</option>
+                      <option value="undefined">Undefinded</option>
+                    </Select>
+                  </FormControl>
+
+                  <FormControl isRequired>
+                    <FormLabel sx={GlobalStyle.labelText} whiteSpace="nowrap">
+                      Blood group
+                    </FormLabel>
+                    <Select placeholder="Choose" sx={GlobalStyle.inputStyle}>
+                      <option value="A+">A+</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B-">B-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="AB-">AB-</option>
+                      <option value="O+">O+</option>
+                      <option value="O-">O-</option>
+                    </Select>
+                  </FormControl>
+                </Flex>
+              </SimpleGrid>
             </Box>
           </Flex>
         </Box>
 
-        {/* Medical information */}
+        {/* ==================== Medical information ==================== */}
         <Tabs variant="enclosed" width="100%">
           <TabList>
             <Tab sx={GlobalStyle.tabSelected}>Medical Information</Tab>
