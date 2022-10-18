@@ -29,7 +29,6 @@ export default () => {
     gap: '24px',
     width: '100%',
     flexDirection: { base: 'column', sm: 'row' },
-    alignItems: { base: 'flex-start', sm: 'flex-end' },
   }
   let iconInput = {
     color: Colour.lightBlack,

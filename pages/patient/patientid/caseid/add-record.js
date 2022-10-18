@@ -44,9 +44,6 @@ export default () => {
 
   const [isError, setIsError] = useState(false)
   const [isExceed, setIsExceed] = useState(false)
-  const [selectedFile, setSelectedFile] = useState([])
-  const [preview, setPreview] = useState([])
-  const [file, setFile] = useState([])
   const toast = useToast()
 
   const [form, setForm] = useState({
@@ -69,7 +66,6 @@ export default () => {
     )
     console.log(ImagesArray)
     setForm({ ...form, photo: [...form.photo, ...ImagesArray] })
-    console.log('file', file)
   }
 
   function deleteFile(e) {
@@ -114,7 +110,7 @@ export default () => {
     }
   }
 
-  console.log('form', form)
+  // console.log('form', form)
   return (
     <Box sx={GlobalStyle.bgColor}>
       <HeadBox topic="symptom tracking" />
