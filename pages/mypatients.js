@@ -20,6 +20,7 @@ import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import { SearchIcon } from '@chakra-ui/icons'
 import HeadCenter from '../components/HeadCenter'
+import { useRouter } from 'next/router'
 
 export default () => {
   let iconStyle = {
@@ -50,6 +51,19 @@ export default () => {
     alignItems: 'center',
     gap: '24px',
   }
+  let hoverStyle = {
+    cursor: 'pointer',
+    transition: 'all 0.1s ease-in-out',
+    _hover: {
+      backgroundColor: Colour.lightGrey,
+    },
+  }
+
+  const router = useRouter()
+
+  const onClickPatient = () => {
+    router.push('/patient')
+  }
 
   return (
     <>
@@ -76,7 +90,7 @@ export default () => {
                 </Tr>
               </Thead>
               <Tbody>
-                <Tr>
+                <Tr sx={hoverStyle} onClick={() => onClickPatient()}>
                   <Td sx={GlobalStyle.labelText}>XXXXXX</Td>
                   <Td sx={GlobalStyle.labelText}>Pakamon Mumu</Td>
                   <Td isNumeric>

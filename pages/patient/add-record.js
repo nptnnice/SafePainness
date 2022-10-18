@@ -15,6 +15,7 @@ import {
   Image,
   SimpleGrid,
   Button,
+  chakra,
 } from '@chakra-ui/react'
 import GlobalStyle from '../../Style'
 import Colour from '../../Colour'
@@ -131,9 +132,7 @@ export default () => {
 
           {/* ==================== Pain scale ==================== */}
           <FormControl isRequired isInvalid={isError && !form.painscale}>
-            <FormLabel sx={GlobalStyle.labelText}>
-              What is pain severity?
-            </FormLabel>
+            <FormLabel sx={GlobalStyle.labelText}>Pain severity</FormLabel>
             <Box sx={GlobalStyle.sliderBox}>
               <Slider
                 defaultValue={4.5}
@@ -160,12 +159,18 @@ export default () => {
                 <SliderThumb boxSize={6} />
               </Slider>
             </Box>
+            <FormErrorMessage marginTop="16px" sx={GlobalStyle.errorText}>
+              Please select pain severity
+            </FormErrorMessage>
           </FormControl>
 
           {/* ==================== Upload picture ==================== */}
           <FormControl isInvalid={isExceed}>
             <FormLabel sx={GlobalStyle.labelText}>
-              Upload picture of your symptom
+              Upload picture of your symptom{' '}
+              <chakra.span sx={GlobalStyle.greyMediumText}>
+                (Optional)
+              </chakra.span>
             </FormLabel>
             <Input
               type="file"
@@ -176,7 +181,7 @@ export default () => {
             />
             {!isExceed ? (
               <FormHelperText sx={GlobalStyle.greyMediumText}>
-                (Optional) You can upload up to 4 pictures.
+                You can upload up to 4 pictures.
               </FormHelperText>
             ) : (
               <FormErrorMessage sx={GlobalStyle.errorText}>
@@ -208,11 +213,13 @@ export default () => {
           {/* ==================== Comment ==================== */}
           <FormControl>
             <FormLabel sx={GlobalStyle.labelText}>
-              Comment to your doctor
+              Comment to your doctor{' '}
+              <chakra.span sx={GlobalStyle.greyMediumText}>
+                (Optional)
+              </chakra.span>
             </FormLabel>
             <Textarea
               sx={GlobalStyle.inputStyle}
-              placeholder="Optional"
               onChange={(e) => setForm({ ...form, comment: e.target.value })}
             />
           </FormControl>

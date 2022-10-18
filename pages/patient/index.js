@@ -3,7 +3,7 @@ import GlobalStyle from '../../Style'
 import Colour from '../../Colour'
 import HeadInfo from '../../components/HeadInfo'
 import PatientInfo from '../../components/PatientInfo'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default () => {
   let flexStyle = {
@@ -46,6 +46,17 @@ export default () => {
     fontSize: { base: '14px', md: '16px' },
     display: { base: 'none', md: 'block' },
   }
+
+  const router = useRouter()
+
+  const onClickAddCase = () => {
+    router.push('/patient/historytaking/part1')
+  }
+
+  const onClickCase = () => {
+    router.push('/patient/case-records')
+  }
+
   return (
     <Box sx={GlobalStyle.bgColor}>
       <HeadInfo
@@ -61,30 +72,26 @@ export default () => {
 
         <Flex sx={flexStyle}>
           <Text sx={GlobalStyle.headingText}>My Cases</Text>
-          <Link href="/historytaking/part1">
-            <Button sx={GlobalStyle.turquoiseBtn}>+ Add Case</Button>
-          </Link>
+
+          <Button sx={GlobalStyle.turquoiseBtn} onClick={onClickAddCase}>
+            + Add Case
+          </Button>
         </Flex>
 
         <Box sx={GlobalStyle.infoBox}>
-          <Link href="/patient/case-records">
-            <Flex sx={caseBox}>
-              <VStack align="start" spacing={1}>
-                <Flex sx={GlobalStyle.spanFlex}>
-                  <Text sx={GlobalStyle.boldText}>Case XXXX:</Text>
-                  <Text sx={GlobalStyle.boldText}>Disease name</Text>
-                </Flex>
-                <Text sx={onTrack}>On Track</Text>
-              </VStack>
-              <VStack align="end" spacing={1}>
-                <Avatar
-                  sx={GlobalStyle.profileImgSmall}
-                  src="/images/nice.JPG"
-                />
-                <Text sx={doctorText}>Dr.Alan Smith</Text>
-              </VStack>
-            </Flex>
-          </Link>
+          <Flex sx={caseBox} onClick={onClickCase}>
+            <VStack align="start" spacing={1}>
+              <Flex sx={GlobalStyle.spanFlex}>
+                <Text sx={GlobalStyle.boldText}>Case XXXX:</Text>
+                <Text sx={GlobalStyle.boldText}>Disease name</Text>
+              </Flex>
+              <Text sx={onTrack}>On Track</Text>
+            </VStack>
+            <VStack align="end" spacing={1}>
+              <Avatar sx={GlobalStyle.profileImgSmall} src="/images/nice.JPG" />
+              <Text sx={doctorText}>Dr.Alan Smith</Text>
+            </VStack>
+          </Flex>
 
           <Flex sx={caseBox}>
             <VStack align="start" spacing={1}>

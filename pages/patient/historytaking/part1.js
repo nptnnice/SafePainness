@@ -29,7 +29,7 @@ import BodySelector from '../../../components/BodySelector'
 // import PainList from '../../../components/PainList'
 import { PainTypes } from '../../../PainTypes'
 import { ArrowForwardIcon } from '@chakra-ui/icons'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default () => {
   let bottomLine = {
@@ -74,6 +74,12 @@ export default () => {
     marginTop: '24px',
     alignItems: 'center',
     gap: '8px',
+  }
+
+  const router = useRouter()
+
+  const onClickNext = () => {
+    router.push('/patient/historytaking/part2')
   }
 
   return (
@@ -169,7 +175,7 @@ export default () => {
             </FormControl>
 
             {/* =================== Question 6 =================== */}
-            <VStack align="left" spacing={10}>
+            <VStack align="left" spacing={10} width="100%">
               <Text sx={GlobalStyle.labelText}>
                 6. What is the pain severity?
               </Text>
@@ -232,11 +238,13 @@ export default () => {
             </VStack>
           </VStack>
 
-          <Link href="./part2">
-            <Button rightIcon={<ArrowForwardIcon />} sx={GlobalStyle.blueBtn}>
-              Next
-            </Button>
-          </Link>
+          <Button
+            rightIcon={<ArrowForwardIcon />}
+            sx={GlobalStyle.blueBtn}
+            onClick={onClickNext}
+          >
+            Next
+          </Button>
         </VStack>
       </Box>
     </Box>

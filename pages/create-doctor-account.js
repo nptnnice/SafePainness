@@ -21,7 +21,7 @@ import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import { useState, useEffect } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/react'
 
 export default () => {
@@ -43,6 +43,11 @@ export default () => {
   const [preview, setPreview] = useState()
   const [isError, setIsError] = useState(false)
   const toast = useToast()
+  const router = useRouter()
+
+  const onClickCancel = () => {
+    router.push('/')
+  }
 
   const [form, setForm] = useState({
     firstname: '',
@@ -287,9 +292,10 @@ export default () => {
         {/* ==================== Button ==================== */}
         <Box sx={GlobalStyle.btnBox}>
           <ButtonGroup sx={GlobalStyle.btnGroup}>
-            <Link href="/">
-              <Button sx={GlobalStyle.whiteBtn}>Cancel</Button>
-            </Link>
+            <Button sx={GlobalStyle.whiteBtn} onClick={onClickCancel}>
+              Cancel
+            </Button>
+
             <Button sx={GlobalStyle.blueBtn} onClick={onCreateDoctor}>
               Create
             </Button>

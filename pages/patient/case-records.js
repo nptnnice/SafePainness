@@ -19,7 +19,7 @@ import Feedbacks from '../../components/Feedbacks'
 import HeadInfo from '../../components/HeadInfo'
 import ConfirmModal from '../../components/ConfirmModal'
 import { useState } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default () => {
   let diagnosisFlex = {
@@ -44,6 +44,12 @@ export default () => {
 
   const [showModal, setShowModal] = useState(false)
   const handleClick = () => setShowModal(!showModal)
+
+  const router = useRouter()
+
+  const onClickAddRecord = () => {
+    router.push('/patient/add-record')
+  }
 
   return (
     <Box sx={GlobalStyle.bgColor}>
@@ -86,11 +92,12 @@ export default () => {
 
         {/* ==================== Records & Feedbacks ==================== */}
         <Box sx={section2}>
-          <Link href="/patient/add-record">
-            <Box sx={btnPosition}>
-              <Button sx={GlobalStyle.turquoiseBtn}>+ Add Record</Button>
-            </Box>
-          </Link>
+          <Box sx={btnPosition}>
+            <Button sx={GlobalStyle.turquoiseBtn} onClick={onClickAddRecord}>
+              + Add Record
+            </Button>
+          </Box>
+
           <Tabs variant="unstyled">
             <TabList>
               <Tab sx={GlobalStyle.tabSelected}>Records</Tab>

@@ -17,11 +17,21 @@ import GlobalStyle from '../../../Style'
 import Colour from '../../../Colour'
 import FormProgress from '../../../components/FormProgress'
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default () => {
   let borderStyle = {
     borderColor: Colour.grey,
+  }
+
+  const router = useRouter()
+
+  const onClickBack = () => {
+    router.push('/patient/historytaking/part1')
+  }
+
+  const onClickNext = () => {
+    router.push('/patient/historytaking/part3')
   }
 
   return (
@@ -70,16 +80,21 @@ export default () => {
           </VStack>
 
           <ButtonGroup sx={GlobalStyle.btnGroup}>
-            <Link href="./part1">
-              <Button leftIcon={<ArrowBackIcon />} sx={GlobalStyle.whiteBtn}>
-                Back
-              </Button>
-            </Link>
-            <Link href="./part3">
-              <Button rightIcon={<ArrowForwardIcon />} sx={GlobalStyle.blueBtn}>
-                Next
-              </Button>
-            </Link>
+            <Button
+              leftIcon={<ArrowBackIcon />}
+              sx={GlobalStyle.whiteBtn}
+              onClick={onClickBack}
+            >
+              Back
+            </Button>
+
+            <Button
+              rightIcon={<ArrowForwardIcon />}
+              sx={GlobalStyle.blueBtn}
+              onClick={onClickNext}
+            >
+              Next
+            </Button>
           </ButtonGroup>
         </VStack>
       </Box>

@@ -20,7 +20,7 @@ import HeadCenter from '../components/HeadCenter'
 import Colour from '../Colour'
 import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default () => {
   let flexStyle = {
@@ -35,6 +35,12 @@ export default () => {
 
   const [show, setShow] = useState(false)
   const handlePassword = () => setShow(!show)
+
+  const router = useRouter()
+
+  const onClickCancel = () => {
+    router.push('/')
+  }
 
   return (
     <>
@@ -159,9 +165,10 @@ export default () => {
         {/* ==================== Button ==================== */}
         <Box sx={GlobalStyle.btnBox}>
           <ButtonGroup sx={GlobalStyle.btnGroup}>
-            <Link href="/">
-              <Button sx={GlobalStyle.whiteBtn}>Cancel</Button>
-            </Link>
+            <Button sx={GlobalStyle.whiteBtn} onClick={onClickCancel}>
+              Cancel
+            </Button>
+
             <Button sx={GlobalStyle.blueBtn}>Create</Button>
           </ButtonGroup>
         </Box>
