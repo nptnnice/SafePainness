@@ -3,6 +3,7 @@ html {
   margin: 0;
   padding: 0;
   height: 100%;
+  scroll-behavior: smooth;
 }
 /* .chakra-ui-light {
   background-color: #f3f4f6;
