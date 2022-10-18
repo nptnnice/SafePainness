@@ -10,14 +10,14 @@ import {
   Tab,
   TabPanel,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../Style'
-import Colour from '../../Colour'
-import SummaryBox from '../../components/SummaryBox'
-import Dashboard from '../../components/Dashboard'
-import Records from '../../components/Records'
-import Feedbacks from '../../components/Feedbacks'
-import HeadInfo from '../../components/HeadInfo'
-import ConfirmModal from '../../components/ConfirmModal'
+import GlobalStyle from '../../../../Style'
+import Colour from '../../../../Colour'
+import SummaryBox from '../../../../components/SummaryBox'
+import Dashboard from '../../../../components/Dashboard'
+import Records from '../../../../components/Records'
+import Feedbacks from '../../../../components/Feedbacks'
+import HeadInfo from '../../../../components/HeadInfo'
+import ConfirmModal from '../../../../components/ConfirmModal'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 
@@ -48,7 +48,7 @@ export default () => {
   const router = useRouter()
 
   const onClickAddRecord = () => {
-    router.push('/patient/add-record')
+    router.push('./caseid/add-record')
   }
 
   return (

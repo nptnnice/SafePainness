@@ -1,8 +1,8 @@
 import { Box, Text, Flex, VStack, Button, Avatar } from '@chakra-ui/react'
-import GlobalStyle from '../../Style'
-import Colour from '../../Colour'
-import HeadInfo from '../../components/HeadInfo'
-import PatientInfo from '../../components/PatientInfo'
+import GlobalStyle from '../../../Style'
+import Colour from '../../../Colour'
+import HeadInfo from '../../../components/HeadInfo'
+import PatientInfo from '../../../components/PatientInfo'
 import { useRouter } from 'next/router'
 
 export default () => {
@@ -50,11 +50,11 @@ export default () => {
   const router = useRouter()
 
   const onClickAddCase = () => {
-    router.push('/patient/historytaking/part1')
+    router.push('./patientid/historytaking/part1')
   }
 
   const onClickCase = () => {
-    router.push('/patient/case-records')
+    router.push('./patientid/caseid')
   }
 
   return (

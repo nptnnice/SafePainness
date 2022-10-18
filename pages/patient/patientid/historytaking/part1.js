@@ -22,12 +22,12 @@ import {
   Flex,
   Image,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../Style'
-import Colour from '../../../Colour'
-import FormProgress from '../../../components/FormProgress'
-import BodySelector from '../../../components/BodySelector'
+import GlobalStyle from '../../../../Style'
+import Colour from '../../../../Colour'
+import FormProgress from '../../../../components/FormProgress'
+import BodySelector from '../../../../components/BodySelector'
 // import PainList from '../../../components/PainList'
-import { PainTypes } from '../../../PainTypes'
+import { PainTypes } from '../../../../PainTypes'
 import { ArrowForwardIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 
@@ -79,7 +79,7 @@ export default () => {
   const router = useRouter()
 
   const onClickNext = () => {
-    router.push('/patient/historytaking/part2')
+    router.push('./part2')
   }
 
   return (

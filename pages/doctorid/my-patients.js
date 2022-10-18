@@ -16,10 +16,10 @@ import {
   Avatar,
   VStack,
 } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
+import GlobalStyle from '../../Style'
+import Colour from '../../Colour'
 import { SearchIcon } from '@chakra-ui/icons'
-import HeadCenter from '../components/HeadCenter'
+import HeadCenter from '../../components/HeadCenter'
 import { useRouter } from 'next/router'
 
 export default () => {
@@ -62,7 +62,7 @@ export default () => {
   const router = useRouter()
 
   const onClickPatient = () => {
-    router.push('/patient')
+    router.push('/patientid')
   }
 
   return (

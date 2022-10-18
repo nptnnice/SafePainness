@@ -13,9 +13,9 @@ import {
   Button,
   ButtonGroup,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../Style'
-import Colour from '../../../Colour'
-import FormProgress from '../../../components/FormProgress'
+import GlobalStyle from '../../../../Style'
+import Colour from '../../../../Colour'
+import FormProgress from '../../../../components/FormProgress'
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 
@@ -27,11 +27,11 @@ export default () => {
   const router = useRouter()
 
   const onClickBack = () => {
-    router.push('/patient/historytaking/part1')
+    router.push('./part1')
   }
 
   const onClickNext = () => {
-    router.push('/patient/historytaking/part3')
+    router.push('./part3')
   }
 
   return (

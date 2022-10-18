@@ -20,7 +20,7 @@ import {
   SimpleGrid,
   Select,
 } from '@chakra-ui/react'
-import HeadCenter from '../../components/HeadCenter'
+import HeadCenter from '../../../components/HeadCenter'
 import GlobalStyle from '../../Style'
 import Colour from '../../Colour'
 import { useState } from 'react'
