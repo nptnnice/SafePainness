@@ -143,7 +143,7 @@ const inputStyle = {
   fontSize: { base: '16px', md: '18px' },
   border: '1px solid',
   borderColor: Colour.grey,
-  height: '48px',
+  height: { base: '40px', md: '48px' },
 }
 
 // button
