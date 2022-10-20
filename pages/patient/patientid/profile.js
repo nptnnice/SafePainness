@@ -21,8 +21,8 @@ import {
   Select,
 } from '@chakra-ui/react'
 import HeadCenter from '../../../components/HeadCenter'
-import GlobalStyle from '../../Style'
-import Colour from '../../Colour'
+import GlobalStyle from '../../../Style'
+import Colour from '../../../Colour'
 import { useState } from 'react'
 import { useToast } from '@chakra-ui/react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
