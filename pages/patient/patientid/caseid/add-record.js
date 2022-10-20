@@ -24,7 +24,7 @@ import { useState } from 'react'
 import { CloseIcon } from '@chakra-ui/icons'
 import { useToast } from '@chakra-ui/react'
 
-export default () => {
+export default function AddRecord() {
   let imgStyle = {
     objectFit: 'cover',
     borderRadius: '12px',

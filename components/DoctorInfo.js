@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 
-export default ({ isOpen, onClose }) => {
+export default function DoctorInfo({ isOpen, onClose }) {
   let layout = {
     gap: '32px',
     flexDirection: { base: 'column', md: 'row' },

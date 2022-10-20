@@ -21,7 +21,7 @@ import ConfirmModal from '../../../../components/ConfirmModal'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 
-export default () => {
+export default function Case() {
   let diagnosisFlex = {
     alignItems: { base: 'flex-start', md: 'center' },
     gap: '16px',

@@ -31,7 +31,7 @@ import { PainTypes } from '../../../../PainTypes'
 import { ArrowForwardIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 
-export default () => {
+export default function History1() {
   let bottomLine = {
     borderBottom: '2px solid',
     borderBlockColor: Colour.grey,
@@ -137,9 +137,9 @@ export default () => {
                   templateColumns="repeat(auto-fill, minmax(180px, 1fr))"
                   sx={GlobalStyle.gridStyle}
                 >
-                  {PainTypes.map((item) => {
+                  {PainTypes.map((item, index) => {
                     return (
-                      <Flex sx={painBox}>
+                      <Flex sx={painBox} key={index}>
                         <Image sx={imgSize} src={item.image} />
                         <Text sx={GlobalStyle.labelText}>{item.name}</Text>
                       </Flex>

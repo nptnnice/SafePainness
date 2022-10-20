@@ -23,7 +23,7 @@ import HeadCenter from '../../components/HeadCenter'
 import { useRouter } from 'next/router'
 import { ArrowLeftIcon, ArrowRightIcon, AddIcon } from '@chakra-ui/icons'
 
-export default () => {
+export default function MyPatients() {
   let iconStyle = {
     color: Colour.darkGrey,
     marginTop: { base: '0px', md: '8px' },
@@ -75,7 +75,9 @@ export default () => {
           {/* ==================== Search box ==================== */}
           <InputGroup>
             <Input sx={GlobalStyle.inputStyle} placeholder="Search patient" />
-            <InputRightElement children={<SearchIcon sx={iconStyle} />} />
+            <InputRightElement>
+              <SearchIcon sx={iconStyle} />
+            </InputRightElement>
           </InputGroup>
           <Button
             sx={GlobalStyle.turquoiseBtn}

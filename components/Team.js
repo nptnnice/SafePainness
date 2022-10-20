@@ -2,7 +2,7 @@ import { Text, SimpleGrid, VStack, Image, Box } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
 
-export default () => {
+export default function Team() {
   const headText = {
     color: Colour.lightBlack,
     fontFamily: 'Lato',

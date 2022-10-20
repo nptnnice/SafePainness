@@ -1,6 +1,6 @@
 import { BodyComponent } from 'reactjs-human-body'
 
-export default () => {
+export default function BodySelector() {
   return (
     <BodyComponent
       partsInput={{
