@@ -1,7 +1,7 @@
 import { Box, Text, Flex, VStack, Avatar } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 
-export default () => {
+export default function PatientInfo() {
   let layout = {
     gap: '32px',
     flexDirection: { base: 'column', sm: 'column', md: 'row' },

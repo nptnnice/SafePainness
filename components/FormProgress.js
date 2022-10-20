@@ -1,7 +1,7 @@
 import { Box, Text, Progress } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 
-export default ({ progress }) => {
+export default function FormProgress({ progress }) {
   let progressStyle = {
     width: '60%',
     margin: '24px auto',

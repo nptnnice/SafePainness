@@ -4,7 +4,7 @@ import Colour from '../Colour'
 import DoctorInfo from './DoctorInfo'
 import { useState } from 'react'
 
-export default (props) => {
+export default function HeadInfo(props) {
   const { name, patientID, caseID, caseName, doctor } = props
   const [showModal, setShowModal] = useState(false)
   const handleClick = () => setShowModal(!showModal)

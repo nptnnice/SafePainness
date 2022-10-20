@@ -24,7 +24,7 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/react'
 
-export default () => {
+export default function CreateDoctorAccount() {
   let flexStyle = {
     gap: '24px',
     width: '100%',

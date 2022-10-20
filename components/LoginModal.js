@@ -20,7 +20,7 @@ import Colour from '../Colour'
 import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
-export default ({ isOpen, onClose }) => {
+export default function LoginModal({ isOpen, onClose }) {
   const [show, setShow] = useState(false)
   const handlePassword = () => setShow(!show)
 

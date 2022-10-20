@@ -22,7 +22,7 @@ import GlobalStyle from '../../Style'
 import { useState } from 'react'
 import { useToast } from '@chakra-ui/react'
 
-export default () => {
+export default function DoctorProfile() {
   let flexStyle = {
     gap: '24px',
     flexDirection: { base: 'column', md: 'row' },

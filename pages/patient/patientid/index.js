@@ -5,7 +5,7 @@ import HeadInfo from '../../../components/HeadInfo'
 import PatientInfo from '../../../components/PatientInfo'
 import { useRouter } from 'next/router'
 
-export default () => {
+export default function Patient() {
   let flexStyle = {
     margin: { base: '32px 0 16px', md: '48px 0 20px' },
     justifyContent: 'space-between',

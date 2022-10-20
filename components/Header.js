@@ -4,7 +4,7 @@ import GlobalStyle from '../Style'
 import LoginModal from './LoginModal'
 import { useState } from 'react'
 
-export default () => {
+export default function Header() {
   const [open, setOpen] = useState(false)
   const handleClick = () => setOpen(!open)
 

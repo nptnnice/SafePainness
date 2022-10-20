@@ -27,7 +27,7 @@ import { useState } from 'react'
 import { useToast } from '@chakra-ui/react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
-export default () => {
+export default function PatientProfile() {
   let flexStyle1 = {
     gap: '24px',
     flexDirection: { base: 'column', md: 'row' },

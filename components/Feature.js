@@ -2,7 +2,7 @@ import { Text, Flex, VStack, Image, Box } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
 
-export default () => {
+export default function Feature() {
   const headText = {
     color: Colour.lightBlack,
     fontFamily: 'Lato',
@@ -44,8 +44,8 @@ export default () => {
           <Text sx={GlobalStyle.headingText}>Easy history taking</Text>
           <Text sx={GlobalStyle.greyMediumText}>
             Doctors can take history easier by using our questionnaire which is
-            based on SOCRATES, a useful way of exploring a patient's presenting
-            symptoms.
+            based on SOCRATES, a useful way of exploring a patient&apos;s
+            presenting symptoms.
           </Text>
         </VStack>
       </Flex>
@@ -65,8 +65,8 @@ export default () => {
         <VStack>
           <Text sx={GlobalStyle.headingText}>Giving feedback</Text>
           <Text sx={GlobalStyle.greyMediumText}>
-            The doctor can monitor the progress of the patient's symptom and
-            give feedback to the patient remotely.
+            The doctor can monitor the progress of the patient&apos;s symptom
+            and give feedback to the patient remotely.
           </Text>
         </VStack>
       </Flex>
