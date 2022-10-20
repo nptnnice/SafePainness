@@ -35,6 +35,31 @@ export default () => {
     cursor: 'pointer',
     marginTop: '8px',
   }
+  let fileBtn = {
+    boxSize: { base: '120px', sm: '150px', md: '180px' },
+    borderRadius: '50%',
+    border: '2px dashed',
+    borderColor: Colour.grey,
+    cursor: 'pointer',
+    fontFamily: 'Lato',
+    fontSize: '18px',
+    color: Colour.grey,
+    position: 'relative',
+    boxSizing: 'border-box',
+  }
+  let upload = {
+    position: 'absolute',
+    transform: 'translate(-50%, -50%)',
+    top: '50%',
+    left: '50%',
+    textAlign: 'center',
+  }
+
+  let oldfileBtn = {
+    opacity: '0',
+    position: 'absolute',
+    zIndex: '-1',
+  }
 
   const [show, setShow] = useState(false)
   const handlePassword = () => setShow(!show)
@@ -140,17 +165,22 @@ export default () => {
         {/* ==================== Basic information ==================== */}
         <Text sx={GlobalStyle.headingText}>Basic Information</Text>
         <Flex sx={flexStyle}>
-          {selectedFile ? (
-            <Avatar src={preview} sx={GlobalStyle.profileImg} />
-          ) : (
-            <Avatar sx={GlobalStyle.profileImg} />
-          )}
           <FormControl>
-            <Input
-              type="file"
-              onChange={onSelectFile}
-              sx={GlobalStyle.inputStyle}
-            />
+            {selectedFile ? (
+              <>
+                <FormLabel cursor="pointer">
+                  <Avatar src={preview} sx={GlobalStyle.profileImg} />
+                </FormLabel>
+                <Input type="file" onChange={onSelectFile} sx={oldfileBtn} />
+              </>
+            ) : (
+              <>
+                <FormLabel sx={fileBtn}>
+                  <Text sx={upload}>Upload photo</Text>
+                </FormLabel>
+                <Input type="file" onChange={onSelectFile} sx={oldfileBtn} />
+              </>
+            )}
           </FormControl>
         </Flex>
 
