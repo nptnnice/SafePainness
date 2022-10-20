@@ -22,8 +22,9 @@ import { SearchIcon } from '@chakra-ui/icons'
 import HeadCenter from '../../components/HeadCenter'
 import { useRouter } from 'next/router'
 import { ArrowLeftIcon, ArrowRightIcon, AddIcon } from '@chakra-ui/icons'
+import axios from 'axios'
 
-export default function MyPatients() {
+export default function MyPatients(props) {
   let iconStyle = {
     color: Colour.darkGrey,
     marginTop: { base: '0px', md: '8px' },
@@ -99,16 +100,18 @@ export default function MyPatients() {
                 </Tr>
               </Thead>
               <Tbody>
-                <Tr sx={hoverStyle} onClick={() => onClickPatient()}>
-                  <Td sx={GlobalStyle.labelText}>XXXXXX</Td>
-                  <Td sx={GlobalStyle.labelText}>Pakamon Mumu</Td>
-                  <Td isNumeric>
-                    <Avatar
-                      src="/images/petch.JPG"
-                      sx={GlobalStyle.profileImgSmall}
-                    />
-                  </Td>
-                </Tr>
+                {props.doctorData.map((doctor) => (
+                  <Tr sx={hoverStyle} onClick={() => onClickPatient()}>
+                    <Td sx={GlobalStyle.labelText}>{doctor.doctorID}</Td>
+                    <Td sx={GlobalStyle.labelText}>{doctor.firstName}</Td>
+                    <Td isNumeric>
+                      <Avatar
+                        src="/images/petch.JPG"
+                        sx={GlobalStyle.profileImgSmall}
+                      />
+                    </Td>
+                  </Tr>
+                ))}
               </Tbody>
             </Table>
           </TableContainer>
@@ -123,4 +126,13 @@ export default function MyPatients() {
       </VStack>
     </>
   )
+}
+
+export async function getServerSideProps() {
+  const doctorData = await axios.get('http://localhost:3000/api/getDoctor')
+  return {
+    props: {
+      doctorData: doctorData.data,
+    },
+  }
 }
