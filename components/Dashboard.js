@@ -5,7 +5,7 @@ import Colour from '../Colour'
 import Chart from 'chart.js/auto'
 import { Line } from 'react-chartjs-2'
 
-export default () => {
+export default function Dashboard() {
   const [painGraph, setPainGraph] = useState({
     dataset: [{}],
   })

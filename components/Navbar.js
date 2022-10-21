@@ -4,7 +4,7 @@ import LoginModal from './LoginModal'
 import { useState } from 'react'
 import Link from 'next/link'
 
-export default () => {
+export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   let navbar = {

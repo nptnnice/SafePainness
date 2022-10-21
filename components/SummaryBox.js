@@ -1,7 +1,7 @@
 import { Text, SimpleGrid, Flex } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 
-export default () => {
+export default function SummaryBox() {
   let gridStyle = {
     columnGap: { base: '10px', md: '24px' },
     rowGap: '8px',

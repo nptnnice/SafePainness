@@ -16,7 +16,7 @@ import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import { useState } from 'react'
 
-export default ({ isOpen, onClose }) => {
+export default function ConfirmModal({ isOpen, onClose }) {
   const [showModal, setShowModal] = useState(false)
   const handleClick = () => setShowModal(!showModal)
 

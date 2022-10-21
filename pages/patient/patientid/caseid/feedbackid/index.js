@@ -14,17 +14,10 @@ import GlobalStyle from '../../../../../Style'
 import HeadInfo from '../../../../../components/HeadInfo';
 import Responses from '../../../../../components/Responses';
 
+export default function Feedback() {
 
-export default () => {
-
-  let flexStyle = {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: '16px',
-  }
-
+ 
   //create map function to display all the feedbacks
-
   return (
     <>
       <Box sx={GlobalStyle.bgColor}>

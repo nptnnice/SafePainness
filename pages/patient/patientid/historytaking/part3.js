@@ -15,7 +15,7 @@ import FormProgress from '../../../../components/FormProgress'
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 
-export default () => {
+export default function History3() {
   const router = useRouter()
 
   const onClickBack = () => {

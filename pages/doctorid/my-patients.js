@@ -21,29 +21,20 @@ import Colour from '../../Colour'
 import { SearchIcon } from '@chakra-ui/icons'
 import HeadCenter from '../../components/HeadCenter'
 import { useRouter } from 'next/router'
+import { ArrowLeftIcon, ArrowRightIcon, AddIcon } from '@chakra-ui/icons'
+import axios from 'axios'
 
-export default () => {
+export default function MyPatients(props) {
   let iconStyle = {
     color: Colour.darkGrey,
-    marginTop: '8px',
+    marginTop: { base: '0px', md: '8px' },
     boxSize: { base: '20px', md: '24px' },
   }
   let flexStyle = {
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: '16px',
+    gap: { base: '8px', md: '16px' },
     width: '100%',
-  }
-  let textBtn = {
-    fontFamily: 'IBM Plex Sans',
-    fontSize: { sm: '16px', md: '18px' },
-    fontWeight: 'medium',
-    color: Colour.lightBlack,
-    cursor: 'pointer',
-    transition: 'all 0.1s',
-    _hover: {
-      color: Colour.turquoise,
-    },
   }
   let btnFlex = {
     marginTop: '24px',
@@ -58,11 +49,23 @@ export default () => {
       backgroundColor: Colour.lightGrey,
     },
   }
+  let arrowStyle = {
+    color: Colour.lightBlack,
+    boxSize: { base: '12px', md: '14px' },
+    cursor: 'pointer',
+    transition: 'all 0.1s',
+    _hover: {
+      color: Colour.turquoise,
+    },
+  }
+  let addIconSize = {
+    boxSize: { base: '12px', md: '14px' },
+  }
 
   const router = useRouter()
 
   const onClickPatient = () => {
-    router.push('/patientid')
+    router.push('/patient/patientid')
   }
 
   return (
@@ -73,9 +76,16 @@ export default () => {
           {/* ==================== Search box ==================== */}
           <InputGroup>
             <Input sx={GlobalStyle.inputStyle} placeholder="Search patient" />
-            <InputRightElement children={<SearchIcon sx={iconStyle} />} />
+            <InputRightElement>
+              <SearchIcon sx={iconStyle} />
+            </InputRightElement>
           </InputGroup>
-          <Button sx={GlobalStyle.turquoiseBtn}>+ appointment</Button>
+          <Button
+            sx={GlobalStyle.turquoiseBtn}
+            leftIcon={<AddIcon sx={addIconSize} />}
+          >
+            Appointment
+          </Button>
         </Flex>
 
         {/* ==================== Patient table ==================== */}
@@ -90,16 +100,18 @@ export default () => {
                 </Tr>
               </Thead>
               <Tbody>
-                <Tr sx={hoverStyle} onClick={() => onClickPatient()}>
-                  <Td sx={GlobalStyle.labelText}>XXXXXX</Td>
-                  <Td sx={GlobalStyle.labelText}>Pakamon Mumu</Td>
-                  <Td isNumeric>
-                    <Avatar
-                      src="/images/petch.JPG"
-                      sx={GlobalStyle.profileImgSmall}
-                    />
-                  </Td>
-                </Tr>
+                {props.doctorData.map((doctor) => (
+                  <Tr sx={hoverStyle} onClick={() => onClickPatient()}>
+                    <Td sx={GlobalStyle.labelText}>{doctor.doctorID}</Td>
+                    <Td sx={GlobalStyle.labelText}>{doctor.firstName}</Td>
+                    <Td isNumeric>
+                      <Avatar
+                        src="/images/petch.JPG"
+                        sx={GlobalStyle.profileImgSmall}
+                      />
+                    </Td>
+                  </Tr>
+                ))}
               </Tbody>
             </Table>
           </TableContainer>
@@ -107,11 +119,20 @@ export default () => {
 
         {/* ==================== Button ==================== */}
         <Flex sx={btnFlex}>
-          <Text sx={textBtn}>Previous</Text>
-          <Text sx={GlobalStyle.regularText}>1</Text>
-          <Text sx={textBtn}>Next</Text>
+          <ArrowLeftIcon sx={arrowStyle} />
+          <Text sx={GlobalStyle.labelText}>1</Text>
+          <ArrowRightIcon sx={arrowStyle} />
         </Flex>
       </VStack>
     </>
   )
+}
+
+export async function getServerSideProps() {
+  const doctorData = await axios.get('http://localhost:3000/api/getDoctor')
+  return {
+    props: {
+      doctorData: doctorData.data,
+    },
+  }
 }
