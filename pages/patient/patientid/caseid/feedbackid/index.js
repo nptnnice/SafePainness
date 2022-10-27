@@ -1,13 +1,11 @@
 import {
   Text,
   Box,
-  Flex,
   Button,
   Textarea,
   FormLabel,
   FormControl,
   VStack,
-  Divider,
 } from '@chakra-ui/react'
 import HeadCenter from '../../../../../components/Headcenter';
 import GlobalStyle from '../../../../../Style'
@@ -15,9 +13,12 @@ import HeadInfo from '../../../../../components/HeadInfo';
 import Responses from '../../../../../components/Responses';
 
 export default function Feedback() {
-
+  let flexStyle = {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: '16px',
+  }
  
-  //create map function to display all the feedbacks
   return (
     <>
       <Box sx={GlobalStyle.bgColor}>
