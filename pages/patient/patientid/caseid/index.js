@@ -95,7 +95,7 @@ export default function Case() {
         </Tabs>
 
         {/* ==================== Records & Feedbacks ==================== */}
-         {/* <Box sx={section2}>
+        {/* <Box sx={section2}>
           <Box sx={btnPosition}>
             <Button sx={GlobalStyle.turquoiseBtn} onClick={onClickAddRecord}>
               + Add Record
@@ -108,7 +108,7 @@ export default function Case() {
               + Feedback
             </Button>
           </Box>
-          <AddFeedbackModal isOpen={showModalFb} onClose={handleClick1}/>
+          <AddFeedbackModal isOpen={showModalFb} onClose={handleClick1} />
 
           <Tabs variant="unstyled">
             <TabList>
