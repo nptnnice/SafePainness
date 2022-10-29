@@ -90,7 +90,7 @@ export default function MyPatients(props) {
             leftIcon={<AddIcon sx={addIconSize} />}
             onClick={handleClick}
           >
-            Appointment
+            Add Case
           </Button>
           <CreateAppointment
             isOpen={showModal}

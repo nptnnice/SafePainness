@@ -1,5 +1,4 @@
 import {
-  Text,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -22,19 +21,23 @@ import {
 } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
-import {
-  SearchIcon,
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  AddIcon,
-} from '@chakra-ui/icons'
-import axios from 'axios'
+import { SearchIcon, AddIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 export default function CreateAppointment({ isOpen, onClose, props }) {
+  const [onClickPatient, setPatient] = useState(false)
+  const [selected, setSelected] = useState('')
+  const onClickHistorytaking = () => {
+    router.push('/patient/patientid/historytaking/part1')
+  }
+  const onClickNewPatient = () => {
+    router.push('/create-patient-account')
+  }
+  const router = useRouter()
   let modalStyle = {
     maxWidth: '900px',
-    maxHeight: '400px',
+    maxHeight: '700px',
     width: '90%',
     borderRadius: '24px',
     padding: { base: '20px', md: '24px' },
@@ -54,12 +57,6 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
   let addIconSize = {
     boxSize: { base: '12px', md: '14px' },
   }
-  let btnFlex = {
-    marginTop: '24px',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '24px',
-  }
   let hoverStyle = {
     cursor: 'pointer',
     transition: 'all 0.1s ease-in-out',
@@ -67,28 +64,27 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
       backgroundColor: Colour.lightGrey,
     },
   }
-  let arrowStyle = {
-    color: Colour.lightBlack,
-    boxSize: { base: '12px', md: '14px' },
-    cursor: 'pointer',
-    transition: 'all 0.1s',
-    _hover: {
-      color: Colour.turquoise,
-    },
+  let hoverStyleSelected = {
+    ...hoverStyle,
+    backgroundColor: Colour.lightGrey,
   }
   let modalBodyStyle = {
     padding: { base: '0px', md: '8px' },
   }
-  let stackLayout = {
-    padding: '0px',
+  let boxStyle = {
+    justifyContent: 'flex-end',
+    padding: { base: '12px 0px', md: '20px 0px 0px 0px' },
   }
-  const onClickPatient = () => {
-    router.push('/patient/patientid')
+  let tableBox = {
+    width: '100%',
+    borderRadius: '12px',
+    backgroundColor: Colour.white,
+    padding: { base: '24px 16px', md: '40px 20px' },
+    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+    overflowY: 'scroll',
+    height: { base: '320px', md: '400px' },
   }
-  const onClickNewPatient = () => {
-    router.push('/create-patient-account')
-  }
-  const router = useRouter()
+
   return (
     <>
       <Modal
@@ -100,7 +96,7 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
         <ModalOverlay />
         <ModalContent sx={modalStyle}>
           <ModalBody sx={modalBodyStyle}>
-            <VStack sx={stackLayout} spacing={8}>
+            <VStack spacing={8}>
               <Flex sx={flexStyle}>
                 {/* ==================== Search box ==================== */}
                 <InputGroup>
@@ -120,9 +116,8 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
                   New Patient
                 </Button>
               </Flex>
-
               {/* ==================== Patient table ==================== */}
-              <Box sx={GlobalStyle.infoBox}>
+              <Box sx={tableBox}>
                 <TableContainer>
                   <Table variant="simple">
                     <Thead>
@@ -134,7 +129,20 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
                     </Thead>
                     <Tbody>
                       {props.map((doctor) => (
-                        <Tr sx={hoverStyle} onClick={() => onClickPatient()}>
+                        <Tr
+                          sx={
+                            selected == doctor.doctorID
+                              ? hoverStyleSelected
+                              : hoverStyle
+                          }
+                          onClick={() => {
+                            if (selected == doctor.doctorID) {
+                              setSelected('')
+                            } else {
+                              setSelected(doctor.doctorID)
+                            }
+                          }}
+                        >
                           <Td sx={GlobalStyle.labelText}>{doctor.doctorID}</Td>
                           <Td sx={GlobalStyle.labelText}>{doctor.firstName}</Td>
                           <Td isNumeric>
@@ -149,25 +157,20 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
                   </Table>
                 </TableContainer>
               </Box>
-
-              {/* ==================== Button ==================== */}
-              <Flex sx={btnFlex}>
-                <ArrowLeftIcon sx={arrowStyle} />
-                <Text sx={GlobalStyle.labelText}>1</Text>
-                <ArrowRightIcon sx={arrowStyle} />
-              </Flex>
             </VStack>
+            {/* ==================== Button ==================== */}
+            <Flex sx={boxStyle}>
+              <Button
+                sx={GlobalStyle.yellowBtn}
+                disabled={selected == ''}
+                onClick={() => onClickHistorytaking()}
+              >
+                Take History
+              </Button>
+            </Flex>
           </ModalBody>
         </ModalContent>
       </Modal>
     </>
   )
 }
-// export async function getServerSideProps() {
-//   const doctorData = await axios.get('http://localhost:3000/api/getDoctor')
-//   return {
-//     props: {
-//       doctorData: doctorData.data,
-//     },
-//   }
-// }
