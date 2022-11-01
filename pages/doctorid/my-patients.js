@@ -23,6 +23,8 @@ import HeadCenter from '../../components/HeadCenter'
 import { useRouter } from 'next/router'
 import { ArrowLeftIcon, ArrowRightIcon, AddIcon } from '@chakra-ui/icons'
 import axios from 'axios'
+import CreateAppointment from '../../components/CreateAppointment'
+import { useState } from 'react'
 
 export default function MyPatients(props) {
   let iconStyle = {
@@ -68,6 +70,9 @@ export default function MyPatients(props) {
     router.push('/patient/patientid')
   }
 
+  const [showModal, setShowModal] = useState(false)
+  const handleClick = () => setShowModal(!showModal)
+
   return (
     <>
       <HeadCenter topic="My Patients" />
@@ -83,9 +88,15 @@ export default function MyPatients(props) {
           <Button
             sx={GlobalStyle.turquoiseBtn}
             leftIcon={<AddIcon sx={addIconSize} />}
+            onClick={handleClick}
           >
-            Appointment
+            Add Case
           </Button>
+          <CreateAppointment
+            isOpen={showModal}
+            onClose={handleClick}
+            props={props.doctorData}
+          />
         </Flex>
 
         {/* ==================== Patient table ==================== */}
