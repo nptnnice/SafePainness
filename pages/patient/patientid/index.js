@@ -73,9 +73,9 @@ export default function Patient() {
         <Flex sx={flexStyle}>
           <Text sx={GlobalStyle.headingText}>My Cases</Text>
 
-          <Button sx={GlobalStyle.turquoiseBtn} onClick={onClickAddCase}>
+          {/* <Button sx={GlobalStyle.turquoiseBtn} onClick={onClickAddCase}>
             + Add Case
-          </Button>
+          </Button> */}
         </Flex>
 
         <Box sx={GlobalStyle.infoBox}>

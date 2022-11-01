@@ -135,7 +135,6 @@ export default function Tutorial(props) {
   }
 
   // handle form submit
-  //   const onSubmit = () => {
   const onSubmit = async () => {
     console.log('form', form)
     // form is completed when firstname and lastname are not empty
@@ -173,6 +172,8 @@ export default function Tutorial(props) {
     }
   }
 
+  console.log('form', form)
+
   return (
     <Box sx={GlobalStyle.layout}>
       <Box marginTop="80px">
@@ -190,7 +191,7 @@ export default function Tutorial(props) {
           <FormControl
             id="lastname"
             isRequired
-            isInvalid={error & !form.lastname}
+            isInvalid={error && !form.lastname}
           >
             <Input placeholder="lastname" onChange={getLastName} />
             <FormErrorMessage>Please fill in your lastname</FormErrorMessage>
@@ -223,6 +224,7 @@ export default function Tutorial(props) {
           {/* submit form */}
           <Button onClick={onSubmit}>Submit</Button>
         </VStack>
+        {console.log('props', props)}
 
         <VStack marginTop="80px">
           {/* show all data from database */}
