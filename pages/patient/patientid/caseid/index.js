@@ -20,6 +20,7 @@ import HeadInfo from '../../../../components/HeadInfo'
 import ConfirmModal from '../../../../components/ConfirmModal'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import AddFeedbackModal from '../../../../components/AddFeedbackModal'
 
 export default function Case() {
   let diagnosisFlex = {
@@ -44,6 +45,9 @@ export default function Case() {
 
   const [showModal, setShowModal] = useState(false)
   const handleClick = () => setShowModal(!showModal)
+
+  const [showModalFb, setShowModalFb] = useState(false)
+  const handleClick1 = () => setShowModalFb(!showModalFb)
 
   const router = useRouter()
 
@@ -91,12 +95,20 @@ export default function Case() {
         </Tabs>
 
         {/* ==================== Records & Feedbacks ==================== */}
-        <Box sx={section2}>
+        {/* <Box sx={section2}>
           <Box sx={btnPosition}>
             <Button sx={GlobalStyle.turquoiseBtn} onClick={onClickAddRecord}>
               + Add Record
             </Button>
+          </Box>  */}
+
+        <Box sx={section2}>
+          <Box sx={btnPosition}>
+            <Button sx={GlobalStyle.turquoiseBtn} onClick={handleClick1}>
+              + Feedback
+            </Button>
           </Box>
+          <AddFeedbackModal isOpen={showModalFb} onClose={handleClick1} />
 
           <Tabs variant="unstyled">
             <TabList>
