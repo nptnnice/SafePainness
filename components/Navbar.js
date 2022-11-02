@@ -3,6 +3,7 @@ import Colour from '../Colour'
 import LoginModal from './LoginModal'
 import { useState } from 'react'
 import Link from 'next/link'
+import Notification from './Notification'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -68,6 +69,7 @@ export default function Navbar() {
         />
       </Link>
       <Flex sx={menuFlex}>
+        <Notification />
         <Link href="/createDoctorAcc">
           <Text sx={signup}>Sign Up</Text>
         </Link>
