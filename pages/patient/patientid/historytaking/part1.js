@@ -86,7 +86,12 @@ export default function History1() {
     <Box sx={GlobalStyle.bgColor}>
       <FormProgress progress={0} />
       <Box sx={GlobalStyle.layout}>
-        <Text sx={GlobalStyle.boldText}>
+        <Text sx={GlobalStyle.labelText}>
+          This is a history taking questionnaire based on SOCRATES pain
+          assessment tool. You need to fill the answer according to your pain
+          experience.
+        </Text>
+        <Text sx={GlobalStyle.boldText} marginTop="24px">
           Part 1: Symptoms and Associated Symptoms
         </Text>
         <VStack spacing={16}>
@@ -154,6 +159,16 @@ export default function History1() {
             </FormControl>
 
             {/* =================== Question 5 =================== */}
+            <FormControl>
+              <FormLabel sx={GlobalStyle.labelText}>
+                5. Does the pain radiate anywhere?
+              </FormLabel>
+              <Input sx={GlobalStyle.inputStyle} />
+              <FormHelperText sx={GlobalStyle.greyMediumText}>
+                (Fill the blank with dash (-), if the answer is no.)
+              </FormHelperText>
+            </FormControl>
+
             <FormControl>
               <FormLabel sx={GlobalStyle.labelText}>
                 5. Is there any other symptoms associated with the pain?

@@ -21,9 +21,6 @@ import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
 export default function LoginModal({ isOpen, onClose }) {
-  const [show, setShow] = useState(false)
-  const handlePassword = () => setShow(!show)
-
   let header = {
     fontFamily: 'Lato',
     fontSize: { base: '28px', md: '32px' },
@@ -57,6 +54,10 @@ export default function LoginModal({ isOpen, onClose }) {
     cursor: 'pointer',
     marginTop: '8px',
   }
+
+  const [show, setShow] = useState(false)
+  const handlePassword = () => setShow(!show)
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
