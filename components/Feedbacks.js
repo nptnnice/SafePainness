@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 export default function Feedbacks() {
   const router = useRouter()
   const onClickFeedback = () => {
-    router.push('./caseid/feedbackid')
+    router.push('./feedback/feedbackid')
   }
   return (
     <>

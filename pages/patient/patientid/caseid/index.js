@@ -9,6 +9,11 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  SimpleGrid,
+  Stack,
 } from '@chakra-ui/react'
 import GlobalStyle from '../../../../Style'
 import Colour from '../../../../Colour'
@@ -22,20 +27,27 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import AddFeedbackModal from '../../../../components/AddFeedbackModal'
 
-export default function Case() {
+export default function Case(props) {
   let diagnosisFlex = {
     alignItems: { base: 'flex-start', md: 'center' },
     gap: '16px',
     width: '100%',
     flexDirection: { base: 'column', md: 'row' },
+    marginBottom: '24px',
   }
   let section1 = {
     marginTop: { base: '40px', md: '56px' },
     position: 'relative',
   }
   let section2 = {
-    marginTop: { base: '72px', md: '56px' },
+    marginTop: { base: '24px', md: '16px' },
     position: 'relative',
+    // flexDirection: 'column',
+    width: '100%',
+    borderRadius: '12px',
+    backgroundColor: Colour.white,
+    padding: { base: '24px 16px', md: '40px 20px' },
+    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
   }
   let btnPosition = {
     position: 'absolute',
@@ -77,53 +89,26 @@ export default function Case() {
           </Button>
         </Flex>
         <ConfirmModal isOpen={showModal} onClose={handleClick} />
-
-        {/* ==================== Dashboard & Summary ==================== */}
-        <Tabs variant="unstyled" sx={section1}>
-          <TabList>
-            <Tab sx={GlobalStyle.tabSelected}>Summary</Tab>
-            <Tab sx={GlobalStyle.tabSelected}>Dashboard</Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel sx={GlobalStyle.tabBox}>
-              <SummaryBox />
-            </TabPanel>
-            <TabPanel sx={GlobalStyle.tabBox}>
-              <Dashboard />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-
-        {/* ==================== Records & Feedbacks ==================== */}
-        {/* <Box sx={section2}>
-          <Box sx={btnPosition}>
-            <Button sx={GlobalStyle.turquoiseBtn} onClick={onClickAddRecord}>
-              + Add Record
-            </Button>
-          </Box>  */}
-
+        <Breadcrumb>
+          <BreadcrumbItem iscurrentPage>
+            <BreadcrumbLink>
+              <Text sx={GlobalStyle.boldText}>Summary</Text>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="./caseid/recordid">
+              <Text sx={GlobalStyle.boldText}>Records</Text>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="./caseid/feedback">
+              <Text sx={GlobalStyle.boldText}>Feedbacks</Text>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </Breadcrumb>
         <Box sx={section2}>
-          <Box sx={btnPosition}>
-            <Button sx={GlobalStyle.turquoiseBtn} onClick={handleClick1}>
-              + Feedback
-            </Button>
-          </Box>
-          <AddFeedbackModal isOpen={showModalFb} onClose={handleClick1} />
-
-          <Tabs variant="unstyled">
-            <TabList>
-              <Tab sx={GlobalStyle.tabSelected}>Records</Tab>
-              <Tab sx={GlobalStyle.tabSelected}>Feedbacks</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel sx={GlobalStyle.tabBox}>
-                <Records />
-              </TabPanel>
-              <TabPanel sx={GlobalStyle.tabBox}>
-                <Feedbacks />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+          <SummaryBox />
+          <Dashboard />
         </Box>
       </Box>
     </Box>
