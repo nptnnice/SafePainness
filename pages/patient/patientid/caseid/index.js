@@ -18,6 +18,13 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 
 export default function Case() {
+  let layout = {
+    width: '90%',
+    margin: '0 auto',
+    maxWidth: '900px',
+    padding: { base: '48px 0 160px', md: '16px 0 240px' },
+    position: 'relative',
+  }
   let diagnosisFlex = {
     alignItems: { base: 'flex-start', md: 'center' },
     gap: '16px',
@@ -59,7 +66,7 @@ export default function Case() {
         doctor="Alan Smith"
       />
 
-      <Box sx={GlobalStyle.layout}>
+      <Box sx={layout}>
         {/* ==================== Confirm diagnosis ==================== */}
         <Flex sx={diagnosisFlex}>
           <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">

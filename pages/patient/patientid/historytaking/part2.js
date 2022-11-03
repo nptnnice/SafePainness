@@ -1,6 +1,7 @@
 import {
   Box,
   Text,
+  Flex,
   VStack,
   FormControl,
   FormLabel,
@@ -16,10 +17,11 @@ import {
 import GlobalStyle from '../../../../Style'
 import Colour from '../../../../Colour'
 import FormProgress from '../../../../components/FormProgress'
-import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
+import { ArrowForwardIcon, ArrowBackIcon, InfoOutlineIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 
 export default function History2() {
+
   let borderStyle = {
     borderColor: Colour.grey,
   }
