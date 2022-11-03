@@ -22,7 +22,7 @@ export default function Case() {
     width: '90%',
     margin: '0 auto',
     maxWidth: '900px',
-    padding: { base: '48px 0 160px', md: '16px 0 240px' },
+    padding: { base: '48px 0 160px', md: '56px 0 240px' },
     position: 'relative',
   }
   let diagnosisFlex = {
@@ -44,17 +44,36 @@ export default function Case() {
   let btnPosition = {
     position: 'absolute',
     right: '0',
-    top: { base: '-50px', md: '-24px' },
+    top: { base: '-16px', md: '32px' },
+  }
+  let btnStyle = {
+    color: Colour.lightRed,
+    backgroundColor: Colour.white,
+    padding: { base: '16px 24px', md: '24px 32px' },
+    fontFamily: 'Lato',
+    fontSize: { base: '16px', md: '18px' },
+    fontWeight: 'bold',
+    borderRadius: '12px',
+    border: '3px solid',
+    borderColor: Colour.lightRed,
+    transition: 'all 0.2s ease',
+    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+    _hover: {
+      borderColor: Colour.red,
+      color: Colour.red,
+    },
+  }
+  const currentPage = {
+    color: Colour.darkBlue,
+    fontFamily: 'IBM Plex Sans',
+    fontWeight: 'bold',
+    fontSize: { base: '16px', md: '18px' },
   }
 
   const [showModal, setShowModal] = useState(false)
+  const [isconfirm, setConfirm] = useState(false)
   const handleClick = () => setShowModal(!showModal)
-
   const router = useRouter()
-
-  const onClickAddRecord = () => {
-    router.push('./caseid/add-record')
-  }
 
   return (
     <Box sx={GlobalStyle.bgColor}>
@@ -68,20 +87,30 @@ export default function Case() {
 
       <Box sx={layout}>
         {/* ==================== Confirm diagnosis ==================== */}
-        <Flex sx={diagnosisFlex}>
-          <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
-            Case XXXX:
-          </Text>
-          <Input placeholder="Disease name" sx={GlobalStyle.inputStyle} />
-          <Button sx={GlobalStyle.yellowBtn} onClick={handleClick}>
-            Confirm diagnosis
-          </Button>
-        </Flex>
-        <ConfirmModal isOpen={showModal} onClose={handleClick} />
+        {!isconfirm ? (
+          <Flex sx={diagnosisFlex}>
+            <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
+              Case XXXX:
+            </Text>
+            <Input placeholder="Disease name" sx={GlobalStyle.inputStyle} />
+            <Button sx={GlobalStyle.yellowBtn} onClick={handleClick}>
+              Confirm diagnosis
+            </Button>
+          </Flex>
+        ) : (
+          <Box sx={btnPosition}>
+            <Button sx={btnStyle}>Stop Tracking</Button>
+          </Box>
+        )}
+        <ConfirmModal
+          isOpen={showModal}
+          onClose={handleClick}
+          setConfirm={setConfirm}
+        />
         <Breadcrumb>
           <BreadcrumbItem iscurrentPage>
             <BreadcrumbLink>
-              <Text sx={GlobalStyle.boldText}>Summary</Text>
+              <Text sx={currentPage}>Summary</Text>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>
