@@ -4,30 +4,20 @@ import {
   Flex,
   Input,
   Button,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  SimpleGrid,
-  Stack,
 } from '@chakra-ui/react'
 import GlobalStyle from '../../../../Style'
 import Colour from '../../../../Colour'
 import SummaryBox from '../../../../components/SummaryBox'
 import Dashboard from '../../../../components/Dashboard'
-import Records from '../../../../components/Records'
-import Feedbacks from '../../../../components/Feedbacks'
 import HeadInfo from '../../../../components/HeadInfo'
 import ConfirmModal from '../../../../components/ConfirmModal'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import AddFeedbackModal from '../../../../components/AddFeedbackModal'
 
-export default function Case(props) {
+export default function Case() {
   let diagnosisFlex = {
     alignItems: { base: 'flex-start', md: 'center' },
     gap: '16px',
@@ -35,14 +25,9 @@ export default function Case(props) {
     flexDirection: { base: 'column', md: 'row' },
     marginBottom: '24px',
   }
-  let section1 = {
-    marginTop: { base: '40px', md: '56px' },
-    position: 'relative',
-  }
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
     position: 'relative',
-    // flexDirection: 'column',
     width: '100%',
     borderRadius: '12px',
     backgroundColor: Colour.white,
@@ -57,9 +42,6 @@ export default function Case(props) {
 
   const [showModal, setShowModal] = useState(false)
   const handleClick = () => setShowModal(!showModal)
-
-  const [showModalFb, setShowModalFb] = useState(false)
-  const handleClick1 = () => setShowModalFb(!showModalFb)
 
   const router = useRouter()
 

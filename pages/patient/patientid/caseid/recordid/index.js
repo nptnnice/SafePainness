@@ -1,7 +1,6 @@
 import {
   Text,
   Box,
-  Flex,
   Button,
   Breadcrumb,
   BreadcrumbItem,
@@ -10,7 +9,6 @@ import {
 import GlobalStyle from '../../../../../Style'
 import Colour from '../../../../../Colour'
 import HeadInfo from '../../../../../components/HeadInfo'
-import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Records from '../../../../../components/Records'
 
@@ -30,11 +28,7 @@ export default function Case() {
     top: { base: '-64px', md: '-72px' },
   }
 
-  const [showModal, setShowModal] = useState(false)
-  const handleClick = () => setShowModal(!showModal)
-
   const router = useRouter()
-
   const onClickAddRecord = () => {
     router.push('../caseid/add-record')
   }
