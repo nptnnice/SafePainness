@@ -84,7 +84,7 @@ export default function ResetPassword() {
         <Box sx={GlobalStyle.layout}>
           <VStack sx={boxStyle} gap="16px">
             <Center>
-              <Avatar sx={GlobalStyle.profileImg} src="/images/profile.JPG" />
+              <Avatar sx={GlobalStyle.profileImg} src="/images/key.png" />
             </Center>
             <Text sx={Discription}>Set your new password</Text>
             <Flex sx={flexStyle}>
