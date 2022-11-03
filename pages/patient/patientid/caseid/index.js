@@ -4,37 +4,25 @@ import {
   Flex,
   Input,
   Button,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  SimpleGrid,
-  Stack,
 } from '@chakra-ui/react'
 import GlobalStyle from '../../../../Style'
 import Colour from '../../../../Colour'
 import SummaryBox from '../../../../components/SummaryBox'
 import Dashboard from '../../../../components/Dashboard'
-import Records from '../../../../components/Records'
-import Feedbacks from '../../../../components/Feedbacks'
 import HeadInfo from '../../../../components/HeadInfo'
 import ConfirmModal from '../../../../components/ConfirmModal'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import AddFeedbackModal from '../../../../components/AddFeedbackModal'
-
-
 
 export default function Case() {
   let layout = {
     width: '90%',
     margin: '0 auto',
     maxWidth: '900px',
-    padding: { base: '48px 0 160px', md: '16px 0 240px' },
+    padding: { base: '48px 0 160px', md: '56px 0 240px' },
     position: 'relative',
   }
   let diagnosisFlex = {
@@ -44,14 +32,9 @@ export default function Case() {
     flexDirection: { base: 'column', md: 'row' },
     marginBottom: '24px',
   }
-  let section1 = {
-    marginTop: { base: '40px', md: '56px' },
-    position: 'relative',
-  }
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
     position: 'relative',
-    // flexDirection: 'column',
     width: '100%',
     borderRadius: '12px',
     backgroundColor: Colour.white,
@@ -61,20 +44,36 @@ export default function Case() {
   let btnPosition = {
     position: 'absolute',
     right: '0',
-    top: { base: '-50px', md: '-24px' },
+    top: { base: '-16px', md: '32px' },
+  }
+  let btnStyle = {
+    color: Colour.lightRed,
+    backgroundColor: Colour.white,
+    padding: { base: '16px 24px', md: '24px 32px' },
+    fontFamily: 'Lato',
+    fontSize: { base: '16px', md: '18px' },
+    fontWeight: 'bold',
+    borderRadius: '12px',
+    border: '3px solid',
+    borderColor: Colour.lightRed,
+    transition: 'all 0.2s ease',
+    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+    _hover: {
+      borderColor: Colour.red,
+      color: Colour.red,
+    },
+  }
+  const currentPage = {
+    color: Colour.darkBlue,
+    fontFamily: 'IBM Plex Sans',
+    fontWeight: 'bold',
+    fontSize: { base: '16px', md: '18px' },
   }
 
   const [showModal, setShowModal] = useState(false)
+  const [isconfirm, setConfirm] = useState(false)
   const handleClick = () => setShowModal(!showModal)
-
-  const [showModalFb, setShowModalFb] = useState(false)
-  const handleClick1 = () => setShowModalFb(!showModalFb)
-
   const router = useRouter()
-
-  const onClickAddRecord = () => {
-    router.push('./caseid/add-record')
-  }
 
   return (
     <Box sx={GlobalStyle.bgColor}>
@@ -88,20 +87,30 @@ export default function Case() {
 
       <Box sx={layout}>
         {/* ==================== Confirm diagnosis ==================== */}
-        <Flex sx={diagnosisFlex}>
-          <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
-            Case XXXX:
-          </Text>
-          <Input placeholder="Disease name" sx={GlobalStyle.inputStyle} />
-          <Button sx={GlobalStyle.yellowBtn} onClick={handleClick}>
-            Confirm diagnosis
-          </Button>
-        </Flex>
-        <ConfirmModal isOpen={showModal} onClose={handleClick} />
+        {!isconfirm ? (
+          <Flex sx={diagnosisFlex}>
+            <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
+              Case XXXX:
+            </Text>
+            <Input placeholder="Disease name" sx={GlobalStyle.inputStyle} />
+            <Button sx={GlobalStyle.yellowBtn} onClick={handleClick}>
+              Confirm diagnosis
+            </Button>
+          </Flex>
+        ) : (
+          <Box sx={btnPosition}>
+            <Button sx={btnStyle}>Stop Tracking</Button>
+          </Box>
+        )}
+        <ConfirmModal
+          isOpen={showModal}
+          onClose={handleClick}
+          setConfirm={setConfirm}
+        />
         <Breadcrumb>
           <BreadcrumbItem iscurrentPage>
             <BreadcrumbLink>
-              <Text sx={GlobalStyle.boldText}>Summary</Text>
+              <Text sx={currentPage}>Summary</Text>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>

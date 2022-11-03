@@ -1,18 +1,9 @@
 import {
   Text,
   Input,
-  InputGroup,
-  InputRightElement,
   Button,
-  ButtonGroup,
-  SimpleGrid,
   Box,
-  Flex,
-  Select,
-  Textarea,
   FormControl,
-  FormLabel,
-  chakra,
   VStack,
   Avatar,
   Center,
@@ -21,20 +12,10 @@ import GlobalStyle from '../Style'
 import HeadCenter from '../components/HeadCenter'
 import Colour from '../Colour'
 import { useState } from 'react'
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/react'
 
 export default function ForgotPassword() {
-  let flexStyle = {
-    gap: '24px',
-    width: '100%',
-  }
-  let iconInput = {
-    color: Colour.lightBlack,
-    cursor: 'pointer',
-    marginTop: '8px',
-  }
   let Discription = {
     textAlign: 'center',
     color: Colour.lightBlack,
@@ -59,7 +40,6 @@ export default function ForgotPassword() {
       textDecoration: 'underline',
     },
   }
-
   const [show, setShow] = useState(false)
   const router = useRouter()
   const onClickCancel = () => {

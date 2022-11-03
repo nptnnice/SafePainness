@@ -1,7 +1,6 @@
 import {
   Text,
   Box,
-  Flex,
   Button,
   Breadcrumb,
   BreadcrumbItem,
@@ -10,7 +9,6 @@ import {
 import GlobalStyle from '../../../../../Style'
 import Colour from '../../../../../Colour'
 import HeadInfo from '../../../../../components/HeadInfo'
-import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Records from '../../../../../components/Records'
 
@@ -29,12 +27,14 @@ export default function Case() {
     right: '0',
     top: { base: '-64px', md: '-72px' },
   }
-
-  const [showModal, setShowModal] = useState(false)
-  const handleClick = () => setShowModal(!showModal)
+  const currentPage = {
+    color: Colour.darkBlue,
+    fontFamily: 'IBM Plex Sans',
+    fontWeight: 'bold',
+    fontSize: { base: '16px', md: '18px' },
+  }
 
   const router = useRouter()
-
   const onClickAddRecord = () => {
     router.push('../caseid/add-record')
   }
@@ -61,7 +61,7 @@ export default function Case() {
           </BreadcrumbItem>
           <BreadcrumbItem iscurrentPage>
             <BreadcrumbLink>
-              <Text sx={GlobalStyle.boldText}>Records</Text>
+              <Text sx={currentPage}>Records</Text>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbItem>

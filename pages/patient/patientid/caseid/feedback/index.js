@@ -30,6 +30,12 @@ export default function Case() {
     right: '0',
     top: { base: '-64px', md: '-72px' },
   }
+  const currentPage = {
+    color: Colour.darkBlue,
+    fontFamily: 'IBM Plex Sans',
+    fontWeight: 'bold',
+    fontSize: { base: '16px', md: '18px' },
+  }
 
   const [showModal, setShowModal] = useState(false)
   const handleClick = () => setShowModal(!showModal)
@@ -70,7 +76,7 @@ export default function Case() {
           </BreadcrumbItem>
           <BreadcrumbItem iscurrentPage>
             <BreadcrumbLink>
-              <Text sx={GlobalStyle.boldText}>Feedbacks</Text>
+              <Text sx={currentPage}>Feedbacks</Text>
             </BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>

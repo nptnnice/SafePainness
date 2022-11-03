@@ -13,12 +13,6 @@ import HeadInfo from '../../../../../components/HeadInfo'
 import Responses from '../../../../../components/Responses'
 
 export default function Feedback() {
-  let flexStyle = {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: '16px',
-  }
-
   return (
     <>
       <Box sx={GlobalStyle.bgColor}>
