@@ -14,9 +14,13 @@ import GlobalStyle from '../../../../Style'
 import FormProgress from '../../../../components/FormProgress'
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 export default function History3() {
   const router = useRouter()
+
+  const [showModal, setShowModal] = useState(false)
+  const handleClick = () => setShowModal(!showModal)
 
   const onClickBack = () => {
     router.push('./part2')
@@ -56,7 +60,7 @@ export default function History3() {
             >
               Back
             </Button>
-            <Button rightIcon={<ArrowForwardIcon />} sx={GlobalStyle.blueBtn}>
+            <Button rightIcon={<ArrowForwardIcon />} sx={GlobalStyle.blueBtn} onClick={handleClick}>
               Next
             </Button>
           </ButtonGroup>
