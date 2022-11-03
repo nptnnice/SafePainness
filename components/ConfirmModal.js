@@ -56,10 +56,15 @@ export default function ConfirmModal({ isOpen, onClose }) {
 
           <ModalFooter>
             <ButtonGroup sx={btnFlex}>
-              <Button sx={GlobalStyle.whiteBtn} onClick={handleClick}>
+              <Button sx={GlobalStyle.whiteBtn} onClick={onClose}>
                 Cancel
               </Button>
-              <Button sx={GlobalStyle.blueBtn} onClick={handleClick}>
+              <Button
+                sx={GlobalStyle.blueBtn}
+                onClick={() => {
+                  onClose()
+                }}
+              >
                 Confirm
               </Button>
             </ButtonGroup>

@@ -5,6 +5,7 @@ export default function SummaryBox() {
   let gridStyle = {
     columnGap: { base: '10px', md: '24px' },
     rowGap: '8px',
+    marginBottom: '32px',
   }
   let flexStyle = {
     alignItems: 'center',
