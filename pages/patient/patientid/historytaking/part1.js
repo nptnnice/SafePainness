@@ -28,10 +28,18 @@ import FormProgress from '../../../../components/FormProgress'
 import BodySelector from '../../../../components/BodySelector'
 // import PainList from '../../../components/PainList'
 import { PainTypes } from '../../../../PainTypes'
-import { ArrowForwardIcon } from '@chakra-ui/icons'
+import { ArrowForwardIcon, InfoOutlineIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import PainScaleModal from '../../../../components/PainScaleModal'
 
 export default function History1() {
+
+  
+  const [showModal, setShowModal] = useState(false)
+  const handleClick = () => setShowModal(!showModal)
+
+
   let bottomLine = {
     borderBottom: '2px solid',
     borderBlockColor: Colour.grey,
@@ -176,9 +184,13 @@ export default function History1() {
 
             {/* =================== Question 6 =================== */}
             <VStack align="left" spacing={10} width="100%">
-              <Text sx={GlobalStyle.labelText}>
-                6. What is the pain severity?
-              </Text>
+              <Flex>
+                <Text sx={GlobalStyle.labelText}>
+                  6. What is the pain severity? {''}
+                <InfoOutlineIcon onClick={handleClick}/>
+                </Text>
+                  <PainScaleModal isOpen={showModal} onClose={handleClick}/>
+              </Flex>
               <FormControl isRequired>
                 <FormLabel sx={GlobalStyle.labelText}>Right now</FormLabel>
                 <Box sx={GlobalStyle.sliderBox}>

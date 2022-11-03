@@ -5,10 +5,14 @@ import { useRouter } from 'next/router'
 import RecordModal from './RecordModal'
 import { useState } from 'react'
 
+
 export default function Records() {
   const router = useRouter()
   const [showModal, setShowModal] = useState(false)
   const handleClick = () => setShowModal(!showModal)
+
+  const [showModalFb, setShowModalFb] = useState(false)
+  const handleClick1 = () => setShowModalFb(!showModalFb)
 
   return (
     <>
