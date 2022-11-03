@@ -67,7 +67,7 @@ export default function ForgotPassword() {
         <Box sx={GlobalStyle.layout}>
           <VStack sx={boxStyle} gap="16px">
             <Center>
-              <Avatar sx={GlobalStyle.profileImg} src="/images/profile.JPG" />
+              <Avatar sx={GlobalStyle.profileImg} src="/images/key.png" />
             </Center>
             <Text sx={Discription}>
               Enter your email address and we’ll send you a link to reset your
