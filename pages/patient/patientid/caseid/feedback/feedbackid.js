@@ -7,18 +7,12 @@ import {
   FormControl,
   VStack,
 } from '@chakra-ui/react'
-import HeadCenter from '../../../../../components/Headcenter';
+import HeadCenter from '../../../../../components/Headcenter'
 import GlobalStyle from '../../../../../Style'
-import HeadInfo from '../../../../../components/HeadInfo';
-import Responses from '../../../../../components/Responses';
+import HeadInfo from '../../../../../components/HeadInfo'
+import Responses from '../../../../../components/Responses'
 
 export default function Feedback() {
-  let flexStyle = {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: '16px',
-  }
- 
   return (
     <>
       <Box sx={GlobalStyle.bgColor}>
@@ -29,10 +23,10 @@ export default function Feedback() {
           caseName="Grammar addict"
           doctor="Alan Smith"
         />
-        <VStack sx={GlobalStyle.layout} align='start' spacing={8}>
+        <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
           <Text sx={GlobalStyle.headingText}>Feedback#1</Text>
           <Box sx={GlobalStyle.infoBox}>
-            <Responses/>
+            <Responses />
           </Box>
           <Box sx={GlobalStyle.infoBox}>
             <FormControl>
@@ -49,5 +43,5 @@ export default function Feedback() {
         </VStack>
       </Box>
     </>
-  );
+  )
 }

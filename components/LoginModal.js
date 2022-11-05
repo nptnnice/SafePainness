@@ -19,8 +19,14 @@ import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { useRouter } from 'next/router'
 
 export default function LoginModal({ isOpen, onClose }) {
+  const router = useRouter()
+  const onClickForgotpassword = () => {
+    router.push('./forgot-password')
+  }
+
   let header = {
     fontFamily: 'Lato',
     fontSize: { base: '28px', md: '32px' },
@@ -96,7 +102,15 @@ export default function LoginModal({ isOpen, onClose }) {
         <ModalFooter sx={footModal}>
           <VStack spacing={4}>
             <Button sx={GlobalStyle.blueBtn}>Log in</Button>
-            <Text sx={clickText}>Forgot password?</Text>
+            <Text
+              sx={clickText}
+              onClick={() => {
+                onClickForgotpassword()
+                onClose()
+              }}
+            >
+              Forgot password?
+            </Text>
           </VStack>
         </ModalFooter>
       </ModalContent>
