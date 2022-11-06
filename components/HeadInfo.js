@@ -45,15 +45,17 @@ export default function HeadInfo(props) {
         <Text sx={idText}>
           {name}: {patientID}
         </Text>
-        <VStack align={{ base: 'start', md: 'end' }} spacing={0}>
-          <Text sx={caseText}>
-            Case {caseID}: {caseName}
-          </Text>
-          <Text sx={doctorText} onClick={handleClick}>
-            By Dr. {doctor}
-          </Text>
-          <DoctorInfo isOpen={showModal} onClose={handleClick} />
-        </VStack>
+        {caseID && (
+          <VStack align={{ base: 'start', md: 'end' }} spacing={0}>
+            <Text sx={caseText}>
+              Case {caseID}: {caseName}
+            </Text>
+            <Text sx={doctorText} onClick={handleClick}>
+              By Dr. {doctor}
+            </Text>
+            <DoctorInfo isOpen={showModal} onClose={handleClick} />
+          </VStack>
+        )}
       </Flex>
     </Box>
   )

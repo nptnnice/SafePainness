@@ -1,7 +1,7 @@
 import { Box, Text, Flex, VStack, Avatar } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 
-export default function PatientInfo() {
+export default function PatientInfo(props) {
   let layout = {
     gap: '32px',
     flexDirection: { base: 'column', sm: 'column', md: 'row' },
@@ -10,57 +10,64 @@ export default function PatientInfo() {
     justifyContent: 'start',
     gap: { base: '24px', sm: '32px', md: '40px' },
   }
+
+  // get patient info
+  const info = props.patientInfo[0]
+
+  // calcuate age from date of birth
+  const age = Math.floor(
+    (new Date() - new Date(info.birthDate)) / 1000 / 60 / 60 / 24 / 365
+  )
+
   return (
     <Box sx={GlobalStyle.infoBox}>
       <Flex sx={layout}>
-        <Avatar sx={GlobalStyle.profileImg} src="/images/nice.JPG" />
+        <Avatar sx={GlobalStyle.profileImg} src={info.image} />
         <VStack spacing={4} align="left">
           <Flex sx={infoFlex}>
             <Flex sx={GlobalStyle.spanFlex}>
               <Text sx={GlobalStyle.labelText}>First Name: </Text>
-              <Text sx={GlobalStyle.regularText}>Pakamon</Text>
+              <Text sx={GlobalStyle.regularText}>{info.firstName}</Text>
             </Flex>
             <Flex sx={GlobalStyle.spanFlex}>
               <Text sx={GlobalStyle.labelText}>Last Name: </Text>
-              <Text sx={GlobalStyle.regularText}>Mumu</Text>
+              <Text sx={GlobalStyle.regularText}>{info.lastName}</Text>
             </Flex>
           </Flex>
 
           <Flex sx={infoFlex}>
             <Flex sx={GlobalStyle.spanFlex}>
               <Text sx={GlobalStyle.labelText}>Age: </Text>
-              <Text sx={GlobalStyle.regularText}>Pakamon</Text>
+              <Text sx={GlobalStyle.regularText}>{age} years</Text>
             </Flex>
             <Flex sx={GlobalStyle.spanFlex}>
               <Text sx={GlobalStyle.labelText}>Blood Group: </Text>
-              <Text sx={GlobalStyle.regularText}>B</Text>
+              <Text sx={GlobalStyle.regularText}>{info.bloodGroup}</Text>
             </Flex>
             <Flex sx={GlobalStyle.spanFlex}>
               <Text sx={GlobalStyle.labelText}>Sex: </Text>
-              <Text sx={GlobalStyle.regularText}>Female</Text>
+              <Text sx={GlobalStyle.regularText}>{info.sex}</Text>
             </Flex>
           </Flex>
 
           <Flex sx={GlobalStyle.spanFlex}>
             <Text sx={GlobalStyle.labelText}>Medical Conditions: </Text>
-            <Text sx={GlobalStyle.regularText}>Test</Text>
+            <Text sx={GlobalStyle.regularText}>{info.medCondition}</Text>
           </Flex>
 
           <Flex sx={GlobalStyle.spanFlex}>
             <Text sx={GlobalStyle.labelText}>Allergy: </Text>
-            <Text sx={GlobalStyle.regularText}>
-              Get botherd by grammatical errors
-            </Text>
+            <Text sx={GlobalStyle.regularText}>{info.allergy}</Text>
           </Flex>
 
           <Flex sx={infoFlex}>
             <Flex sx={GlobalStyle.spanFlex}>
               <Text sx={GlobalStyle.labelText}>Contact: </Text>
-              <Text sx={GlobalStyle.regularText}>099-XXX-XXXX</Text>
+              <Text sx={GlobalStyle.regularText}>{info.phoneNumber}</Text>
             </Flex>
             <Flex sx={GlobalStyle.spanFlex}>
               <Text sx={GlobalStyle.labelText}>Email: </Text>
-              <Text sx={GlobalStyle.regularText}>Pokemon@gmail.com</Text>
+              <Text sx={GlobalStyle.regularText}>{info.email}</Text>
             </Flex>
           </Flex>
         </VStack>
