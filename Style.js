@@ -110,7 +110,7 @@ const greyMediumText = {
 const errorText = {
   color: Colour.red,
   fontFamily: 'IBM Plex Sans',
-  fontWeight: 'medium',
+  // fontWeight: 'medium',
   fontSize: { base: '16px', md: '18px' },
 }
 const regularText = {

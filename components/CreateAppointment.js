@@ -127,7 +127,7 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
                         <Th isNumeric></Th>
                       </Tr>
                     </Thead>
-                    <Tbody>
+                    {/* <Tbody>
                       {props.map((doctor) => (
                         <Tr
                           sx={
@@ -153,7 +153,7 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
                           </Td>
                         </Tr>
                       ))}
-                    </Tbody>
+                    </Tbody> */}
                   </Table>
                 </TableContainer>
               </Box>
