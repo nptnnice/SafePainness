@@ -4,25 +4,18 @@ import {
   Image,
   Box,
   Avatar,
-  Button,
   Popover,
   PopoverTrigger,
   PopoverContent,
-  PopoverHeader,
   PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverAnchor,
 } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import LoginModal from './LoginModal'
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { useState } from 'react'
 import Notification from './Notification'
 import { useRouter } from 'next/router'
-import axios from 'axios'
+import { useAppContext } from '../context/UserContext'
 
 export default function Navbar() {
   let navbar = {
@@ -83,39 +76,29 @@ export default function Navbar() {
   // set login modal
   const [open, setOpen] = useState(false)
 
-  // set user info
-  const [roleID, setRoleID] = useState(0)
-  const [profile_img, setProfile_img] = useState('')
-  const [userID, setUserID] = useState('')
-
   // router
   const router = useRouter()
 
-  // check if user is logged in
-  useEffect(() => {
-    console.log('token', sessionStorage.getItem('token'))
-    if (!sessionStorage.getItem('token')) {
-      router.push('/')
-    } else {
-      setRoleID(sessionStorage.getItem('roleID'))
-      setProfile_img(sessionStorage.getItem('image'))
-      setUserID(sessionStorage.getItem('userID'))
-    }
-  }, [])
+  // context
+  const { user, setUser } = useAppContext()
 
+  // navigate to profile page
   const onClickProfile = () => {
-    if (roleID == 1) {
-      router.push(`/doctor/${userID}/profile`)
-    } else if (roleID == 2) {
-      router.push(`/patient/${userID}/profile`)
+    if (user.roleID == 1) {
+      router.push(`/doctor/${user.userID}/profile`)
+    } else if (user.roleID == 2) {
+      router.push(`/patient/${user.userID}/profile`)
     }
   }
 
+  // logout, clear user context and sessionStorage, and navigate to home page
   const onLogout = () => {
+    setUser(null)
     sessionStorage.clear()
     router.push('/')
   }
 
+  // set menu in popover
   const MenuAccount = () => {
     return (
       <>
@@ -129,22 +112,18 @@ export default function Navbar() {
     )
   }
 
-  console.log('role', roleID)
-
-  if (roleID == 0) {
+  if (!user) {
     return (
       <Flex sx={navbar}>
-        <Link href="/">
-          <Image
-            sx={logo}
-            src="/images/Logo.png"
-            onClick={() => {
-              window.scrollTo({
-                top: 0,
-              })
-            }}
-          />
-        </Link>
+        <Image
+          sx={logo}
+          src="/images/Logo.png"
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+            })
+          }}
+        />
 
         <Flex sx={menuFlex}>
           <Text sx={signup}>Sign Up</Text>
@@ -158,23 +137,21 @@ export default function Navbar() {
   } else {
     return (
       <Flex sx={navbar}>
-        <Link href="/">
-          <Image
-            sx={logo}
-            src="/images/Logo.png"
-            onClick={() => {
-              window.scrollTo({
-                top: 0,
-              })
-            }}
-          />
-        </Link>
+        <Image
+          sx={logo}
+          src="/images/Logo.png"
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+            })
+          }}
+        />
 
         <Flex sx={menuFlex}>
           <Notification />
           <Popover>
             <PopoverTrigger>
-              <Avatar role="button" tabIndex="0" size="sm" src={profile_img} />
+              <Avatar role="button" tabIndex="0" size="sm" src={user.image} />
             </PopoverTrigger>
             <PopoverContent>
               <PopoverBody>

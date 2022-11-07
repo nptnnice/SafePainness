@@ -1,16 +1,21 @@
 import {
   Text,
+  Flex,
   Box,
   Button,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../../../Style'
-import Colour from '../../../../../Colour'
-import HeadInfo from '../../../../../components/HeadInfo'
+import GlobalStyle from '../../../../../../Style'
+import Colour from '../../../../../../Colour'
+import HeadInfo from '../../../../../../components/HeadInfo'
 import { useRouter } from 'next/router'
-import Records from '../../../../../components/Records'
+import Records from '../../../../../../components/Records'
+import BreadcrumbMenu from '../../../../../../components/BreadcrumbMenu'
+import { RecordList } from '../../../../../../RecordList'
+import RecordModal from '../../../../../../components/RecordModal'
+import { useState } from 'react'
 
 export default function Case() {
   let section2 = {
@@ -42,6 +47,9 @@ export default function Case() {
     router.push('./feedback/feedbackid')
   }
 
+  const [showModal, setShowModal] = useState(false)
+  const handleClick = () => setShowModal(!showModal)
+
   return (
     <Box sx={GlobalStyle.bgColor}>
       <HeadInfo
@@ -53,30 +61,28 @@ export default function Case() {
       />
 
       <Box sx={GlobalStyle.layout}>
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="../caseid">
-              <Text sx={GlobalStyle.boldText}>Summary</Text>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem iscurrentPage>
-            <BreadcrumbLink>
-              <Text sx={currentPage}>Records</Text>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="./feedback">
-              <Text sx={GlobalStyle.boldText}>Feedbacks</Text>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
+        <BreadcrumbMenu />
+
         <Box sx={section2}>
           <Box sx={btnPosition}>
             <Button sx={GlobalStyle.turquoiseBtn} onClick={onClickAddRecord}>
               + Record
             </Button>
           </Box>
-          <Records />
+
+          {RecordList.map((record, index) => {
+            return (
+              <Flex
+                key={index}
+                sx={GlobalStyle.recordBox}
+                onClick={handleClick}
+              >
+                <Text sx={GlobalStyle.boldText}>Record #{record.id}</Text>
+                <Text sx={GlobalStyle.greyMediumText}>{record.date}</Text>
+                <RecordModal isOpen={showModal} onClose={handleClick} />
+              </Flex>
+            )
+          })}
         </Box>
       </Box>
     </Box>

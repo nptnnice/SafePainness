@@ -7,13 +7,15 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../../../Style'
-import Colour from '../../../../../Colour'
-import HeadInfo from '../../../../../components/HeadInfo'
+import GlobalStyle from '../../../../../../Style'
+import Colour from '../../../../../../Colour'
+import HeadInfo from '../../../../../../components/HeadInfo'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import AddFeedbackModal from '../../../../../components/AddFeedbackModal'
-import Feedbacks from '../../../../../components/Feedbacks'
+import AddFeedbackModal from '../../../../../../components/AddFeedbackModal'
+import Feedbacks from '../../../../../../components/Feedbacks'
+import BreadcrumbMenu from '../../../../../../components/BreadcrumbMenu'
+import { FeedbackList } from '../../../../../../FeedbackList'
 
 export default function Case() {
   let section2 = {
@@ -63,7 +65,8 @@ export default function Case() {
       />
 
       <Box sx={GlobalStyle.layout}>
-        <Breadcrumb>
+        <BreadcrumbMenu />
+        {/* <Breadcrumb>
           <BreadcrumbItem>
             <BreadcrumbLink href="../caseid">
               <Text sx={GlobalStyle.boldText}>Summary</Text>
@@ -79,7 +82,7 @@ export default function Case() {
               <Text sx={currentPage}>Feedbacks</Text>
             </BreadcrumbLink>
           </BreadcrumbItem>
-        </Breadcrumb>
+        </Breadcrumb> */}
         <Box sx={section2}>
           <Box sx={btnPosition}>
             <Button sx={GlobalStyle.turquoiseBtn} onClick={handleClick1}>
@@ -87,7 +90,19 @@ export default function Case() {
             </Button>
           </Box>
           <AddFeedbackModal isOpen={showModalFb} onClose={handleClick1} />
-          <Feedbacks />
+          {/* <Feedbacks /> */}
+          {FeedbackList.map((feedback, index) => {
+            return (
+              <Flex
+                key={index}
+                sx={GlobalStyle.recordBox}
+                onClick={onClickFeedback}
+              >
+                <Text sx={GlobalStyle.boldText}>Feedback #{feedback.id}</Text>
+                <Text sx={GlobalStyle.greyMediumText}>{feedback.date}</Text>
+              </Flex>
+            )
+          })}
         </Box>
       </Box>
     </Box>

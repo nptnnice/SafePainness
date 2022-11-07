@@ -8,14 +8,15 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../../Style'
-import Colour from '../../../../Colour'
-import SummaryBox from '../../../../components/SummaryBox'
-import Dashboard from '../../../../components/Dashboard'
-import HeadInfo from '../../../../components/HeadInfo'
-import ConfirmModal from '../../../../components/ConfirmModal'
+import GlobalStyle from '../../../../../Style'
+import Colour from '../../../../../Colour'
+import SummaryBox from '../../../../../components/SummaryBox'
+import Dashboard from '../../../../../components/Dashboard'
+import HeadInfo from '../../../../../components/HeadInfo'
+import ConfirmModal from '../../../../../components/ConfirmModal'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import BreadcrumbMenu from '../../../../../components/BreadcrumbMenu'
 
 export default function Case() {
   let layout = {
@@ -32,7 +33,7 @@ export default function Case() {
     flexDirection: { base: 'column', md: 'row' },
     marginBottom: '24px',
   }
-  let section2 = {
+  let section = {
     marginTop: { base: '24px', md: '16px' },
     position: 'relative',
     width: '100%',
@@ -107,24 +108,11 @@ export default function Case() {
           onClose={handleClick}
           setConfirm={setConfirm}
         />
-        <Breadcrumb>
-          <BreadcrumbItem iscurrentPage>
-            <BreadcrumbLink>
-              <Text sx={currentPage}>Summary</Text>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="./caseid/recordid">
-              <Text sx={GlobalStyle.boldText}>Records</Text>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="./caseid/feedback">
-              <Text sx={GlobalStyle.boldText}>Feedbacks</Text>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
-        <Box sx={section2}>
+
+        {/* ==================== Breadcrumb ==================== */}
+        <BreadcrumbMenu />
+
+        <Box sx={section}>
           <SummaryBox />
           <Dashboard />
         </Box>

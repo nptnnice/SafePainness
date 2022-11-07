@@ -53,7 +53,7 @@ export default function Patient(props) {
   const router = useRouter()
 
   const onClickCase = () => {
-    router.push('./patientid/caseid')
+    router.push('./patientid/case/caseid')
   }
 
   console.log(props)

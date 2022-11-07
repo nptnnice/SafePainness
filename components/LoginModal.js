@@ -25,6 +25,7 @@ import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import axios from 'axios'
+import { useAppContext } from '../context/UserContext'
 
 export default function LoginModal({ isOpen, onClose }) {
   let clickText = {
@@ -46,15 +47,18 @@ export default function LoginModal({ isOpen, onClose }) {
     marginTop: '8px',
   }
 
-  // set show password
-  const [show, setShow] = useState(false)
-  const handlePassword = () => setShow(!show)
-
   // set router
   const router = useRouter()
   const onClickForgotpassword = () => {
     router.push('./forgot-password')
   }
+
+  // context
+  const { user, setUser } = useAppContext()
+
+  // set show password
+  const [show, setShow] = useState(false)
+  const handlePassword = () => setShow(!show)
 
   // set input
   const [username, setUsername] = useState('')
@@ -95,12 +99,17 @@ export default function LoginModal({ isOpen, onClose }) {
         } else if (res.data == 'Wrong password') {
           setIsPasswordValid(false)
         } else {
-          // if login success
+          // if login success, set token and user context
           sessionStorage.setItem('token', res.data.token)
           sessionStorage.setItem('userID', res.data.userID)
           sessionStorage.setItem('roleID', res.data.roleID)
-          sessionStorage.setItem('username', res.data.username)
           sessionStorage.setItem('image', res.data.image)
+          setUser({
+            token: res.data.token,
+            userID: res.data.userID,
+            roleID: res.data.roleID,
+            image: res.data.image,
+          })
 
           // redirect to home page
           if (res.data.roleID == 1) {
