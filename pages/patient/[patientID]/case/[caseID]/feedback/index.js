@@ -7,15 +7,14 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../../../../Style'
-import Colour from '../../../../../../Colour'
-import HeadInfo from '../../../../../../components/HeadInfo'
+import GlobalStyle from '/Style'
+import Colour from '/Colour'
+import HeadInfo from '/components/HeadInfo'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import AddFeedbackModal from '../../../../../../components/AddFeedbackModal'
-import Feedbacks from '../../../../../../components/Feedbacks'
-import BreadcrumbMenu from '../../../../../../components/BreadcrumbMenu'
-import { FeedbackList } from '../../../../../../FeedbackList'
+import AddFeedbackModal from '/components/AddFeedbackModal'
+import BreadcrumbMenu from '/components/BreadcrumbMenu'
+import { FeedbackList } from '/FeedbackList'
 
 export default function Case() {
   let section2 = {
@@ -39,19 +38,13 @@ export default function Case() {
     fontSize: { base: '16px', md: '18px' },
   }
 
-  const [showModal, setShowModal] = useState(false)
-  const handleClick = () => setShowModal(!showModal)
-
-  const [showModalFb, setShowModalFb] = useState(false)
-  const handleClick1 = () => setShowModalFb(!showModalFb)
+  const [showAddFeedback, setShowAddFeedback] = useState(false)
+  const onClickAddFeedback = () => setShowAddFeedback(!showAddFeedback)
 
   const router = useRouter()
 
-  const onClickAddRecord = () => {
-    router.push('./caseid/add-record')
-  }
-  const onClickFeedback = () => {
-    router.push('./feedback/feedbackid')
+  const onClickFeedback = (feedbackID) => {
+    router.push(`./feedback/${feedbackID}`)
   }
 
   return (
@@ -66,37 +59,24 @@ export default function Case() {
 
       <Box sx={GlobalStyle.layout}>
         <BreadcrumbMenu />
-        {/* <Breadcrumb>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="../caseid">
-              <Text sx={GlobalStyle.boldText}>Summary</Text>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="./recordid">
-              <Text sx={GlobalStyle.boldText}>Records</Text>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbItem iscurrentPage>
-            <BreadcrumbLink>
-              <Text sx={currentPage}>Feedbacks</Text>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb> */}
+
         <Box sx={section2}>
           <Box sx={btnPosition}>
-            <Button sx={GlobalStyle.turquoiseBtn} onClick={handleClick1}>
+            <Button sx={GlobalStyle.turquoiseBtn} onClick={onClickAddFeedback}>
               + Feedback
             </Button>
           </Box>
-          <AddFeedbackModal isOpen={showModalFb} onClose={handleClick1} />
+          <AddFeedbackModal
+            isOpen={showAddFeedback}
+            onClose={onClickAddFeedback}
+          />
           {/* <Feedbacks /> */}
           {FeedbackList.map((feedback, index) => {
             return (
               <Flex
                 key={index}
                 sx={GlobalStyle.recordBox}
-                onClick={onClickFeedback}
+                onClick={() => onClickFeedback(feedback.id)}
               >
                 <Text sx={GlobalStyle.boldText}>Feedback #{feedback.id}</Text>
                 <Text sx={GlobalStyle.greyMediumText}>{feedback.date}</Text>

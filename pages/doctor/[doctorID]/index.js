@@ -16,16 +16,16 @@ import {
   Avatar,
   VStack,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../Style'
-import Colour from '../../../Colour'
+import GlobalStyle from '/Style'
+import Colour from '/Colour'
 import { SearchIcon } from '@chakra-ui/icons'
-import HeadCenter from '../../../components/HeadCenter'
+import HeadCenter from '/components/HeadCenter'
 import { useRouter } from 'next/router'
 import { ArrowLeftIcon, ArrowRightIcon, AddIcon } from '@chakra-ui/icons'
 import axios from 'axios'
-import CreateAppointment from '../../../components/CreateAppointment'
+import CreateAppointment from '/components/CreateAppointment'
 import { useState, useEffect } from 'react'
-import url from '../../../url'
+import url from '/url'
 
 export default function MyPatients(props) {
   let iconStyle = {

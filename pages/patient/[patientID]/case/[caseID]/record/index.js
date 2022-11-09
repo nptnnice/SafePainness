@@ -7,14 +7,13 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../../../../Style'
-import Colour from '../../../../../../Colour'
-import HeadInfo from '../../../../../../components/HeadInfo'
+import GlobalStyle from '/Style'
+import Colour from '/Colour'
+import HeadInfo from '/components/HeadInfo'
 import { useRouter } from 'next/router'
-import Records from '../../../../../../components/Records'
-import BreadcrumbMenu from '../../../../../../components/BreadcrumbMenu'
-import { RecordList } from '../../../../../../RecordList'
-import RecordModal from '../../../../../../components/RecordModal'
+import BreadcrumbMenu from '/components/BreadcrumbMenu'
+import { RecordList } from '/RecordList'
+import RecordModal from '/components/RecordModal'
 import { useState } from 'react'
 
 export default function Case() {
@@ -40,15 +39,15 @@ export default function Case() {
   }
 
   const router = useRouter()
+  const patientID = router.query.patientID
+  const caseID = router.query.caseID
+
   const onClickAddRecord = () => {
-    router.push('../caseid/add-record')
-  }
-  const onClickFeedback = () => {
-    router.push('./feedback/feedbackid')
+    router.push(`/patient/${patientID}/case/${caseID}/add-record`)
   }
 
   const [showModal, setShowModal] = useState(false)
-  const handleClick = () => setShowModal(!showModal)
+  const onClickRecord = () => setShowModal(!showModal)
 
   return (
     <Box sx={GlobalStyle.bgColor}>
@@ -75,11 +74,11 @@ export default function Case() {
               <Flex
                 key={index}
                 sx={GlobalStyle.recordBox}
-                onClick={handleClick}
+                onClick={onClickRecord}
               >
                 <Text sx={GlobalStyle.boldText}>Record #{record.id}</Text>
                 <Text sx={GlobalStyle.greyMediumText}>{record.date}</Text>
-                <RecordModal isOpen={showModal} onClose={handleClick} />
+                <RecordModal isOpen={showModal} onClose={onClickRecord} />
               </Flex>
             )
           })}

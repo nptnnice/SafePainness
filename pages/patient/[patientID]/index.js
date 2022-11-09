@@ -1,11 +1,11 @@
 import { Box, Text, Flex, VStack, Button, Avatar } from '@chakra-ui/react'
-import GlobalStyle from '../../../Style'
-import Colour from '../../../Colour'
-import HeadInfo from '../../../components/HeadInfo'
-import PatientInfo from '../../../components/PatientInfo'
+import GlobalStyle from '/Style'
+import Colour from '/Colour'
+import HeadInfo from '/components/HeadInfo'
+import PatientInfo from '/components/PatientInfo'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import url from '../../../url'
+import url from '/url'
 
 export default function Patient(props) {
   let flexStyle = {
@@ -51,9 +51,10 @@ export default function Patient(props) {
 
   // router
   const router = useRouter()
+  const patientID = router.query.patientID
 
-  const onClickCase = () => {
-    router.push('./patientid/case/caseid')
+  const onClickCase = (caseID) => {
+    router.push(`./${patientID}/case/${caseID}`)
   }
 
   console.log(props)
@@ -71,7 +72,13 @@ export default function Patient(props) {
 
         <Box sx={GlobalStyle.infoBox}>
           {props.caseList.map((item, index) => (
-            <Flex key={index} sx={caseBox} onClick={onClickCase}>
+            <Flex
+              key={index}
+              sx={caseBox}
+              onClick={() => {
+                onClickCase(item.caseID)
+              }}
+            >
               <VStack align="start" spacing={1}>
                 <Flex sx={GlobalStyle.spanFlex}>
                   <Text sx={GlobalStyle.boldText}>Case {item.caseID}:</Text>

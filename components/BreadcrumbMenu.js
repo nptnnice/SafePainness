@@ -18,15 +18,15 @@ export default function BreadcrumbMenu() {
 
   const router = useRouter()
   const patientID = router.query.patientID
-  console.log(router.pathname)
+  const caseID = router.query.caseID
 
   return (
     <Breadcrumb>
       <BreadcrumbItem>
         <BreadcrumbLink
-          onClick={() => router.push(`/patient/${patientID}/case/caseid`)}
+          onClick={() => router.push(`/patient/${patientID}/case/${caseID}`)}
           sx={
-            router.pathname === '/patient/[patientID]/case/caseid'
+            router.pathname === '/patient/[patientID]/case/[caseID]'
               ? currentPage
               : GlobalStyle.boldText
           }
@@ -37,10 +37,10 @@ export default function BreadcrumbMenu() {
       <BreadcrumbItem>
         <BreadcrumbLink
           onClick={() =>
-            router.push(`/patient/${patientID}/case/caseid/record`)
+            router.push(`/patient/${patientID}/case/${caseID}/record`)
           }
           sx={
-            router.pathname === '/patient/[patientID]/case/caseid/record'
+            router.pathname === '/patient/[patientID]/case/[caseID]/record'
               ? currentPage
               : GlobalStyle.boldText
           }
@@ -51,10 +51,10 @@ export default function BreadcrumbMenu() {
       <BreadcrumbItem>
         <BreadcrumbLink
           onClick={() =>
-            router.push(`/patient/${patientID}/case/caseid/feedback`)
+            router.push(`/patient/${patientID}/case/${caseID}/feedback`)
           }
           sx={
-            router.pathname === '/patient/[patientID]/case/caseid/feedback'
+            router.pathname === '/patient/[patientID]/case/[caseID]/feedback'
               ? currentPage
               : GlobalStyle.boldText
           }

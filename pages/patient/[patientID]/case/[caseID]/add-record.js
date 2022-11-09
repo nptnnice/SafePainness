@@ -17,9 +17,9 @@ import {
   Button,
   chakra,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../../Style'
-import Colour from '../../../../Colour'
-import HeadBox from '../../../../components/HeadCenter'
+import GlobalStyle from '/Style'
+import Colour from '/Colour'
+import HeadBox from '/components/HeadCenter'
 import { useState } from 'react'
 import { CloseIcon } from '@chakra-ui/icons'
 import { useToast } from '@chakra-ui/react'
