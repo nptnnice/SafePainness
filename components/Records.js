@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'
 import RecordModal from './RecordModal'
 import { useState } from 'react'
 
-
 export default function Records() {
   const router = useRouter()
   const [showModal, setShowModal] = useState(false)

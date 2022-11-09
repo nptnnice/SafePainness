@@ -7,10 +7,9 @@ import {
   FormControl,
   VStack,
 } from '@chakra-ui/react'
-import HeadCenter from '../../../../../components/Headcenter'
-import GlobalStyle from '../../../../../Style'
-import HeadInfo from '../../../../../components/HeadInfo'
-import Responses from '../../../../../components/Responses'
+import GlobalStyle from '/Style'
+import HeadInfo from '/components/HeadInfo'
+import Responses from '/components/Responses'
 
 export default function Feedback() {
   return (
