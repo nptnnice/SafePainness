@@ -3,6 +3,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
+  ModalCloseButton,
   Flex,
   Avatar,
   VStack,
@@ -19,28 +20,24 @@ import {
   Td,
   TableContainer,
 } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
+import GlobalStyle from '/Style'
+import Colour from '/Colour'
 import { SearchIcon, AddIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import url from '/url'
+import axios from 'axios'
+import QRgenerator from '/components/QRgenerator'
 
-export default function CreateAppointment({ isOpen, onClose, props }) {
-  const [onClickPatient, setPatient] = useState(false)
-  const [selected, setSelected] = useState('')
-  const onClickHistorytaking = () => {
-    router.push('/patient/patientid/historytaking/part1')
-  }
-  const onClickNewPatient = () => {
-    router.push('/create-patient-account')
-  }
-  const router = useRouter()
+export default function CreateAppointment(props) {
+  const { isOpen, onClose, allpatients } = props
+
   let modalStyle = {
     maxWidth: '900px',
     maxHeight: '700px',
     width: '90%',
     borderRadius: '24px',
-    padding: { base: '20px', md: '24px' },
+    padding: { base: '24px 0px', md: '32px 16px' },
     backgroundColor: Colour.lightGrey,
   }
   let flexStyle = {
@@ -66,10 +63,10 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
   }
   let hoverStyleSelected = {
     ...hoverStyle,
-    backgroundColor: Colour.lightGrey,
-  }
-  let modalBodyStyle = {
-    padding: { base: '0px', md: '8px' },
+    backgroundColor: Colour.turquoise,
+    _hover: {
+      backgroundColor: Colour.turquoise,
+    },
   }
   let boxStyle = {
     justifyContent: 'flex-end',
@@ -85,6 +82,32 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
     height: { base: '320px', md: '400px' },
   }
 
+  // router
+  const router = useRouter()
+  const onClickNewPatient = () => {
+    router.push('/create-patient-account')
+  }
+
+  // choose patient
+  const [selected, setSelected] = useState('')
+
+  const choosePatient = (patientID) => {
+    if (selected === patientID) {
+      setSelected('')
+    } else {
+      setSelected(patientID)
+    }
+  }
+
+  const [showQR, setShowQR] = useState(false)
+  const handleClickQR = () => setShowQR(!showQR)
+
+  // // submit
+  // const onClickHistorytaking = () => {
+  //   const patientID = selected
+  //   router.push(`/patient/${patientID}/historytaking/part1`)
+  // }
+
   return (
     <>
       <Modal
@@ -95,7 +118,8 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
       >
         <ModalOverlay />
         <ModalContent sx={modalStyle}>
-          <ModalBody sx={modalBodyStyle}>
+          <ModalCloseButton />
+          <ModalBody>
             <VStack spacing={8}>
               <Flex sx={flexStyle}>
                 {/* ==================== Search box ==================== */}
@@ -116,6 +140,7 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
                   New Patient
                 </Button>
               </Flex>
+
               {/* ==================== Patient table ==================== */}
               <Box sx={tableBox}>
                 <TableContainer>
@@ -127,47 +152,52 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
                         <Th isNumeric></Th>
                       </Tr>
                     </Thead>
-                    {/* <Tbody>
-                      {props.map((doctor) => (
+                    <Tbody>
+                      {allpatients.map((patient, index) => (
                         <Tr
+                          key={index}
                           sx={
-                            selected == doctor.doctorID
+                            selected == patient.patientID
                               ? hoverStyleSelected
                               : hoverStyle
                           }
-                          onClick={() => {
-                            if (selected == doctor.doctorID) {
-                              setSelected('')
-                            } else {
-                              setSelected(doctor.doctorID)
-                            }
-                          }}
+                          onClick={() => choosePatient(patient.patientID)}
                         >
-                          <Td sx={GlobalStyle.labelText}>{doctor.doctorID}</Td>
-                          <Td sx={GlobalStyle.labelText}>{doctor.firstName}</Td>
+                          <Td sx={GlobalStyle.labelText}>
+                            {patient.patientID}
+                          </Td>
+                          <Td sx={GlobalStyle.labelText}>
+                            {patient.firstName}&nbsp;{patient.lastName}
+                          </Td>
                           <Td isNumeric>
                             <Avatar
-                              src="/images/petch.JPG"
+                              src={patient.image}
                               sx={GlobalStyle.profileImgSmall}
                             />
                           </Td>
                         </Tr>
                       ))}
-                    </Tbody> */}
+                    </Tbody>
                   </Table>
                 </TableContainer>
               </Box>
             </VStack>
+
             {/* ==================== Button ==================== */}
             <Flex sx={boxStyle}>
               <Button
                 sx={GlobalStyle.yellowBtn}
                 disabled={selected == ''}
-                onClick={() => onClickHistorytaking()}
+                onClick={handleClickQR}
               >
                 Take History
               </Button>
             </Flex>
+            <QRgenerator
+              isOpen={showQR}
+              onClose={handleClickQR}
+              patientID={selected}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>

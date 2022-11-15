@@ -23,8 +23,8 @@ import HeadCenter from '/components/HeadCenter'
 import { useRouter } from 'next/router'
 import { ArrowLeftIcon, ArrowRightIcon, AddIcon } from '@chakra-ui/icons'
 import axios from 'axios'
-import CreateAppointment from '/components/CreateAppointment'
-import { useState, useEffect } from 'react'
+import AddCase from '/components/AddCase'
+import { useState } from 'react'
 import url from '/url'
 
 export default function MyPatients(props) {
@@ -67,8 +67,6 @@ export default function MyPatients(props) {
 
   // router
   const router = useRouter()
-  const doctorID = router.query.doctorID
-
   // redirect to patient info page
   const onClickPatient = (patientID) => {
     router.push(`/patient/${patientID}`)
@@ -76,9 +74,7 @@ export default function MyPatients(props) {
 
   // set modal
   const [showModal, setShowModal] = useState(false)
-  const handleClick = () => setShowModal(!showModal)
-
-  console.log('props', props)
+  const handleClickModal = () => setShowModal(!showModal)
 
   return (
     <>
@@ -95,14 +91,14 @@ export default function MyPatients(props) {
           <Button
             sx={GlobalStyle.turquoiseBtn}
             leftIcon={<AddIcon sx={addIconSize} />}
-            onClick={handleClick}
+            onClick={handleClickModal}
           >
             Add Case
           </Button>
-          <CreateAppointment
+          <AddCase
             isOpen={showModal}
-            onClose={handleClick}
-            props={props.doctorData}
+            onClose={handleClickModal}
+            allpatients={props.allpatients}
           />
         </Flex>
 
@@ -118,14 +114,16 @@ export default function MyPatients(props) {
                 </Tr>
               </Thead>
               <Tbody>
-                {props.patientList.map((item, index) => (
+                {props.mypatients.map((item, index) => (
                   <Tr
                     key={index}
                     sx={hoverStyle}
                     onClick={() => onClickPatient(item.patientID)}
                   >
                     <Td sx={GlobalStyle.labelText}>{item.patientID}</Td>
-                    <Td sx={GlobalStyle.labelText}>{item.firstName}</Td>
+                    <Td sx={GlobalStyle.labelText}>
+                      {item.firstName}&nbsp;{item.lastName}
+                    </Td>
                     <Td isNumeric>
                       <Avatar
                         src={item.image}
@@ -151,12 +149,19 @@ export default function MyPatients(props) {
 }
 
 export async function getServerSideProps(context) {
-  const result = await axios.post(`${url}/api/patientManager/getMyPatients`, {
-    doctorID: context.params.doctorID,
-  })
+  const mypatients = await axios.post(
+    `${url}/api/patientManager/getMyPatients`,
+    {
+      doctorID: context.params.doctorID,
+    }
+  )
+  const allpatients = await axios.get(
+    `${url}/api/patientManager/getAllPatients`
+  )
   return {
     props: {
-      patientList: result.data,
+      mypatients: mypatients.data,
+      allpatients: allpatients.data,
     },
   }
 }
