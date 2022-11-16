@@ -99,14 +99,37 @@ export default function CreateAppointment(props) {
     }
   }
 
+  // set to show QR code
   const [showQR, setShowQR] = useState(false)
   const handleClickQR = () => setShowQR(!showQR)
 
-  // // submit
-  // const onClickHistorytaking = () => {
-  //   const patientID = selected
-  //   router.push(`/patient/${patientID}/historytaking/part1`)
-  // }
+  // handle search
+  const [search, setSearch] = useState('')
+  const [searchResult, setSearchResult] = useState([])
+
+  useEffect(() => {
+    // if search is empty, show all patients
+    if (search === '') {
+      setSearchResult(allpatients)
+    } else {
+      // if search is not empty, show patients that match the search
+      const result = allpatients.filter((patient) => {
+        if (
+          patient.firstName.toLowerCase().includes(search.toLowerCase()) ||
+          patient.lastName.toLowerCase().includes(search.toLowerCase()) ||
+          patient.firstName
+            .toLowerCase()
+            .concat(' ', patient.lastName.toLowerCase())
+            .includes(search.toLowerCase())
+        ) {
+          return patient
+        } else {
+          return null
+        }
+      })
+      setSearchResult(result)
+    }
+  }, [search])
 
   return (
     <>
@@ -127,11 +150,13 @@ export default function CreateAppointment(props) {
                   <Input
                     sx={GlobalStyle.inputStyle}
                     placeholder="Search patient"
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                   <InputRightElement>
                     <SearchIcon sx={iconStyle} />
                   </InputRightElement>
                 </InputGroup>
+
                 <Button
                   sx={GlobalStyle.turquoiseBtn}
                   leftIcon={<AddIcon sx={addIconSize} />}
@@ -153,7 +178,7 @@ export default function CreateAppointment(props) {
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {allpatients.map((patient, index) => (
+                      {searchResult.map((patient, index) => (
                         <Tr
                           key={index}
                           sx={

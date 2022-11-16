@@ -289,6 +289,11 @@ const gridStyle = {
   gap: { base: '16px', md: '24px' },
   width: '100%',
 }
+const iconStyle = {
+  boxSize: { base: '16px', md: '24px' },
+  color: Colour.grey,
+  cursor: 'pointer',
+}
 
 export default {
   bgColor,
@@ -326,4 +331,5 @@ export default {
   btnGroup,
   sliderBox,
   gridStyle,
+  iconStyle,
 }
