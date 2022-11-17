@@ -28,6 +28,7 @@ import { useState, useEffect } from 'react'
 import url from '/url'
 import axios from 'axios'
 import QRgenerator from '/components/QRgenerator'
+import { useToast } from '@chakra-ui/react'
 
 export default function CreateAppointment(props) {
   const { isOpen, onClose, allpatients } = props
@@ -84,9 +85,10 @@ export default function CreateAppointment(props) {
 
   // router
   const router = useRouter()
-  const onClickNewPatient = () => {
-    router.push('/create-patient-account')
-  }
+  const doctorID = router.query.doctorID
+
+  // toast
+  const toast = useToast()
 
   // choose patient
   const [selected, setSelected] = useState('')
@@ -131,6 +133,44 @@ export default function CreateAppointment(props) {
     }
   }, [search])
 
+  // create case
+  const onCreateCase = async () => {
+    const caseData = {
+      doctorID: doctorID,
+      patientID: selected,
+      date: new Date(),
+    }
+    console.log(caseData)
+    if (selected !== '' && doctorID !== undefined) {
+      try {
+        const res = await axios.post('/api/caseManager/addCase', caseData)
+        console.log('res', res)
+        toast({
+          title: 'Case created.',
+          description: 'You can now view the case.',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        })
+        onClose()
+        setTimeout(() => {
+          router.push(`${url}/patient/${selected}`)
+        }, 4000)
+      } catch (err) {
+        console.log(err)
+        toast({
+          title: 'Case creation failed.',
+          description: 'Please try again.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        })
+      }
+    } else {
+      alert('Error occured. Please try again.')
+    }
+  }
+
   return (
     <>
       <Modal
@@ -157,13 +197,13 @@ export default function CreateAppointment(props) {
                   </InputRightElement>
                 </InputGroup>
 
-                <Button
+                {/* <Button
                   sx={GlobalStyle.turquoiseBtn}
                   leftIcon={<AddIcon sx={addIconSize} />}
                   onClick={() => onClickNewPatient()}
                 >
                   New Patient
-                </Button>
+                </Button> */}
               </Flex>
 
               {/* ==================== Patient table ==================== */}
@@ -213,16 +253,17 @@ export default function CreateAppointment(props) {
               <Button
                 sx={GlobalStyle.yellowBtn}
                 disabled={selected == ''}
-                onClick={handleClickQR}
+                // onClick={handleClickQR}
+                onClick={onCreateCase}
               >
-                Take History
+                Create case
               </Button>
             </Flex>
-            <QRgenerator
+            {/* <QRgenerator
               isOpen={showQR}
               onClose={handleClickQR}
               patientID={selected}
-            />
+            /> */}
           </ModalBody>
         </ModalContent>
       </Modal>

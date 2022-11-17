@@ -24,10 +24,11 @@ import { useRouter } from 'next/router'
 import { ArrowLeftIcon, ArrowRightIcon, AddIcon } from '@chakra-ui/icons'
 import axios from 'axios'
 import AddCase from '/components/AddCase'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import url from '/url'
 
 export default function MyPatients(props) {
+  const { mypatients, allpatients } = props
   let iconStyle = {
     color: Colour.darkGrey,
     marginTop: { base: '0px', md: '8px' },
@@ -67,6 +68,7 @@ export default function MyPatients(props) {
 
   // router
   const router = useRouter()
+
   // redirect to patient info page
   const onClickPatient = (patientID) => {
     router.push(`/patient/${patientID}`)
@@ -76,6 +78,34 @@ export default function MyPatients(props) {
   const [showModal, setShowModal] = useState(false)
   const handleClickModal = () => setShowModal(!showModal)
 
+  // set search
+  const [search, setSearch] = useState('')
+  const [searchResult, setSearchResult] = useState([])
+
+  useEffect(() => {
+    // if search is empty, show all patients
+    if (search === '') {
+      setSearchResult(mypatients)
+    } else {
+      // if search is not empty, show patients that match the search
+      const result = mypatients.filter((patient) => {
+        if (
+          patient.firstName.toLowerCase().includes(search.toLowerCase()) ||
+          patient.lastName.toLowerCase().includes(search.toLowerCase()) ||
+          patient.firstName
+            .toLowerCase()
+            .concat(' ', patient.lastName.toLowerCase())
+            .includes(search.toLowerCase())
+        ) {
+          return patient
+        } else {
+          return null
+        }
+      })
+      setSearchResult(result)
+    }
+  }, [search])
+
   return (
     <>
       <HeadCenter topic="My Patients" />
@@ -83,7 +113,11 @@ export default function MyPatients(props) {
         <Flex sx={flexStyle}>
           {/* ==================== Search box ==================== */}
           <InputGroup>
-            <Input sx={GlobalStyle.inputStyle} placeholder="Search patient" />
+            <Input
+              sx={GlobalStyle.inputStyle}
+              placeholder="Search patient"
+              onChange={(e) => setSearch(e.target.value)}
+            />
             <InputRightElement>
               <SearchIcon sx={iconStyle} />
             </InputRightElement>
@@ -98,7 +132,7 @@ export default function MyPatients(props) {
           <AddCase
             isOpen={showModal}
             onClose={handleClickModal}
-            allpatients={props.allpatients}
+            allpatients={allpatients}
           />
         </Flex>
 
@@ -114,7 +148,7 @@ export default function MyPatients(props) {
                 </Tr>
               </Thead>
               <Tbody>
-                {props.mypatients.map((item, index) => (
+                {searchResult.map((item, index) => (
                   <Tr
                     key={index}
                     sx={hoverStyle}

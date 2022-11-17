@@ -9,9 +9,8 @@ import {
   Input,
   Button,
   ButtonGroup,
-  Toast,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../../Style'
+import GlobalStyle from '../../../../../../Style'
 import FormProgress from '/components/FormProgress'
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
@@ -22,6 +21,7 @@ export default function History3() {
   // router
   const router = useRouter()
   const patientID = router.query.patientID
+  const caseID = router.query.caseID
 
   // toast
   const toast = useToast()
@@ -63,7 +63,7 @@ export default function History3() {
     if (exacerbate && relieve) {
       setError(false)
       saveLocalStorage()
-      router.push(`/patient/${patientID}/historytaking/part2`)
+      router.push(`/patient/${patientID}/case/${caseID}/historytaking/part2`)
     } else {
       setError(true)
       toast({
@@ -79,7 +79,7 @@ export default function History3() {
     if (exacerbate && relieve) {
       setError(false)
       saveLocalStorage()
-      // router.push(`/patient/${patientID}/historytaking/part2`)
+      router.push(`/patient/${patientID}/case/${caseID}/historytaking/summary`)
     } else {
       setError(true)
       toast({

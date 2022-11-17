@@ -21,8 +21,8 @@ import {
   Flex,
   Image,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../../Style'
-import Colour from '../../../../Colour'
+import GlobalStyle from '../../../../../../Style'
+import Colour from '../../../../../../Colour'
 import FormProgress from '/components/FormProgress'
 import BodySelector from '/components/BodySelector'
 import { PainTypes } from '/PainTypes'
@@ -86,6 +86,7 @@ export default function History1() {
   // router
   const router = useRouter()
   const patientID = router.query.patientID
+  const caseID = router.query.caseID
 
   // toast
   const toast = useToast()
@@ -245,7 +246,7 @@ export default function History1() {
       localStorage.setItem('otherSymptom', otherSymptom)
       localStorage.setItem('painScaleNow', painScaleNow)
       localStorage.setItem('painScalePast', painScalePast)
-      router.push(`/patient/${patientID}/historytaking/part2`)
+      router.push(`/patient/${patientID}/case/${caseID}/historytaking/part2`)
     } else {
       setError(true)
       toast({
