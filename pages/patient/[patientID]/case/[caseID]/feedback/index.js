@@ -16,8 +16,16 @@ import axios from 'axios'
 import AddFeedbackModal from '/components/AddFeedbackModal'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import { FeedbackList } from '/FeedbackList'
+import { async } from '@firebase/util'
 
-export default function Case() {
+export default function Case(props) {
+
+  let total = props.getAllFeedback.length + 1
+
+  console.log(props.getAllFeedback)
+  console.log(props.getAllFeedback[0].feedbackID)
+  console.log(props.getAllFeedback[1].feedbackID)
+
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
     position: 'relative',
@@ -72,15 +80,17 @@ export default function Case() {
             onClose={onClickAddFeedback}
           />
           {/* <Feedbacks /> */}
-          {FeedbackList.map((feedback, index) => {
+          {props.getAllFeedback.map((feedback, index) => {
+            total = total - 1
             return (
               <Flex
                 key={index}
                 sx={GlobalStyle.recordBox}
-                onClick={() => onClickFeedback(feedback.id)}
+                onClick={() => onClickFeedback(feedback.feedbackID)}
               >
-                <Text sx={GlobalStyle.boldText}>Feedback #{feedback.id}</Text>
-                <Text sx={GlobalStyle.greyMediumText}>{feedback.date}</Text>
+                <Text sx={GlobalStyle.boldText}>Feedback #{(total)}</Text>
+                <Text sx={GlobalStyle.greyMediumText}>{new Date(feedback.datetime).toLocaleString('en-GB')}</Text>
+                
               </Flex>
             )
           })}
@@ -90,4 +100,11 @@ export default function Case() {
   )
 }
 
-
+export async function getServerSideProps() {
+  const result = await axios.get('http://localhost:3000/api/feedbackManager/getAllFeedback')
+  return {
+    props: {
+      getAllFeedback: result.data,
+    },
+  }
+}

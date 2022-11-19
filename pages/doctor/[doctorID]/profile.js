@@ -17,7 +17,7 @@ import {
   Grid,
   GridItem,
 } from '@chakra-ui/react'
-import HeadCenter from '../../../components/HeadCenter'
+import HeadCenter from '/components/HeadCenter'
 import GlobalStyle from '../../../Style'
 import { useState } from 'react'
 import { useToast } from '@chakra-ui/react'

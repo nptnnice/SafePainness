@@ -14,9 +14,13 @@ import { useRouter } from 'next/router'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import { RecordList } from '/RecordList'
 import RecordModal from '/components/RecordModal'
+import axios from 'axios'
 import { useState } from 'react'
 
-export default function Case() {
+export default function Case({getAllRecords, props}) {
+
+  let total = getAllRecords.length + 1
+
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
     position: 'relative',
@@ -38,7 +42,7 @@ export default function Case() {
     fontSize: { base: '16px', md: '18px' },
   }
 
-  const router = useRouter()
+  const router = useRouter(props)
   const patientID = router.query.patientID
   const caseID = router.query.caseID
 
@@ -69,15 +73,18 @@ export default function Case() {
             </Button>
           </Box>
 
-          {RecordList.map((record, index) => {
+          {getAllRecords.map((record, index) => {
+            
+            total = total - 1;
+
             return (
               <Flex
                 key={index}
                 sx={GlobalStyle.recordBox}
                 onClick={onClickRecord}
               >
-                <Text sx={GlobalStyle.boldText}>Record #{record.id}</Text>
-                <Text sx={GlobalStyle.greyMediumText}>{record.date}</Text>
+                <Text sx={GlobalStyle.boldText}>Record #{total}</Text>
+                <Text sx={GlobalStyle.greyMediumText}>{new Date(record.datetime).toLocaleString('en-GB')}</Text>
                 <RecordModal isOpen={showModal} onClose={onClickRecord} />
               </Flex>
             )
@@ -86,4 +93,13 @@ export default function Case() {
       </Box>
     </Box>
   )
+}
+
+export async function getServerSideProps() {
+  const result = await axios.get('http://localhost:3000/api/recordManager/getAllRecords')
+  return {
+    props: {
+      getAllRecords: result.data,
+    },
+  }
 }

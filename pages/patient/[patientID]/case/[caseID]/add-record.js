@@ -1,5 +1,6 @@
 import {
   Box,
+  Flex,
   Input,
   VStack,
   FormControl,
@@ -23,6 +24,16 @@ import HeadBox from '/components/HeadCenter'
 import { useState } from 'react'
 import { CloseIcon } from '@chakra-ui/icons'
 import { useToast } from '@chakra-ui/react'
+import axios from 'axios'
+import ReactLoading from 'react-loading'
+import { storage } from '/firebaseConfig'
+import {
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+  deleteObject,
+} from 'firebase/storage'
+
 
 export default function AddRecord() {
   let imgStyle = {
@@ -43,16 +54,98 @@ export default function AddRecord() {
   }
 
   const [isError, setIsError] = useState(false)
+
   const [isExceed, setIsExceed] = useState(false)
+  
   const toast = useToast()
+
+  const [image, setImage] = useState('')
+
+  const [loading, setLoading] = useState(false)
+
+  const getCurrentSymptom = (e) => {
+    setForm({ ...form, symptom: e.target.value })
+  }
+  const getComment = (e) => {
+    setForm({...form, comment: e.target.value})
+  }
+  const getPainSeverity = (e) => {
+    setForm({...form, painScale: e})
+  }
+
+  const [error, setError] = useState(false)
 
   const [form, setForm] = useState({
     symptom: '',
-    datetime: '',
-    painscale: '',
-    photo: [],
+    painScale: '',
+    image: '',
     comment: '',
   })
+  
+  console.log(form)
+
+  // handle change for image
+  const getImg = (e) => {
+    // handle when change image without deleting the previous one
+    if (image) {
+      deleteImg()
+    }
+    // upload image to firebase when user choose an image
+    if (e.target.files[0]) {
+      setImage(e.target.files[0])
+      const file = e.target.files[0]
+      const date = new Date().toISOString().slice(0, 10)
+      const storageRef = ref(storage, `/images/${date}-${file.name}`)
+      const uploadTask = uploadBytesResumable(storageRef, file)
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          setLoading(true)
+          const percent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          )
+          console.log('Upload progress is ' + percent)
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused')
+              break
+            case 'running':
+              console.log('Upload is running')
+              break
+          }
+        },
+        // Handle unsuccessful uploads
+        (err) => console.log(err),
+        () => {
+          // Handle successful uploads on complete
+          setLoading(false)
+          // download firebase storage image url
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            setForm({ ...form, image: url })
+          })
+        }
+      )
+    }
+  }
+
+  console.log("This is URL "+ form.image)
+  console.log(typeof(form.image))
+  
+  // cancel upload image
+  function deleteImg() {
+    const date = new Date().toISOString().slice(0, 10)
+    const deleteRef = ref(storage, `/images/${date}-${image.name}`)
+    deleteObject(deleteRef)
+      .then(() => {
+        console.log('delete success')
+      })
+      .catch((error) => {
+        console.log('delete error', error)
+      })
+    setImage('')
+    setForm({ ...form, image: '' })
+  }
 
   function uploadSingleFile(e) {
     setIsExceed(false)
@@ -65,30 +158,53 @@ export default function AddRecord() {
       URL.createObjectURL(e[1])
     )
     console.log(ImagesArray)
-    setForm({ ...form, photo: [...form.photo, ...ImagesArray] })
+    setForm({ ...form, image: [...form.image, ...ImagesArray] })
   }
 
   function deleteFile(e) {
-    const s = form.photo.filter((item, index) => index !== e)
-    setForm({ ...form, photo: s })
+    const s = form.image.filter((item, index) => index !== e)
+    setForm({ ...form, image: s })
   }
 
-  const onSend = () => {
-    setIsExceed(false)
-    if (!form.symptom || !form.painscale) {
+  const onSend = async () => {
+    //setIsExceed(false)
+      try {
+        const result = await axios.post('/api/recordManager/addRecord', {
+          symptom: form.symptom,
+          painScale: form.painScale,
+          image: form.image,
+          comment: form.comment,
+        })
+        console.log("This is Result " + result)
+      } catch (err) {
+        console.log(err)
+      }
+      // setTimeout(() => {
+      //   window.location.reload()
+      //   }, 1500)
+        toast({
+          title: 'Response submitted',
+          description: 'Your response has been submitted',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+    
+    /*
+    if (!form.symptom || !form.painScale) {
       setIsError(true)
       console.log('form is invalid')
       toast({
         title: 'An error occurred.',
         description: 'Please fill in all required fields.',
         status: 'error',
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
       })
     } else {
-      if (form.photo.length > 4) {
+      if (form.image.length > 4) {
         setIsExceed(true)
-        setForm({ ...form, photo: [] })
+        setForm({ ...form, image: [] })
         return
       }
       setIsError(false)
@@ -96,21 +212,35 @@ export default function AddRecord() {
       var now = new Date().toLocaleString()
       setForm({ ...form, datetime: now })
       console.log(form)
+      try {
+        const result = await axios.post('/api/recordManager/addRecord', {
+          symptom: form.symptom,
+          painScale: form.painScale,
+          image: form.image,
+          comment: form.comment,
+          datetime: form.datetime,
+        })
+          console.log(result)
+      } catch (err) {
+          console.log(err)
+      }
       toast({
         title: 'Submit successfully',
         description: 'Your record has been submitted.',
         status: 'success',
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
       })
       // reload page
       setTimeout(() => {
         window.location.reload()
-      }, 4000)
+      }, 1500)
     }
-  }
+  }*/
+}
 
   // console.log('form', form)
+
   return (
     <Box sx={GlobalStyle.bgColor}>
       <HeadBox topic="symptom tracking" />
@@ -122,12 +252,13 @@ export default function AddRecord() {
             <Textarea
               sx={GlobalStyle.inputStyle}
               placeholder="Fill in your current symptom"
-              onChange={(e) => setForm({ ...form, symptom: e.target.value })}
+              onChange={getCurrentSymptom}
             />
+            {console.log(form.symptom)}
           </FormControl>
 
           {/* ==================== Pain scale ==================== */}
-          <FormControl isRequired isInvalid={isError && !form.painscale}>
+          <FormControl isRequired isInvalid={isError && !form.painScale}>
             <FormLabel sx={GlobalStyle.labelText}>Pain severity</FormLabel>
             <Box sx={GlobalStyle.sliderBox}>
               <Slider
@@ -136,8 +267,9 @@ export default function AddRecord() {
                 max={10}
                 step={1}
                 sx={GlobalStyle.labelText}
-                onChange={(e) => setForm({ ...form, painscale: e })}
+                onChange={getPainSeverity}
               >
+                {console.log(form.painScale)}
                 <SliderMark value={0}>0</SliderMark>
                 <SliderMark value={1}>1</SliderMark>
                 <SliderMark value={2}>2</SliderMark>
@@ -171,10 +303,20 @@ export default function AddRecord() {
             <Input
               type="file"
               sx={GlobalStyle.inputStyle}
-              onChange={uploadSingleFile}
+              onChange={getImg}
               multiple
-              isDisabled={form.photo.length >= 4}
+              isDisabled={form.image.length >= 4}
             />
+            {/* show uploading progress */}
+            {loading && (
+              <ReactLoading
+                type={'spin'}
+                color={'#000'}
+                height={'20px'}
+                width={'20px'}
+              />
+            )}
+            
             {!isExceed ? (
               <FormHelperText sx={GlobalStyle.greyMediumText}>
                 You can upload up to 4 pictures.
@@ -190,7 +332,7 @@ export default function AddRecord() {
               sx={GlobalStyle.gridStyle}
               marginTop="24px"
             >
-              {form.photo.map((item, index) => {
+              {/* {form.image.map((item, index) => {
                 return (
                   <Box sx={imgBox} key={item}>
                     <CloseIcon
@@ -198,11 +340,11 @@ export default function AddRecord() {
                       onClick={() => {
                         deleteFile(index)
                       }}
-                    />
+                      />
                     <Image src={item} sx={imgStyle} />
                   </Box>
                 )
-              })}
+              })} */}
             </SimpleGrid>
           </FormControl>
 
@@ -216,7 +358,7 @@ export default function AddRecord() {
             </FormLabel>
             <Textarea
               sx={GlobalStyle.inputStyle}
-              onChange={(e) => setForm({ ...form, comment: e.target.value })}
+              onChange={getComment}
             />
           </FormControl>
         </VStack>
@@ -229,5 +371,16 @@ export default function AddRecord() {
         </Box>
       </Box>
     </Box>
+
+    
   )
 }
+
+// export async function getServerSideProps() {
+//   const result = axios.post('/api/recordManager/addRecord')
+//   return {
+//     props: {
+//       AddrecordtoDB: result.data,
+//     }
+//   }
+// }
