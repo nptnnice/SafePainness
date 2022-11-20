@@ -82,40 +82,43 @@ export default function Tutorial(props) {
     }
     // upload image to firebase when user choose an image
     if (e.target.files[0]) {
-      setImg(e.target.files[0])
-      const file = e.target.files[0]
-      const date = new Date().toISOString().slice(0, 10)
-      const storageRef = ref(storage, `/images/${date}-${file.name}`)
-      const uploadTask = uploadBytesResumable(storageRef, file)
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          // Observe state change events such as progress, pause, and resume
-          setLoading(true)
-          const percent = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          )
-          console.log('Upload progress is ' + percent)
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused')
-              break
-            case 'running':
-              console.log('Upload is running')
-              break
-          }
-        },
-        // Handle unsuccessful uploads
-        (err) => console.log(err),
-        () => {
-          // Handle successful uploads on complete
-          setLoading(false)
-          // download firebase storage image url
-          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            setForm({ ...form, img: url })
-          })
-        }
-      )
+      console.log('file', e.target.files[0])
+      const image = URL.createObjectURL(e.target.files[0])
+      console.log('url', image)
+      // setImg(e.target.files[0])
+      // const file = e.target.files[0]
+      // const date = new Date().toISOString().slice(0, 10)
+      // const storageRef = ref(storage, `/images/${date}-${file.name}`)
+      // const uploadTask = uploadBytesResumable(storageRef, file)
+      // uploadTask.on(
+      //   'state_changed',
+      //   (snapshot) => {
+      //     // Observe state change events such as progress, pause, and resume
+      //     setLoading(true)
+      //     const percent = Math.round(
+      //       (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      //     )
+      //     console.log('Upload progress is ' + percent)
+      //     switch (snapshot.state) {
+      //       case 'paused':
+      //         console.log('Upload is paused')
+      //         break
+      //       case 'running':
+      //         console.log('Upload is running')
+      //         break
+      //     }
+      //   },
+      //   // Handle unsuccessful uploads
+      //   (err) => console.log(err),
+      //   () => {
+      //     // Handle successful uploads on complete
+      //     setLoading(false)
+      //     // download firebase storage image url
+      //     getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+      //       setForm({ ...form, img: url })
+      //     })
+      //   }
+      // )
     }
   }
 

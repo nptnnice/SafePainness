@@ -96,118 +96,97 @@ export default function History1() {
   const handleClickModal = () => setShowModal(!showModal)
 
   // set form
-  const [site, setSite] = useState([])
-  const [onset, setOnset] = useState('')
-  const [onsetType, setOnsetType] = useState('')
-  const [characteristic, setCharacteristic] = useState([])
-  const [radiation, setRadiation] = useState('')
-  const [associatedSymp, setAssociatedSymp] = useState([])
-  const [painScaleNow, setPainScaleNow] = useState('')
-  const [painScalePast, setPainScalePast] = useState('')
+  const [form, setForm] = useState({
+    site: [],
+    onset: '',
+    onsetType: '',
+    characteristic: [],
+    otherCharacteristic: '',
+    radiation: '',
+    associatedSymp: [],
+    otherSymptom: '',
+    painScaleNow: '',
+    painScalePast: '',
+  })
 
-  const [otherSymptom, setOtherSymptom] = useState('')
-  const [otherCharacteristic, setOtherCharacteristic] = useState('')
-
-  // localStorage.clear()
+  // handle saved data
   useEffect(() => {
-    if (localStorage.getItem('site') !== null) {
-      setSite(localStorage.getItem('site'))
-      console.log(localStorage.getItem('site'))
-    }
-    if (localStorage.getItem('onset') !== null) {
-      setOnset(localStorage.getItem('onset'))
-      console.log(localStorage.getItem('onset'))
-    }
-    if (localStorage.getItem('onsetType') !== null) {
-      setOnsetType(localStorage.getItem('onsetType'))
-      console.log(localStorage.getItem('onsetType'))
-    }
-    if (localStorage.getItem('characteristic') !== null) {
-      setCharacteristic(localStorage.getItem('characteristic'))
-      console.log(localStorage.getItem('characteristic'))
-    }
-    if (localStorage.getItem('radiation') !== null) {
-      setRadiation(localStorage.getItem('radiation'))
-      console.log(localStorage.getItem('radiation'))
-    }
-    if (localStorage.getItem('associatedSymp') !== null) {
-      setAssociatedSymp(localStorage.getItem('associatedSymp'))
-      console.log(localStorage.getItem('associatedSymp'))
-    }
-    if (localStorage.getItem('painScaleNow') !== null) {
-      setPainScaleNow(localStorage.getItem('painScaleNow'))
-      console.log(localStorage.getItem('painScaleNow'))
-    }
-    if (localStorage.getItem('painScalePast') !== null) {
-      setPainScalePast(localStorage.getItem('painScalePast'))
-      console.log(localStorage.getItem('painScalePast'))
-    }
-    if (localStorage.getItem('otherSymptom') !== null) {
-      setOtherSymptom(localStorage.getItem('otherSymptom'))
-      console.log(localStorage.getItem('otherSymptom'))
-    }
-    if (localStorage.getItem('otherCharacteristic') !== null) {
-      setOtherCharacteristic(localStorage.getItem('otherCharacteristic'))
-      console.log(localStorage.getItem('otherCharacteristic'))
+    if (localStorage.getItem('historytaking-1')) {
+      setForm(JSON.parse(localStorage.getItem('historytaking-1')))
     }
   }, [])
 
   // handle form change
   // site
   const getSite = (e) => {
-    if (site.includes(e)) {
-      setSite(site.filter((item) => item !== e))
+    let newSite = e
+    if (form.site.includes(e)) {
+      newSite = form.site.filter((item) => item !== e)
+      setForm({ ...form, site: newSite })
     } else {
-      setSite([...site, e])
+      newSite = [...form.site, e]
+      setForm({ ...form, site: [...form.site, e] })
     }
   }
   // onset
   const getOnset = (e) => {
-    setOnset(e.target.value)
+    setForm({ ...form, onset: e.target.value })
   }
   // onset type
   const getOnsetType = (value) => {
-    setOnsetType(value)
+    setForm({ ...form, onsetType: value })
   }
   // characteristic
   const getCharacteristic = (painCharacter) => {
-    if (characteristic.includes(painCharacter)) {
-      setCharacteristic(characteristic.filter((item) => item !== painCharacter))
+    let newCharacteristic = painCharacter
+    if (form.characteristic.includes(painCharacter)) {
+      newCharacteristic = form.characteristic.filter(
+        (item) => item !== painCharacter
+      )
+      setForm({ ...form, characteristic: newCharacteristic })
     } else {
-      setCharacteristic([...characteristic, painCharacter])
+      newCharacteristic = [...form.characteristic, painCharacter]
+      setForm({
+        ...form,
+        characteristic: [...form.characteristic, painCharacter],
+      })
     }
   }
+  // other characteristic
   const getOtherCharacteristic = (e) => {
-    setOtherCharacteristic(e.target.value)
+    setForm({ ...form, otherCharacteristic: e.target.value })
   }
   // radiation
   const getRadiation = (e) => {
-    setRadiation(e.target.value)
+    setForm({ ...form, radiation: e.target.value })
   }
   // associated symptom
   const getAssociatedSymp = (e) => {
-    // if array consists of the value, remove it
-    if (associatedSymp.includes(e.target.value)) {
-      setAssociatedSymp(
-        associatedSymp.filter((item) => item !== e.target.value)
+    let newAssociatedSymp = e
+    if (form.associatedSymp.includes(e.target.value)) {
+      newAssociatedSymp = form.associatedSymp.filter(
+        (item) => item !== e.target.value
       )
-    }
-    // if array doesn't consist of the value, add it
-    else {
-      setAssociatedSymp([...associatedSymp, e.target.value])
+      setForm({ ...form, associatedSymp: newAssociatedSymp })
+    } else {
+      newAssociatedSymp = [...form.associatedSymp, e.target.value]
+      setForm({
+        ...form,
+        associatedSymp: [...form.associatedSymp, e.target.value],
+      })
     }
   }
   // other symptom
   const getOtherSymptom = (e) => {
-    setOtherSymptom(e.target.value)
+    setForm({ ...form, otherSymptom: e.target.value })
   }
   // pain scale now
   const getPainScaleNow = (e) => {
-    setPainScaleNow(e)
+    setForm({ ...form, painScaleNow: e })
   }
   // pain scale past
   const getPainScalePast = (e) => {
-    setPainScalePast(e)
+    setForm({ ...form, painScalePast: e })
   }
 
   // handle error
@@ -215,37 +194,19 @@ export default function History1() {
 
   // handle next button
   const onClickNext = () => {
-    console.log('site: ', site)
-    console.log('onset: ', onset)
-    console.log('onsetType: ', onsetType)
-    console.log('characteristic: ', characteristic)
-    console.log('otherCharacteristic: ', otherCharacteristic)
-    console.log('radiation: ', radiation)
-    console.log('associatedSymp: ', associatedSymp)
-    console.log('otherSymptom: ', otherSymptom)
-    console.log('painScaleNow: ', painScaleNow)
-    console.log('painScalePast: ', painScalePast)
     if (
-      site &&
-      onset &&
-      onsetType &&
-      characteristic &&
-      radiation &&
-      associatedSymp &&
-      painScaleNow &&
-      painScalePast
+      form.site.length !== 0 &&
+      form.onset &&
+      form.onsetType &&
+      form.characteristic.length !== 0 &&
+      form.radiation &&
+      form.associatedSymp.length !== 0 &&
+      form.painScaleNow &&
+      form.painScalePast
     ) {
       setError(false)
-      localStorage.setItem('site', site)
-      localStorage.setItem('onset', onset)
-      localStorage.setItem('onsetType', onsetType)
-      localStorage.setItem('characteristic', characteristic)
-      localStorage.setItem('otherCharacteristic', otherCharacteristic)
-      localStorage.setItem('radiation', radiation)
-      localStorage.setItem('associatedSymp', associatedSymp)
-      localStorage.setItem('otherSymptom', otherSymptom)
-      localStorage.setItem('painScaleNow', painScaleNow)
-      localStorage.setItem('painScalePast', painScalePast)
+      localStorage.setItem('historytaking-1', JSON.stringify(form))
+      // console.log(localStorage.getItem('historytaking-1'))
       router.push(`/patient/${patientID}/case/${caseID}/historytaking/part2`)
     } else {
       setError(true)
@@ -257,6 +218,61 @@ export default function History1() {
       })
     }
   }
+
+  const [bodyState, setBodyState] = useState({
+    head: {
+      show: true,
+      selected: false,
+    },
+    left_shoulder: {
+      show: true,
+      selected: false,
+    },
+    right_shoulder: {
+      show: true,
+      selected: false,
+    },
+    left_arm: {
+      show: true,
+      selected: false,
+    },
+    right_arm: {
+      show: true,
+      selected: false,
+    },
+    chest: {
+      show: true,
+      selected: false,
+    },
+    stomach: {
+      show: true,
+      selected: false,
+    },
+    left_leg: {
+      show: true,
+      selected: false,
+    },
+    right_leg: {
+      show: true,
+      selected: false,
+    },
+    left_hand: {
+      show: true,
+      selected: false,
+    },
+    right_hand: {
+      show: true,
+      selected: false,
+    },
+    left_foot: {
+      show: true,
+      selected: false,
+    },
+    right_foot: {
+      show: true,
+      selected: false,
+    },
+  })
 
   return (
     <Box sx={GlobalStyle.bgColor}>
@@ -273,7 +289,11 @@ export default function History1() {
         <VStack spacing={16}>
           <VStack spacing={16} align="start" sx={GlobalStyle.formBox}>
             {/* =================== Question 1 =================== */}
-            <FormControl sx={bottomLine} isRequired>
+            <FormControl
+              sx={bottomLine}
+              isRequired
+              isInvalid={error && form.site.length == 0}
+            >
               <FormLabel sx={GlobalStyle.labelText}>
                 1. Where is the pain? (The maximal site of the pain)
               </FormLabel>
@@ -281,51 +301,20 @@ export default function History1() {
                 Please select site of the pain.
               </FormErrorMessage>
               {/* <BodySelector /> */}
-              <BodyComponent
-                onClick={getSite}
-                partsInput={{
-                  head: { show: true },
-                  left_shoulder: {
-                    show: true,
-                  },
-                  right_shoulder: {
-                    show: true,
-                  },
-                  left_arm: { show: true },
-                  right_arm: {
-                    show: true,
-                  },
-                  chest: { show: true },
-                  stomach: { show: true },
-                  left_leg: { show: true },
-                  right_leg: {
-                    show: true,
-                  },
-                  left_hand: {
-                    show: true,
-                  },
-                  right_hand: {
-                    show: true,
-                  },
-                  left_foot: {
-                    show: true,
-                  },
-                  right_foot: {
-                    show: true,
-                  },
-                }}
-              />
+              {/* {console.log('test', form.site.includes('head'))} */}
+
+              <BodyComponent onClick={getSite} partsInput={bodyState} />
             </FormControl>
 
             {/* =================== Question 2 =================== */}
-            <FormControl isRequired isInvalid={error && !onset}>
+            <FormControl isRequired isInvalid={error && !form.onset}>
               <FormLabel sx={GlobalStyle.labelText}>
                 2. When did the pain start?
               </FormLabel>
               <Input
                 sx={GlobalStyle.inputStyle}
                 onChange={getOnset}
-                value={onset}
+                value={form.onset}
               />
               <FormHelperText sx={GlobalStyle.greyMediumText}>
                 e.g. after an accident, disease, treatment, etc.
@@ -333,16 +322,16 @@ export default function History1() {
             </FormControl>
 
             {/*  ===================Question 3  ===================*/}
-            <FormControl isRequired isInvalid={error && !onsetType}>
+            <FormControl isRequired isInvalid={error && !form.onsetType}>
               <FormLabel sx={GlobalStyle.labelText}>
                 3. Was the pain sudden or gradual?
               </FormLabel>
-              <RadioGroup onChange={getOnsetType} value={onsetType}>
+              <RadioGroup onChange={getOnsetType} value={form.onsetType}>
                 <Stack direction="row" gap={16}>
-                  <Radio value="sudden" sx={borderStyle}>
+                  <Radio value="Sudden" sx={borderStyle}>
                     <Text sx={GlobalStyle.labelText}>Sudden</Text>
                   </Radio>
-                  <Radio value="gradual" sx={borderStyle}>
+                  <Radio value="Gradual" sx={borderStyle}>
                     <Text sx={GlobalStyle.labelText}>Gradual</Text>
                   </Radio>
                 </Stack>
@@ -350,12 +339,19 @@ export default function History1() {
             </FormControl>
 
             {/* =================== Question 4 =================== */}
-            <FormControl isRequired isInvalid={error && !characteristic}>
+            <FormControl
+              isRequired
+              isInvalid={
+                error &&
+                form.characteristic.length == 0 &&
+                !form.otherCharacteristic
+              }
+            >
               <FormLabel sx={GlobalStyle.labelText}>
                 4. How does the pain feel like?
               </FormLabel>
               <FormErrorMessage sx={GlobalStyle.errorText}>
-                Please enter a value
+                Please select your pain characteristic.
               </FormErrorMessage>
               <Box sx={gridBox}>
                 <SimpleGrid
@@ -366,7 +362,7 @@ export default function History1() {
                     return (
                       <Flex
                         sx={
-                          characteristic.includes(item.name)
+                          form.characteristic.includes(item.name)
                             ? painBoxSelected
                             : painBox
                         }
@@ -385,20 +381,20 @@ export default function History1() {
                 <Input
                   sx={GlobalStyle.inputStyle}
                   onChange={getOtherCharacteristic}
-                  value={otherCharacteristic}
+                  value={form.otherCharacteristic}
                 />
               </Flex>
             </FormControl>
 
             {/* =================== Question 5 =================== */}
-            <FormControl isRequired isInvalid={error && !radiation}>
+            <FormControl isRequired isInvalid={error && !form.radiation}>
               <FormLabel sx={GlobalStyle.labelText}>
                 5. Does the pain radiate anywhere else?
               </FormLabel>
               <Input
                 sx={GlobalStyle.inputStyle}
                 onChange={getRadiation}
-                value={radiation}
+                value={form.radiation}
               />
               <FormHelperText sx={GlobalStyle.greyMediumText}>
                 (Fill the blank with dash (-), if the answer is no.)
@@ -408,7 +404,9 @@ export default function History1() {
             {/* =================== Question 6 =================== */}
             <FormControl
               isRequired
-              isInvalid={error && associatedSymp.length == 0}
+              isInvalid={
+                error && form.associatedSymp.length == 0 && !form.otherSymptom
+              }
             >
               <FormLabel sx={GlobalStyle.labelText}>
                 6. Is there any other symptoms associated with the pain?
@@ -419,7 +417,7 @@ export default function History1() {
                   sx={checkboxStyle}
                   value="Nausea"
                   onChange={getAssociatedSymp}
-                  isChecked={associatedSymp.includes('Nausea')}
+                  isChecked={form.associatedSymp.includes('Nausea')}
                 >
                   Nausea
                 </Checkbox>
@@ -427,7 +425,7 @@ export default function History1() {
                   sx={checkboxStyle}
                   value="Fever"
                   onChange={getAssociatedSymp}
-                  isChecked={associatedSymp.includes('Fever')}
+                  isChecked={form.associatedSymp.includes('Fever')}
                 >
                   Fever
                 </Checkbox>
@@ -435,7 +433,7 @@ export default function History1() {
                   sx={checkboxStyle}
                   value="Dizziness"
                   onChange={getAssociatedSymp}
-                  isChecked={associatedSymp.includes('Dizziness')}
+                  isChecked={form.associatedSymp.includes('Dizziness')}
                 >
                   Dizziness
                 </Checkbox>
@@ -443,7 +441,7 @@ export default function History1() {
                   sx={checkboxStyle}
                   value="Muscle cramps"
                   onChange={getAssociatedSymp}
-                  isChecked={associatedSymp.includes('Muscle cramps')}
+                  isChecked={form.associatedSymp.includes('Muscle cramps')}
                 >
                   Muscle cramps
                 </Checkbox>
@@ -451,7 +449,7 @@ export default function History1() {
                   sx={checkboxStyle}
                   value="Muscle paralysis"
                   onChange={getAssociatedSymp}
-                  isChecked={associatedSymp.includes('Muscle paralysis')}
+                  isChecked={form.associatedSymp.includes('Muscle paralysis')}
                 >
                   Muscle paralysis
                 </Checkbox>
@@ -459,7 +457,7 @@ export default function History1() {
                   sx={checkboxStyle}
                   value="Joint stiffness"
                   onChange={getAssociatedSymp}
-                  isChecked={associatedSymp.includes('Joint stiffness')}
+                  isChecked={form.associatedSymp.includes('Joint stiffness')}
                 >
                   Joint stiffness
                 </Checkbox>
@@ -467,7 +465,9 @@ export default function History1() {
                   sx={checkboxStyle}
                   value="Incontinence of bladder"
                   onChange={getAssociatedSymp}
-                  isChecked={associatedSymp.includes('Incontinence of bladder')}
+                  isChecked={form.associatedSymp.includes(
+                    'Incontinence of bladder'
+                  )}
                 >
                   Incontinence of bladder
                 </Checkbox>
@@ -475,7 +475,9 @@ export default function History1() {
                   sx={checkboxStyle}
                   value="Incontinence of bowels"
                   onChange={getAssociatedSymp}
-                  isChecked={associatedSymp.includes('Incontinence of bowels')}
+                  isChecked={form.associatedSymp.includes(
+                    'Incontinence of bowels'
+                  )}
                 >
                   Incontinence of bowels
                 </Checkbox>
@@ -483,7 +485,11 @@ export default function History1() {
 
               <Flex sx={other}>
                 <Text sx={GlobalStyle.labelText}>Other:</Text>
-                <Input sx={GlobalStyle.inputStyle} onChange={getOtherSymptom} />
+                <Input
+                  sx={GlobalStyle.inputStyle}
+                  onChange={getOtherSymptom}
+                  value={form.otherSymptom}
+                />
               </Flex>
             </FormControl>
 
@@ -499,11 +505,14 @@ export default function History1() {
                 <PainScaleModal isOpen={showModal} onClose={handleClickModal} />
               </Flex>
               {/* =================== Question 7.1 =================== */}
-              <FormControl isRequired isInvalid={error && !painScaleNow}>
+              <FormControl isRequired isInvalid={error && !form.painScaleNow}>
                 <FormLabel sx={GlobalStyle.labelText}>Right now</FormLabel>
+                <FormErrorMessage sx={GlobalStyle.errorText}>
+                  Please select.
+                </FormErrorMessage>
                 <Box sx={GlobalStyle.sliderBox}>
                   <Slider
-                    value={painScaleNow == '' ? 0.5 : painScaleNow}
+                    value={form.painScaleNow == '' ? 0.5 : form.painScaleNow}
                     min={0}
                     max={10}
                     step={1}
@@ -530,13 +539,16 @@ export default function History1() {
               </FormControl>
 
               {/* =================== Question 7.2 =================== */}
-              <FormControl isRequired isInvalid={error && !painScalePast}>
+              <FormControl isRequired isInvalid={error && !form.painScalePast}>
                 <FormLabel sx={GlobalStyle.labelText}>
                   Average in the past 7 days
                 </FormLabel>
+                <FormErrorMessage sx={GlobalStyle.errorText}>
+                  Please select.
+                </FormErrorMessage>
                 <Box sx={GlobalStyle.sliderBox}>
                   <Slider
-                    value={painScalePast == '' ? 0.5 : painScalePast}
+                    value={form.painScalePast == '' ? 0.5 : form.painScalePast}
                     min={0}
                     max={10}
                     step={1}

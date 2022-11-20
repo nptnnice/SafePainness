@@ -27,8 +27,10 @@ export default function History3() {
   const toast = useToast()
 
   // set form
-  const [exacerbate, setExacerbate] = useState('')
-  const [relieve, setRelieve] = useState('')
+  const [form, setForm] = useState({
+    exacerbate: '',
+    relieve: '',
+  })
 
   // handle error
   const [error, setError] = useState(false)
@@ -36,47 +38,32 @@ export default function History3() {
   // handle change
   // exacerbate
   const getExacerbate = (e) => {
-    setExacerbate(e.target.value)
+    setForm({ ...form, exacerbate: e.target.value })
   }
   // relieve
   const getRelieve = (e) => {
-    setRelieve(e.target.value)
+    setForm({ ...form, relieve: e.target.value })
   }
 
   // save local storage
   const saveLocalStorage = () => {
-    localStorage.setItem('exacerbate', exacerbate)
-    localStorage.setItem('relieve', relieve)
+    localStorage.setItem('historytaking-3', JSON.stringify(form))
   }
 
   // handle saved data
   useEffect(() => {
-    if (localStorage.getItem('exacerbate')) {
-      setExacerbate(localStorage.getItem('exacerbate'))
-    }
-    if (localStorage.getItem('relieve')) {
-      setRelieve(localStorage.getItem('relieve'))
+    if (localStorage.getItem('historytaking-3')) {
+      setForm(JSON.parse(localStorage.getItem('historytaking-3')))
     }
   }, [])
 
   const onClickBack = () => {
-    if (exacerbate && relieve) {
-      setError(false)
-      saveLocalStorage()
-      router.push(`/patient/${patientID}/case/${caseID}/historytaking/part2`)
-    } else {
-      setError(true)
-      toast({
-        title: 'Please fill in all the required fields.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      })
-    }
+    saveLocalStorage()
+    router.push(`/patient/${patientID}/case/${caseID}/historytaking/part2`)
   }
 
   const onClickNext = () => {
-    if (exacerbate && relieve) {
+    if (form.exacerbate && form.relieve) {
       setError(false)
       saveLocalStorage()
       router.push(`/patient/${patientID}/case/${caseID}/historytaking/summary`)
@@ -99,26 +86,26 @@ export default function History3() {
         <VStack spacing={16}>
           <VStack spacing={16} align="start" sx={GlobalStyle.formBox}>
             {/* ==================== Question 12 ==================== */}
-            <FormControl isRequired isInvalid={error && !exacerbate}>
+            <FormControl isRequired isInvalid={error && !form.exacerbate}>
               <FormLabel sx={GlobalStyle.labelText}>
                 12. What makes the pain worse?
               </FormLabel>
               <Input
                 sx={GlobalStyle.inputStyle}
                 onChange={getExacerbate}
-                value={exacerbate}
+                value={form.exacerbate}
               />
             </FormControl>
 
             {/* ==================== Question 13 ==================== */}
-            <FormControl isRequired isInvalid={error && !relieve}>
+            <FormControl isRequired isInvalid={error && !form.relieve}>
               <FormLabel sx={GlobalStyle.labelText}>
                 13. How did you relieve your pain?
               </FormLabel>
               <Input
                 sx={GlobalStyle.inputStyle}
                 onChange={getRelieve}
-                value={relieve}
+                value={form.relieve}
               />
             </FormControl>
           </VStack>

@@ -39,71 +39,48 @@ export default function History2() {
   const [error, setError] = useState(false)
 
   // set form
-  const [painPeriod, setPainPeriod] = useState('')
-  const [painOccur, setPainOccur] = useState('')
-  const [worseTime, setWorseTime] = useState('')
-  const [experience, setExperience] = useState('')
+  const [form, setForm] = useState({
+    painPeriod: '',
+    painFrequency: '',
+    worseTime: '',
+    experience: '',
+  })
 
   // handle change
   // pain period
   const getPainPeriod = (e) => {
-    setPainPeriod(e.target.value)
+    setForm({ ...form, painPeriod: e.target.value })
   }
   // pain occur
-  const getPainOccur = (e) => {
-    setPainOccur(e)
+  const getPainFrequency = (e) => {
+    setForm({ ...form, painFrequency: e })
   }
   // worse time
   const getWorseTime = (e) => {
-    setWorseTime(e.target.value)
+    setForm({ ...form, worseTime: e.target.value })
   }
   // experience
   const getExperience = (e) => {
-    setExperience(e)
+    setForm({ ...form, experience: e })
   }
 
   // save local storage
   const saveLocalStorage = () => {
-    localStorage.setItem('painPeriod', painPeriod)
-    localStorage.setItem('painOccur', painOccur)
-    localStorage.setItem('worseTime', worseTime)
-    localStorage.setItem('experience', experience)
+    localStorage.setItem('historytaking-2', JSON.stringify(form))
   }
 
-  // handle saved data
-  useEffect(() => {
-    if (localStorage.getItem('painPeriod') !== null) {
-      setPainPeriod(localStorage.getItem('painPeriod'))
-    }
-    if (localStorage.getItem('painOccur') !== null) {
-      setPainOccur(localStorage.getItem('painOccur'))
-    }
-    if (localStorage.getItem('worseTime') !== null) {
-      setWorseTime(localStorage.getItem('worseTime'))
-    }
-    if (localStorage.getItem('experience') !== null) {
-      setExperience(localStorage.getItem('experience'))
-    }
-  }, [])
-
   const onClickBack = () => {
-    if (painPeriod && painOccur && worseTime && experience) {
-      setError(false)
-      saveLocalStorage()
-      router.push(`/patient/${patientID}/case/${caseID}/historytaking/part1`)
-    } else {
-      setError(true)
-      toast({
-        title: 'Please fill in all the required fields.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      })
-    }
+    saveLocalStorage()
+    router.push(`/patient/${patientID}/case/${caseID}/historytaking/part1`)
   }
 
   const onClickNext = () => {
-    if (painPeriod && painOccur && worseTime && experience) {
+    if (
+      form.painPeriod &&
+      form.painFrequency &&
+      form.worseTime &&
+      form.experience
+    ) {
       setError(false)
       saveLocalStorage()
       router.push(`/patient/${patientID}/case/${caseID}/historytaking/part3`)
@@ -118,6 +95,13 @@ export default function History2() {
     }
   }
 
+  // handle saved data
+  useEffect(() => {
+    if (localStorage.getItem('historytaking-2')) {
+      setForm(JSON.parse(localStorage.getItem('historytaking-2')))
+    }
+  }, [])
+
   return (
     <Box sx={GlobalStyle.bgColor}>
       <FormProgress progress={40} />
@@ -126,43 +110,46 @@ export default function History2() {
         <VStack spacing={16}>
           <VStack spacing={16} align="start" sx={GlobalStyle.formBox}>
             {/* ==================== Question 8 ==================== */}
-            <FormControl isRequired isInvalid={error && !painPeriod}>
+            <FormControl isRequired isInvalid={error && !form.painPeriod}>
               <FormLabel sx={GlobalStyle.labelText}>
                 8. How long have you have this pain?
               </FormLabel>
               <Input
                 sx={GlobalStyle.inputStyle}
                 onChange={getPainPeriod}
-                value={painPeriod}
+                value={form.painPeriod}
               />
             </FormControl>
 
             {/* ==================== Question 9 ==================== */}
-            <FormControl isRequired isInvalid={error && !painOccur}>
+            <FormControl isRequired isInvalid={error && !form.painFrequency}>
               <FormLabel sx={GlobalStyle.labelText}>
                 9. Is the pain constant or intermittent?
               </FormLabel>
-              <RadioGroup onChange={getPainOccur} value={painOccur}>
+              <RadioGroup
+                onChange={getPainFrequency}
+                value={form.painFrequency}
+              >
                 <Stack direction="row" gap={16}>
-                  <Radio sx={borderStyle} value="constant">
+                  <Radio sx={borderStyle} value="Constant">
                     <Text sx={GlobalStyle.labelText}>Constant</Text>
                   </Radio>
-                  <Radio sx={borderStyle} value="intermittent">
-                    <Text sx={GlobalStyle.labelText}>intermittent</Text>
+                  <Radio sx={borderStyle} value="Intermittent">
+                    <Text sx={GlobalStyle.labelText}>Intermittent</Text>
                   </Radio>
                 </Stack>
               </RadioGroup>
             </FormControl>
 
             {/* ==================== Question 10 ==================== */}
-            <FormControl isRequired isInvalid={error && !worseTime}>
+            <FormControl isRequired isInvalid={error && !form.worseTime}>
               <FormLabel sx={GlobalStyle.labelText}>
                 10. What time of the day that the pain is worse?
               </FormLabel>
               <Input
                 sx={GlobalStyle.inputStyle}
                 onChange={getWorseTime}
-                value={worseTime}
+                value={form.worseTime}
               />
               <FormHelperText sx={GlobalStyle.greyMediumText}>
                 e.g. in the morning, afternoon, after work, at night, during
@@ -171,16 +158,16 @@ export default function History2() {
             </FormControl>
 
             {/* ==================== Question 11 ==================== */}
-            <FormControl isRequired isInvalid={error && !experience}>
+            <FormControl isRequired isInvalid={error && !form.experience}>
               <FormLabel sx={GlobalStyle.labelText}>
                 11. Have you ever had this pain before?
               </FormLabel>
-              <RadioGroup onChange={getExperience} value={experience}>
+              <RadioGroup onChange={getExperience} value={form.experience}>
                 <Stack direction="row" gap={16}>
-                  <Radio sx={borderStyle} value="yes">
+                  <Radio sx={borderStyle} value="Yes">
                     <Text sx={GlobalStyle.labelText}>Yes</Text>
                   </Radio>
-                  <Radio sx={borderStyle} value="no">
+                  <Radio sx={borderStyle} value="No">
                     <Text sx={GlobalStyle.labelText}>No</Text>
                   </Radio>
                 </Stack>
