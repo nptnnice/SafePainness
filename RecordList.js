@@ -15,4 +15,8 @@ export const RecordList = [
     id: 4,
     date: 'Sep 4, 2022',
   },
+  {
+  id: 5,
+    date: 'Sep 4, 2022',
+  },
 ]

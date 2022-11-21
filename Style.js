@@ -284,6 +284,7 @@ const sliderBox = {
   width: '96%',
   margin: '0 auto',
   marginTop: '16px',
+  
 }
 const gridStyle = {
   gap: { base: '16px', md: '24px' },
