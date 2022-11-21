@@ -17,15 +17,19 @@ import {
   useToast,
   Center,
 } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 
 export default function AddFeedbackModal({ isOpen, onClose }) {
   let inputBox = {
     ...GlobalStyle.inputStyle,
     height: '160px',
   }
-  const [showModal, setShowModal] = useState(false)
-  const handleClick = () => setShowModal(!showModal)
-  const handleClick1 = () => useDisclosure()
+
+  // router
+  const router = useRouter()
+  const { patientID, caseID } = router.query
+
+  // toast
   const toast = useToast()
 
   // handle error
@@ -45,18 +49,18 @@ export default function AddFeedbackModal({ isOpen, onClose }) {
   }
   // submit
   const submitFeedback = async () => {
-    if (feedback.message != '') {
+    if (feedback) {
       try {
-        const result = await axios.post('/api/feedbackManager/addFeedback', {
-          message: feedback.message,
+        const res = await axios.post('/api/feedbackManager/addFeedback', {
+          caseID: caseID,
+          message: feedback,
+          datetime: new Date(),
         })
-        console.log(result)
+        console.log(res)
       } catch (err) {
         console.log(err)
       }
-      setTimeout(() => {
-        window.location.reload()
-      }, 2000)
+      onClose()
       toast({
         title: 'Feedback submitted',
         description: 'Your feedback has been submitted',
@@ -64,13 +68,11 @@ export default function AddFeedbackModal({ isOpen, onClose }) {
         duration: 3000,
         isClosable: true,
       })
+    } else {
+      setError(true)
     }
   }
 
-  let btnFlex = {
-    gap: '16px',
-    margin: '24px auto 0',
-  }
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -88,7 +90,7 @@ export default function AddFeedbackModal({ isOpen, onClose }) {
               </FormErrorMessage>
             </FormControl>
             <Center>
-              <ButtonGroup sx={btnFlex}>
+              <ButtonGroup sx={GlobalStyle.btnGroup} marginTop="24px">
                 <Button sx={GlobalStyle.whiteBtn} onClick={onCancel}>
                   Cancel
                 </Button>
