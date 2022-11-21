@@ -13,18 +13,17 @@ import HeadInfo from '/components/HeadInfo'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import AddFeedbackModal from '/components/AddFeedbackModal'
+import AddFeedback from '/components/AddFeedback'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import { FeedbackList } from '/FeedbackList'
-import { async } from '@firebase/util'
+import url from '/url'
 
 export default function Case(props) {
+  // let total = props.getAllFeedback.length + 1
 
-  let total = props.getAllFeedback.length + 1
-
-  console.log(props.getAllFeedback)
-  console.log(props.getAllFeedback[0].feedbackID)
-  console.log(props.getAllFeedback[1].feedbackID)
+  // console.log(props.getAllFeedback)
+  // console.log(props.getAllFeedback[0].feedbackID)
+  // console.log(props.getAllFeedback[1].feedbackID)
 
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
@@ -55,10 +54,9 @@ export default function Case(props) {
   const onClickFeedback = (feedbackID) => {
     router.push(`./feedback/${feedbackID}`)
   }
-  
-  console.log("This is getAllFeedback")
+
+  console.log('This is getAllFeedback')
   console.log(props.getAllFeedback)
-  
 
   return (
     <Box sx={GlobalStyle.bgColor}>
@@ -79,10 +77,7 @@ export default function Case(props) {
               + Feedback
             </Button>
           </Box>
-          <AddFeedbackModal
-            isOpen={showAddFeedback}
-            onClose={onClickAddFeedback}
-          />
+          <AddFeedback isOpen={showAddFeedback} onClose={onClickAddFeedback} />
           {/* <Feedbacks /> */}
           {props.getAllFeedback.map((feedback, index) => {
             total = total - 1
@@ -92,9 +87,10 @@ export default function Case(props) {
                 sx={GlobalStyle.recordBox}
                 onClick={() => onClickFeedback(feedback.feedbackID)}
               >
-                <Text sx={GlobalStyle.boldText}>Feedback #{(total)}</Text>
-                <Text sx={GlobalStyle.greyMediumText}>{new Date(feedback.datetime).toLocaleString('en-GB')}</Text>
-                
+                <Text sx={GlobalStyle.boldText}>Feedback #{total}</Text>
+                <Text sx={GlobalStyle.greyMediumText}>
+                  {new Date(feedback.datetime).toLocaleString('en-GB')}
+                </Text>
               </Flex>
             )
           })}
@@ -105,7 +101,7 @@ export default function Case(props) {
 }
 
 export async function getServerSideProps() {
-  const result = await axios.get('http://localhost:3000/api/feedbackManager/getAllFeedback')
+  const result = await axios.get(`${url}/api/feedbackManager/getAllFeedback`)
   return {
     props: {
       getAllFeedback: result.data,

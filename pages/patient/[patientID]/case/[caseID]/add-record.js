@@ -34,7 +34,6 @@ import {
   deleteObject,
 } from 'firebase/storage'
 
-
 export default function AddRecord() {
   let imgStyle = {
     objectFit: 'cover',
@@ -59,10 +58,8 @@ export default function AddRecord() {
 
   const toast = useToast()
 
-
-  
   const [loading, setLoading] = useState(false)
-  
+
   const getCurrentSymptom = (e) => {
     setForm({ ...form, symptom: e.target.value })
   }
@@ -72,9 +69,9 @@ export default function AddRecord() {
   const getPainSeverity = (e) => {
     setForm({ ...form, painScale: e })
   }
-  
+
   const [error, setError] = useState(false)
-  
+
   const [storeImg, setStoreImg] = useState([])
 
   const [image, setImage] = useState([])
@@ -83,11 +80,10 @@ export default function AddRecord() {
     painScale: '',
     comment: '',
   })
-  
 
   console.log(form)
 
-//input image and collect url
+  //input image and collect url
   const handleChange = (e) => {
     for (let i = 0; i < e.target.files.length; i++) {
       setStoreImg(e.target.files[i])
@@ -95,7 +91,7 @@ export default function AddRecord() {
       const date = new Date().toISOString().slice(0, 10)
       const storageRef = ref(storage, `/images/${date}-${file.name}`)
       const uploadTask = uploadBytesResumable(storageRef, file)
-      console.log("This is storageref" , storageRef) 
+      console.log('This is storageref', storageRef)
       uploadTask.on(
         'state_changed',
         (snapshot) => {
@@ -121,18 +117,18 @@ export default function AddRecord() {
           setLoading(false)
           // download firebase storage image url
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            setImage((prevState) => [...prevState, url])  
+            setImage((prevState) => [...prevState, url])
           })
         }
       )
     }
-  };
+  }
 
   //delete preview image from array and firebase storage
-  function rmImage (i) {
+  function rmImage(i) {
     const date = new Date().toISOString().slice(0, 10)
     const deleteRef = ref(storage, `/images/${date}-${storeImg.name}`)
-    console.log("This is deleteRef")
+    console.log('This is deleteRef')
     console.log(deleteRef)
     deleteObject(deleteRef)
       .then(() => {
@@ -141,16 +137,15 @@ export default function AddRecord() {
       .catch((err) => {
         console.log(err)
       })
-   
+
     const newImages = [...image]
     newImages.splice(i, 1)
     setImage(newImages)
   }
 
+  console.log('This is URL ' + form.image)
+  console.log(typeof form.image)
 
-  console.log("This is URL " + form.image)
-  console.log(typeof (form.image))
-  
   function uploadSingleFile(e) {
     setIsExceed(false)
     if (e.target.files.length > 4) {
@@ -194,7 +189,7 @@ export default function AddRecord() {
           painScale: form.painScale,
           comment: form.comment,
           datetime: form.datetime,
-          image: image
+          image: image,
         })
         console.log(result)
       } catch (err) {
@@ -214,9 +209,8 @@ export default function AddRecord() {
     }
   }
 
-
   // console.log('form', form)
-  console.log("This is image ")
+  console.log('This is image ')
   console.log(image)
 
   // console.log("This is "+files)
@@ -285,7 +279,7 @@ export default function AddRecord() {
               sx={GlobalStyle.inputStyle}
               onChange={handleChange}
               multiple
-            // isDisabled={form.image.length > 4}
+              // isDisabled={form.image.length > 4}
             />
             {/* show uploading progress */}
             {loading && (
@@ -322,7 +316,6 @@ export default function AddRecord() {
               // </Box>
             ))}
 
-
             {/* {files.map((file, key) => {
               return (
                 <Flex align="center">
@@ -337,17 +330,13 @@ export default function AddRecord() {
               </Flex>
             ) : null} */}
 
-            {
-
-            }
-
+            {}
 
             <SimpleGrid
               templateColumns="repeat(auto-fill, minmax(160px, 1fr))"
               sx={GlobalStyle.gridStyle}
               marginTop="24px"
             >
-
               {/* {form.image.map((item, index) => {
                 return (
                   <Box sx={imgBox} key={item}>
@@ -372,10 +361,7 @@ export default function AddRecord() {
                 (Optional)
               </chakra.span>
             </FormLabel>
-            <Textarea
-              sx={GlobalStyle.inputStyle}
-              onChange={getComment}
-            />
+            <Textarea sx={GlobalStyle.inputStyle} onChange={getComment} />
           </FormControl>
         </VStack>
 
@@ -387,8 +373,6 @@ export default function AddRecord() {
         </Box>
       </Box>
     </Box>
-
-
   )
 }
 

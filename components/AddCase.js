@@ -22,13 +22,9 @@ import {
 } from '@chakra-ui/react'
 import GlobalStyle from '/Style'
 import Colour from '/Colour'
-import { SearchIcon, AddIcon } from '@chakra-ui/icons'
+import { SearchIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
-import url from '/url'
-import axios from 'axios'
-import QRgenerator from '/components/QRgenerator'
-import { useToast } from '@chakra-ui/react'
 import ConfirmAddCase from '/components/ConfirmAddCase'
 
 export default function CreateAppointment(props) {
@@ -52,9 +48,6 @@ export default function CreateAppointment(props) {
     color: Colour.darkGrey,
     marginTop: { base: '0px', md: '8px' },
     boxSize: { base: '20px', md: '24px' },
-  }
-  let addIconSize = {
-    boxSize: { base: '12px', md: '14px' },
   }
   let hoverStyle = {
     cursor: 'pointer',
@@ -88,13 +81,9 @@ export default function CreateAppointment(props) {
   const router = useRouter()
   const doctorID = router.query.doctorID
 
-  // toast
-  const toast = useToast()
-
   // choose patient
   const [selected, setSelected] = useState('')
   const [patientName, setPatientName] = useState('')
-
   const choosePatient = (patientID, firstname, lastname) => {
     if (selected === patientID) {
       setSelected('')
@@ -106,14 +95,13 @@ export default function CreateAppointment(props) {
     }
   }
 
-  // set to show QR code
-  const [showQR, setShowQR] = useState(false)
-  const handleClickQR = () => setShowQR(!showQR)
+  // set to show modal
+  const [showModal, setShowModal] = useState(false)
+  const onCreateCase = () => setShowModal(!showModal)
 
   // handle search
   const [search, setSearch] = useState('')
   const [searchResult, setSearchResult] = useState([])
-
   useEffect(() => {
     // if search is empty, show all patients
     if (search === '') {
@@ -137,44 +125,6 @@ export default function CreateAppointment(props) {
       setSearchResult(result)
     }
   }, [search])
-
-  // create case
-  const onCreateCase = async () => {
-    const caseData = {
-      doctorID: doctorID,
-      patientID: selected,
-      date: new Date(),
-    }
-    console.log(caseData)
-    if (selected !== '' && doctorID !== undefined) {
-      try {
-        const res = await axios.post('/api/caseManager/addCase', caseData)
-        console.log('res', res)
-        toast({
-          title: 'Case created.',
-          description: 'You can now view the case.',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        })
-        onClose()
-        setTimeout(() => {
-          router.push(`${url}/patient/${selected}`)
-        }, 2000)
-      } catch (err) {
-        console.log(err)
-        toast({
-          title: 'Case creation failed.',
-          description: 'Please try again.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        })
-      }
-    } else {
-      alert('Error occured. Please try again.')
-    }
-  }
 
   return (
     <>
@@ -201,14 +151,6 @@ export default function CreateAppointment(props) {
                     <SearchIcon sx={iconStyle} />
                   </InputRightElement>
                 </InputGroup>
-
-                {/* <Button
-                  sx={GlobalStyle.turquoiseBtn}
-                  leftIcon={<AddIcon sx={addIconSize} />}
-                  onClick={() => onClickNewPatient()}
-                >
-                  New Patient
-                </Button> */}
               </Flex>
 
               {/* ==================== Patient table ==================== */}
@@ -264,21 +206,17 @@ export default function CreateAppointment(props) {
               <Button
                 sx={GlobalStyle.yellowBtn}
                 disabled={selected == ''}
-                // onClick={handleClickQR}
                 onClick={onCreateCase}
               >
                 Create case
               </Button>
             </Flex>
-            {/* <QRgenerator
-              isOpen={showQR}
-              onClose={handleClickQR}
-              patientID={selected}
-            /> */}
             <ConfirmAddCase
-              isOpen={showQR}
-              onClose={handleClickQR}
+              isOpen={showModal}
+              onClose={onCreateCase}
               patientName={patientName}
+              doctorID={doctorID}
+              patientID={selected}
             />
           </ModalBody>
         </ModalContent>
