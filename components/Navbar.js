@@ -82,6 +82,21 @@ export default function Navbar() {
   // context
   const { user, setUser } = useAppContext()
 
+  // handle click logo
+  const onClickLogo = () => {
+    if (user) {
+      if (user.roleID == 1) {
+        router.push(`/doctor/${user.userID}`)
+      } else if (user.roleID == 2) {
+        router.push(`/patient/${user.userID}`)
+      }
+    } else {
+      window.scrollTo({
+        top: 0,
+      })
+    }
+  }
+
   // navigate to profile page
   const onClickProfile = () => {
     if (user.roleID == 1) {
@@ -115,15 +130,7 @@ export default function Navbar() {
   if (!user) {
     return (
       <Flex sx={navbar}>
-        <Image
-          sx={logo}
-          src="/images/Logo.png"
-          onClick={() => {
-            window.scrollTo({
-              top: 0,
-            })
-          }}
-        />
+        <Image sx={logo} src="/images/Logo.png" onClick={onClickLogo} />
 
         <Flex sx={menuFlex}>
           <Text sx={signup}>Sign Up</Text>
@@ -137,15 +144,7 @@ export default function Navbar() {
   } else {
     return (
       <Flex sx={navbar}>
-        <Image
-          sx={logo}
-          src="/images/Logo.png"
-          onClick={() => {
-            window.scrollTo({
-              top: 0,
-            })
-          }}
-        />
+        <Image sx={logo} src="/images/Logo.png" onClick={onClickLogo} />
 
         <Flex sx={menuFlex}>
           <Notification />

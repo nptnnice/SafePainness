@@ -16,6 +16,7 @@ import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useToast } from '@chakra-ui/react'
+import axios from 'axios'
 
 export default function History3() {
   // router
@@ -62,11 +63,59 @@ export default function History3() {
     router.push(`/patient/${patientID}/case/${caseID}/historytaking/part2`)
   }
 
+  const removeOther = (part1) => {
+    if (part1.otherCharacteristic) {
+      part1.characteristic.push(part1.otherCharacteristic)
+    }
+    if (part1.otherSymptom) {
+      part1.associatedSymp.push(part1.otherSymptom)
+    }
+    //remove from array
+    delete part1.otherCharacteristic
+    delete part1.otherSymptom
+  }
+
+  const sendToDB = async (data) => {
+    try {
+      const res = await axios.post(`/api/caseManager/updateHistoryTaking`, data)
+      console.log('res', res)
+    } catch (err) {
+      console.log('err', err)
+      toast({
+        title: 'Error',
+        description: 'Something went wrong',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
+    }
+    localStorage.removeItem('historytaking-1')
+    localStorage.removeItem('historytaking-2')
+    localStorage.removeItem('historytaking-3')
+  }
+
   const onClickNext = () => {
     if (form.exacerbate && form.relieve) {
       setError(false)
       saveLocalStorage()
-      router.push(`/patient/${patientID}/case/${caseID}/historytaking/summary`)
+      // get all saved data
+      const part1 = JSON.parse(localStorage.getItem('historytaking-1'))
+      const part2 = JSON.parse(localStorage.getItem('historytaking-2'))
+      const part3 = JSON.parse(localStorage.getItem('historytaking-3'))
+      removeOther(part1)
+      const data = {
+        ...part1,
+        ...part2,
+        ...part3,
+        caseID: caseID,
+      }
+      console.log(data)
+      sendToDB(data)
+      setTimeout(() => {
+        router.push(
+          `/patient/${patientID}/case/${caseID}/historytaking/summary`
+        )
+      }, 3000)
     } else {
       setError(true)
       toast({
@@ -118,12 +167,8 @@ export default function History3() {
             >
               Back
             </Button>
-            <Button
-              rightIcon={<ArrowForwardIcon />}
-              sx={GlobalStyle.blueBtn}
-              onClick={onClickNext}
-            >
-              Next
+            <Button sx={GlobalStyle.blueBtn} onClick={onClickNext}>
+              Submit
             </Button>
           </ButtonGroup>
         </VStack>

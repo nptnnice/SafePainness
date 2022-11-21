@@ -481,6 +481,14 @@ export default function History1() {
                 >
                   Incontinence of bowels
                 </Checkbox>
+                <Checkbox
+                  sx={checkboxStyle}
+                  value="None"
+                  onChange={getAssociatedSymp}
+                  isChecked={form.associatedSymp.includes('None')}
+                >
+                  None
+                </Checkbox>
               </SimpleGrid>
 
               <Flex sx={other}>

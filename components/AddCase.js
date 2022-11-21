@@ -29,6 +29,7 @@ import url from '/url'
 import axios from 'axios'
 import QRgenerator from '/components/QRgenerator'
 import { useToast } from '@chakra-ui/react'
+import ConfirmAddCase from '/components/ConfirmAddCase'
 
 export default function CreateAppointment(props) {
   const { isOpen, onClose, allpatients } = props
@@ -92,12 +93,16 @@ export default function CreateAppointment(props) {
 
   // choose patient
   const [selected, setSelected] = useState('')
+  const [patientName, setPatientName] = useState('')
 
-  const choosePatient = (patientID) => {
+  const choosePatient = (patientID, firstname, lastname) => {
     if (selected === patientID) {
       setSelected('')
+      setPatientName('')
     } else {
       setSelected(patientID)
+      const patientName = `${firstname} ${lastname}`
+      setPatientName(patientName)
     }
   }
 
@@ -155,7 +160,7 @@ export default function CreateAppointment(props) {
         onClose()
         setTimeout(() => {
           router.push(`${url}/patient/${selected}`)
-        }, 4000)
+        }, 2000)
       } catch (err) {
         console.log(err)
         toast({
@@ -226,7 +231,13 @@ export default function CreateAppointment(props) {
                               ? hoverStyleSelected
                               : hoverStyle
                           }
-                          onClick={() => choosePatient(patient.patientID)}
+                          onClick={() =>
+                            choosePatient(
+                              patient.patientID,
+                              patient.firstName,
+                              patient.lastName
+                            )
+                          }
                         >
                           <Td sx={GlobalStyle.labelText}>
                             {patient.patientID}
@@ -264,6 +275,11 @@ export default function CreateAppointment(props) {
               onClose={handleClickQR}
               patientID={selected}
             /> */}
+            <ConfirmAddCase
+              isOpen={showQR}
+              onClose={handleClickQR}
+              patientName={patientName}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>
