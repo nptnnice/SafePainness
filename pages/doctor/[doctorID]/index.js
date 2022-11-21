@@ -73,7 +73,7 @@ export default function MyPatients(props) {
   const onClickPatient = (patientID) => {
     router.push(`/patient/${patientID}`)
   }
-
+  
   // set modal
   const [showModal, setShowModal] = useState(false)
   const handleClick = () => setShowModal(!showModal)

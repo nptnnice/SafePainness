@@ -17,6 +17,7 @@ import ConfirmModal from '/components/ConfirmModal'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
+import axios from 'axios'
 
 export default function Case() {
   let layout = {
@@ -120,3 +121,4 @@ export default function Case() {
     </Box>
   )
 }
+

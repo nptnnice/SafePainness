@@ -43,6 +43,7 @@ export default function Tutorial(props) {
   const [loading, setLoading] = useState(false)
 
   // set form for storing it into database
+  //link
   const [form, setForm] = useState({
     firstname: '',
     lastname: '',
@@ -119,6 +120,8 @@ export default function Tutorial(props) {
     }
   }
 
+  console.log("This is url " + form.img)
+  console.log(typeof(form.img))
   // cancel upload image
   function deleteImg() {
     const date = new Date().toISOString().slice(0, 10)
@@ -143,7 +146,7 @@ export default function Tutorial(props) {
       // send form data to database
       try {
         const res = await axios.post('/api/postTest', form)
-        console.log('res', res)
+        console.log("This is res " + res)
         // notify user that the form is submitted
         toast({
           title: 'Success',
@@ -173,6 +176,8 @@ export default function Tutorial(props) {
   }
 
   console.log('form', form)
+
+  console
 
   return (
     <Box sx={GlobalStyle.layout}>
@@ -213,13 +218,13 @@ export default function Tutorial(props) {
                 width={'20px'}
               />
             )}
-            {/* show image preview */}
-            {form.img ? (
-              <Flex align="center">
-                <Image src={form.img} sx={GlobalStyle.profileImg} />
-                <Button onClick={deleteImg}>cancel</Button>
-              </Flex>
-            ) : null}
+              {/* show image preview */}
+              {form.img ? (
+                <Flex align="center">
+                  <Image src={form.img} sx={GlobalStyle.profileImg} />
+                  <Button onClick={deleteImg}>cancel</Button>
+                </Flex>
+              ) : null}
           </FormControl>
           {/* submit form */}
           <Button onClick={onSubmit}>Submit</Button>

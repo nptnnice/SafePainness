@@ -5,7 +5,7 @@ import { useState } from 'react'
 import axios from 'axios';
 import { ResponseList } from '../ResponseList';
 
-export default function Responses({getAllResponse}) {
+export default function Responses({ getAllResponse }) {
 
     let flexStyle = {
         alignItems: 'center',
@@ -20,12 +20,13 @@ export default function Responses({getAllResponse}) {
     return (
         <>
             {getAllResponse.map((item, index) => {
+
                 return (
                     <Box sx={BoxStyle} key={index}>
                         <Flex sx={flexStyle} >
                             <Text sx={GlobalStyle.labelText}>Response from {item.senderID}</Text>
                             <Text sx={GlobalStyle.greyMediumText} textAlign="right">
-                                {item.datetime}
+                                {new Date(item.datetime).toLocaleString('en-GB')}
                             </Text>
                         </Flex>
                         <Text sx={GlobalStyle.regularText}>{item.message}</Text>
@@ -33,7 +34,7 @@ export default function Responses({getAllResponse}) {
                     </Box>
 
                 );
-            })} 
+            })}
         </>
     )
 }
