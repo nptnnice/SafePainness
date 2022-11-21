@@ -43,6 +43,7 @@ export default function Tutorial(props) {
   const [loading, setLoading] = useState(false)
 
   // set form for storing it into database
+  //link
   const [form, setForm] = useState({
     firstname: '',
     lastname: '',
@@ -176,6 +177,8 @@ export default function Tutorial(props) {
 
   console.log('form', form)
 
+  console
+
   return (
     <Box sx={GlobalStyle.layout}>
       <Box marginTop="80px">
@@ -215,13 +218,13 @@ export default function Tutorial(props) {
                 width={'20px'}
               />
             )}
-            {/* show image preview */}
-            {form.img ? (
-              <Flex align="center">
-                <Image src={form.img} sx={GlobalStyle.profileImg} />
-                <Button onClick={deleteImg}>cancel</Button>
-              </Flex>
-            ) : null}
+              {/* show image preview */}
+              {form.img ? (
+                <Flex align="center">
+                  <Image src={form.img} sx={GlobalStyle.profileImg} />
+                  <Button onClick={deleteImg}>cancel</Button>
+                </Flex>
+              ) : null}
           </FormControl>
           {/* submit form */}
           <Button onClick={onSubmit}>Submit</Button>

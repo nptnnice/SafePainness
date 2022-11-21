@@ -21,6 +21,12 @@ export default function Case({getAllRecords, props}) {
 
   let total = getAllRecords.length + 1
 
+  console.log("This is getAllRecords")
+  console.log(getAllRecords)
+
+  console.log("This is props")
+  console.log(props)
+
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
     position: 'relative',

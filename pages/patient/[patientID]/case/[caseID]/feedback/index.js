@@ -55,6 +55,10 @@ export default function Case(props) {
   const onClickFeedback = (feedbackID) => {
     router.push(`./feedback/${feedbackID}`)
   }
+  
+  console.log("This is getAllFeedback")
+  console.log(props.getAllFeedback)
+  
 
   return (
     <Box sx={GlobalStyle.bgColor}>

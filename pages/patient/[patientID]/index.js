@@ -59,6 +59,9 @@ export default function Patient(props) {
 
   console.log(props)
 
+  console.log("This is caseList " )
+  console.log(props.caseList[0  ])
+
   return (
     <Box sx={GlobalStyle.bgColor}>
       <HeadInfo name="Patient ID" patientID={props.patientInfo[0].patientID} />
@@ -70,6 +73,8 @@ export default function Patient(props) {
           <Text sx={GlobalStyle.headingText}>My Cases</Text>
         </Flex>
 
+      
+
         <Box sx={GlobalStyle.infoBox}>
           {props.caseList.map((item, index) => (
             <Flex
@@ -78,7 +83,8 @@ export default function Patient(props) {
               onClick={() => {
                 onClickCase(item.caseID)
               }}
-            >
+            > 
+            
               <VStack align="start" spacing={1}>
                 <Flex sx={GlobalStyle.spanFlex}>
                   <Text sx={GlobalStyle.boldText}>Case {item.caseID}:</Text>

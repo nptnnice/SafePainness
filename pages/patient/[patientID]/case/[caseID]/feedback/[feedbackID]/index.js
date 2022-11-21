@@ -4,6 +4,7 @@ import {
   Button,
   Textarea,
   FormLabel,
+  FormErrorMessage,
   FormControl,
   VStack,
   useToast,
@@ -83,13 +84,23 @@ export default function Feedback(props) {
         title: 'Response submitted',
         description: 'Your response has been submitted',
         status: 'success',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       })
     } else {
       setError(true)
+      toast({
+        title: 'An error occurred.',
+        description: 'Please enter your reponse first before submitting',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
     }
   }
+
+  console.log("This is getALlFeedback from another page ")
+  console.log(props.getAllFeedback)
 
   return (
     <>
@@ -107,11 +118,14 @@ export default function Feedback(props) {
             <Responses getAllResponse={props.getAllResponse} />
           </Box>
           <Box sx={GlobalStyle.infoBox}>
-            <FormControl>
+            <FormControl isInvalid={error && !form.message}>
               <FormLabel sx={GlobalStyle.labelText}>
                 Response to your doctor
               </FormLabel>
               <Textarea sx={GlobalStyle.inputStyle} onChange={getResponses} />
+              <FormErrorMessage marginTop="16px" sx={GlobalStyle.errorText}>
+                Please fill in your response
+                </FormErrorMessage>
             </FormControl>
           </Box>
           {/* ==== Button ==== */}
@@ -126,9 +140,11 @@ export default function Feedback(props) {
 
 export async function getServerSideProps() {
   const result = await axios.get('http://localhost:3000/api/responseManager/getAllResponses')
+  const result2 = await axios.get('http://localhost:3000/api/feedbackManager/getAllFeedback')
   return {
     props: {
       getAllResponse: result.data,
+      getAllFeedback: result2.data,
     },
   }
 }

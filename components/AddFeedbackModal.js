@@ -12,6 +12,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Textarea,
   useToast,
   Center,
@@ -22,6 +23,9 @@ export default function AddFeedbackModal({ isOpen, onClose }) {
   const handleClick = () => setShowModal(!showModal)
   const handleClick1 = () => useDisclosure()
   const toast = useToast()
+
+  const [isError, setIsError] = useState(false)
+
   const [feedback, SetFeedback] = useState({
     message: '',
   })
@@ -33,6 +37,7 @@ export default function AddFeedbackModal({ isOpen, onClose }) {
   const [error, setError] = useState(false)
 
   const submitFeedback = async () => {
+
     if (feedback.message != '') {
       try {
         const result = await axios.post('/api/feedbackManager/addFeedback', { 
@@ -53,7 +58,14 @@ export default function AddFeedbackModal({ isOpen, onClose }) {
         isClosable: true,
       })
     } else {
-      setError(true)
+      setIsError(true)
+      toast({
+        title: 'An error occurred.',
+        description: 'Please enter your feedback first before comfirming',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
     }
   }
 
@@ -73,11 +85,14 @@ export default function AddFeedbackModal({ isOpen, onClose }) {
                     </ModalHeader> */}
           <ModalCloseButton />
           <ModalBody>
-            <FormControl>
+            <FormControl isInvalid={isError && !feedback.message}>
               <FormLabel sx={GlobalStyle.labelText}>
                 Send feedback to your patient
               </FormLabel>
               <Textarea sx={GlobalStyle.inputStyle} onChange={getFeedback}/>
+              <FormErrorMessage marginTop="16px" sx={GlobalStyle.errorText}>
+                Please fill in your feedback
+                </FormErrorMessage>
             </FormControl>
             <Center>
               <ButtonGroup sx={btnFlex}>
