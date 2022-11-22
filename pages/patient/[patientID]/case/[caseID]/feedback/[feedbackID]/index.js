@@ -11,96 +11,81 @@ import {
   flattenTokens,
 } from '@chakra-ui/react'
 import axios from 'axios'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import GlobalStyle from '/Style'
 import HeadInfo from '/components/HeadInfo'
 import Responses from '/components/Responses'
 import { useAppContext } from '/context/UserContext'
+import url from '/url'
 
 export default function Feedback(props) {
+  const { feedback, allResponses, feedbacklist } = props
 
+  // find the index of the feedback
+  const [feedbackIndex, setFeedbackIndex] = useState(0)
+  useEffect(() => {
+    for (let i = 0; i < feedbacklist.length; i++) {
+      console.log(i, feedbacklist[i])
+      console.log(feedback.feedbackID)
+      if (feedbacklist[i].feedbackID === feedback.feedbackID) {
+        setFeedbackIndex(feedbacklist.length - i)
+      }
+    }
+  }, [])
+
+  // check role
   const { user } = useAppContext()
-  //console.log(user.userID)
-  console.log("This is " + user)
+  const [roleID, setRoleID] = useState(0)
+  useEffect(() => {
+    if (user) {
+      setRoleID(user.userID)
+    }
+  }, [user])
 
-  console.log(props.getAllResponse)
-
-  console.log("This is props "+props)
-  console.log(props.getAllResponse[1].feedbackID)
-  // let today = new Date()
-  // let month = today.getMonth() + 1
-  // let year = today.getFullYear()
-  // let date = today.getDate()
-
-  // let todayDate = year + '-' + month + '-' + date
-
-  // let hours = today.getHours()
-  // let minutes = today.getMinutes()
-  // let seconds = today.getSeconds()
-
+  // toast
   const toast = useToast()
 
+  // handle error
+  const [error, setError] = useState(false)
 
-  // const de = new Date()
-  // console.log(typeof(de))
-  // console.log(de)
-  // const datetime = new Date().toISOString().replace('T', ' ').replace('Z', ' ');
-  // const datetime1 = new Date().toUTCString().replace('T', ' ').replace('Z', ' ');
-
-  // console.log("ISO" + ' '+datetime)
-  // console.log("UTC" + ' '+datetime1)
-  // console.log(typeof(datetime))
-
-
+  // handle response
   const [form, setForm] = useState({
     message: '',
   })
-  const [error, setError] = useState(false)
-
   const getResponses = (e) => {
-    setForm({...form, message: e.target.value})
+    setForm({ ...form, message: e.target.value })
   }
 
-  //console.log(sessionStorage.getItem('userID'))
-  
-
+  // handle submit
   const submitResponse = async () => {
-    if (form.message != '') {
+    if (form.message) {
+      setError(false)
       try {
-        const result1 = await axios.post('/api/responseManager/addResponse', { 
-          message: form.message,
+        const res = await axios.post('/api/responseManager/addResponse', {
+          feedbackID: feedback.feedbackID,
           senderID: user.userID,
+          message: form.message,
+          datetime: new Date(),
         })
-          //senderID: sessionStorage.getItem('userID'),
-        
-        console.log(result1)
+        console.log(res)
       } catch (err) {
         console.log(err)
       }
-      setTimeout(() => {
-      window.location.reload()
-      }, 1500)
       toast({
-        title: 'Response submitted',
+        title: 'Success',
         description: 'Your response has been submitted',
         status: 'success',
         duration: 3000,
         isClosable: true,
       })
+      setForm({ message: '' })
+      setTimeout(() => {
+        window.location.reload()
+      }, 4000)
     } else {
       setError(true)
-      toast({
-        title: 'An error occurred.',
-        description: 'Please enter your reponse first before submitting',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      })
     }
   }
-
-  console.log("This is getALlFeedback from another page ")
-  console.log(props.getAllFeedback)
 
   return (
     <>
@@ -113,24 +98,33 @@ export default function Feedback(props) {
           doctor="Alan Smith"
         />
         <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
-          <Text sx={GlobalStyle.headingText}>Feedback #{}</Text>  
+          <Text sx={GlobalStyle.headingText}>Feedback #{feedbackIndex}</Text>
           <Box sx={GlobalStyle.infoBox}>
-            <Responses getAllResponse={props.getAllResponse} />
+            <Responses
+              feedback={feedback}
+              allResponses={allResponses}
+              roleID={roleID}
+            />
           </Box>
           <Box sx={GlobalStyle.infoBox}>
             <FormControl isInvalid={error && !form.message}>
               <FormLabel sx={GlobalStyle.labelText}>
-                Response to your doctor
+                {roleID == 1
+                  ? 'Response to your patient'
+                  : 'Response to your doctor'}
               </FormLabel>
               <Textarea sx={GlobalStyle.inputStyle} onChange={getResponses} />
               <FormErrorMessage marginTop="16px" sx={GlobalStyle.errorText}>
                 Please fill in your response
-                </FormErrorMessage>
+              </FormErrorMessage>
             </FormControl>
           </Box>
+
           {/* ==== Button ==== */}
           <Box sx={GlobalStyle.btnBox}>
-            <Button sx={GlobalStyle.blueBtn} onClick={submitResponse}>Submit</Button>
+            <Button sx={GlobalStyle.blueBtn} onClick={submitResponse}>
+              Submit
+            </Button>
           </Box>
         </VStack>
       </Box>
@@ -138,14 +132,32 @@ export default function Feedback(props) {
   )
 }
 
-export async function getServerSideProps() {
-  const result = await axios.get('http://localhost:3000/api/responseManager/getAllResponses')
-  const result2 = await axios.get('http://localhost:3000/api/feedbackManager/getAllFeedback')
+export async function getServerSideProps(context) {
+  const feedbackID = context.params.feedbackID
+  const caseID = context.params.caseID
+  const result = await axios.get(`${url}/api/feedbackManager/getFeedback`, {
+    headers: {
+      feedbackid: feedbackID,
+    },
+  })
+  const result2 = await axios.get(
+    `${url}/api/responseManager/getAllResponses`,
+    {
+      headers: {
+        feedbackid: feedbackID,
+      },
+    }
+  )
+  const result3 = await axios.get(`${url}/api/feedbackManager/getAllFeedback`, {
+    headers: {
+      caseid: caseID,
+    },
+  })
   return {
     props: {
-      getAllResponse: result.data,
-      getAllFeedback: result2.data,
+      feedback: result.data,
+      allResponses: result2.data,
+      feedbacklist: result3.data,
     },
   }
 }
-

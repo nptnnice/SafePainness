@@ -1,9 +1,7 @@
 import db from '../../../db'
 
 export default async function handler(req, res) {
-  //const { caseID } = req.body
-
-  const caseID = '2022-000003'
+  const caseID = req.headers.caseid
 
   let result = await db.query(
     //sort by datetime

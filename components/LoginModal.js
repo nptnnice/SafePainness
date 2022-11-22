@@ -104,11 +104,16 @@ export default function LoginModal({ isOpen, onClose }) {
           sessionStorage.setItem('userID', res.data.userID)
           sessionStorage.setItem('roleID', res.data.roleID)
           sessionStorage.setItem('image', res.data.image)
+          sessionStorage.setItem(
+            'name',
+            res.data.firstName + ' ' + res.data.lastName
+          )
           setUser({
             token: res.data.token,
             userID: res.data.userID,
             roleID: res.data.roleID,
             image: res.data.image,
+            name: res.data.firstName + ' ' + res.data.lastName,
           })
 
           // redirect to home page

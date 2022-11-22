@@ -56,7 +56,7 @@ export default function Notification() {
   return (
     <Popover>
       <PopoverTrigger>
-        <BellIcon sx={iconButton} />
+        <BellIcon role="button" tabIndex="0" sx={iconButton} />
       </PopoverTrigger>
       <PopoverContent width="480px">
         <PopoverArrow />

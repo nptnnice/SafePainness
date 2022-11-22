@@ -13,18 +13,12 @@ import HeadInfo from '/components/HeadInfo'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import AddFeedbackModal from '/components/AddFeedbackModal'
+import AddFeedback from '/components/AddFeedback'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
-import { FeedbackList } from '/FeedbackList'
-import { async } from '@firebase/util'
+import url from '/url'
 
 export default function Case(props) {
-
-  let total = props.getAllFeedback.length + 1
-
-  console.log(props.getAllFeedback)
-  console.log(props.getAllFeedback[0].feedbackID)
-  console.log(props.getAllFeedback[1].feedbackID)
+  const { feedbackList } = props
 
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
@@ -40,25 +34,21 @@ export default function Case(props) {
     right: '0',
     top: { base: '-64px', md: '-72px' },
   }
-  const currentPage = {
-    color: Colour.darkBlue,
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: 'bold',
-    fontSize: { base: '16px', md: '18px' },
-  }
 
+  // router
+  const router = useRouter()
+  const { patientID, caseID } = router.query
+
+  const [feedbackAmount, setFeedbackAmount] = useState(feedbackList.length)
+
+  // add feedback
   const [showAddFeedback, setShowAddFeedback] = useState(false)
   const onClickAddFeedback = () => setShowAddFeedback(!showAddFeedback)
 
-  const router = useRouter()
-
+  // click feedback
   const onClickFeedback = (feedbackID) => {
-    router.push(`./feedback/${feedbackID}`)
+    router.push(`/patient/${patientID}/case/${caseID}/feedback/${feedbackID}`)
   }
-  
-  console.log("This is getAllFeedback")
-  console.log(props.getAllFeedback)
-  
 
   return (
     <Box sx={GlobalStyle.bgColor}>
@@ -79,22 +69,20 @@ export default function Case(props) {
               + Feedback
             </Button>
           </Box>
-          <AddFeedbackModal
-            isOpen={showAddFeedback}
-            onClose={onClickAddFeedback}
-          />
-          {/* <Feedbacks /> */}
-          {props.getAllFeedback.map((feedback, index) => {
-            total = total - 1
+          <AddFeedback isOpen={showAddFeedback} onClose={onClickAddFeedback} />
+          {feedbackList.map((feedback, index) => {
             return (
               <Flex
                 key={index}
                 sx={GlobalStyle.recordBox}
                 onClick={() => onClickFeedback(feedback.feedbackID)}
               >
-                <Text sx={GlobalStyle.boldText}>Feedback #{(total)}</Text>
-                <Text sx={GlobalStyle.greyMediumText}>{new Date(feedback.datetime).toLocaleString('en-GB')}</Text>
-                
+                <Text sx={GlobalStyle.boldText}>
+                  Feedback #{feedbackAmount - index}
+                </Text>
+                <Text sx={GlobalStyle.greyMediumText}>
+                  {new Date(feedback.datetime).toLocaleString()}
+                </Text>
               </Flex>
             )
           })}
@@ -104,11 +92,16 @@ export default function Case(props) {
   )
 }
 
-export async function getServerSideProps() {
-  const result = await axios.get('http://localhost:3000/api/feedbackManager/getAllFeedback')
+export async function getServerSideProps(context) {
+  const caseID = context.params.caseID
+  const result = await axios.get(`${url}/api/feedbackManager/getAllFeedback`, {
+    headers: {
+      caseid: caseID,
+    },
+  })
   return {
     props: {
-      getAllFeedback: result.data,
+      feedbackList: result.data,
     },
   }
 }

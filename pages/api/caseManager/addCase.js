@@ -1,46 +1,19 @@
 import db from '../../../db'
+import addNotification from '../../../function/addNotification'
 
 export default async function handler(req, res) {
-  const {
+  const { doctorID, patientID, date } = req.body
+  let result = await db.query(
+    `INSERT INTO "public"."Case" ("doctorID", "patientID", "date") VALUES ($1, $2, $3)`,
+    [doctorID, patientID, date]
+  )
+
+  let notification = await addNotification(
     doctorID,
     patientID,
     date,
-    site,
-    onset,
-    onsetType,
-    characteristic,
-    radiation,
-    associatedSymp,
-    painScaleNow,
-    painScalePast,
-    painPeriod,
-    painOccur,
-    worseTime,
-    experience,
-    exacerbate,
-    relieve,
-  } = req.body
-  let result = await db.query(
-    `INSERT INTO "public"."Case" ("doctorID", "patientID", "date", "site", "onset", "onsetType", "characteristic", "radiation", "associatedSymp", "painScaleNow", "painScalePast", "painPeriod", "painOccur", "worseTime", "experience", "exacerbate", "relieve") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`,
-    [
-      doctorID,
-      patientID,
-      date,
-      site,
-      onset,
-      onsetType,
-      characteristic,
-      radiation,
-      associatedSymp,
-      painScaleNow,
-      painScalePast,
-      painPeriod,
-      painOccur,
-      worseTime,
-      experience,
-      exacerbate,
-      relieve,
-    ]
+    `You have a new case from doctor ${doctorID}`
   )
+
   res.json(result.rows)
 }

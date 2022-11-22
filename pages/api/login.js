@@ -4,7 +4,13 @@ import jwt from 'jsonwebtoken'
 export default async function handler(req, res) {
   const { username, password } = req.body
   let user = await db.query(
-    `SELECT "doctorID" AS "userID", "username", "password", "roleID", "image" FROM "public"."Doctor" WHERE "username"=$1 UNION SELECT "patientID" AS "userID", "username", "password", "roleID", "image" FROM "public"."Patient" WHERE "username"=$1`,
+    `SELECT "doctorID" AS "userID", "username", "password", "firstName", "lastName", "roleID", "image"
+    FROM "public"."Doctor"
+    WHERE "username"=$1
+    UNION
+    SELECT "patientID" AS "userID", "username", "password", "firstName", "lastName", "roleID", "image"
+    FROM "public"."Patient"
+    WHERE "username"=$1`,
     [username]
   )
   // Check if user exist

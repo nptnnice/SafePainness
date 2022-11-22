@@ -12,8 +12,9 @@ export function AppWrapper({ children }) {
         userID: sessionStorage.getItem('userID'),
         roleID: sessionStorage.getItem('roleID'),
         image: sessionStorage.getItem('image'),
+        name: sessionStorage.getItem('name'),
       })
-      console.log('token', sessionStorage.getItem('token'))
+      // console.log('token', sessionStorage.getItem('token'))
     }
   }, [])
   console.log('user', user)
@@ -28,5 +29,3 @@ export function AppWrapper({ children }) {
 export function useAppContext() {
   return useContext(AppContext)
 }
-
-

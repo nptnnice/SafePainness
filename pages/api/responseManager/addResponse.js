@@ -1,11 +1,7 @@
 import db from '../../../db'
 
 export default async function handler(req, res) {
-
-  const { message, senderID } = req.body;
-  const datetime = new Date();
-
-  const feedbackID = '810415858382635010';
+  const { senderID, message, datetime, feedbackID } = req.body
 
   let result = await db.query(
     `INSERT INTO "public"."Response"
