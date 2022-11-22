@@ -1,8 +1,6 @@
 import {
   Text,
   Input,
-  InputGroup,
-  InputRightElement,
   Button,
   ButtonGroup,
   SimpleGrid,
@@ -14,99 +12,41 @@ import {
   FormErrorMessage,
   chakra,
   VStack,
-  Avatar,
 } from '@chakra-ui/react'
 import HeadCenter from '../components/HeadCenter'
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
-import { useState, useEffect } from 'react'
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/react'
+import axios from 'axios'
 
 export default function CreateDoctorAccount() {
   let flexStyle = {
     gap: '24px',
     width: '100%',
-    flexDirection: { base: 'column', sm: 'row' },
-  }
-  let iconInput = {
-    color: Colour.lightBlack,
-    cursor: 'pointer',
-    marginTop: '8px',
-  }
-  let fileBtn = {
-    boxSize: { base: '120px', sm: '150px', md: '180px' },
-    borderRadius: '50%',
-    border: '2px dashed',
-    borderColor: Colour.grey,
-    cursor: 'pointer',
-    fontFamily: 'Lato',
-    fontSize: '18px',
-    color: Colour.grey,
-    position: 'relative',
-    boxSizing: 'border-box',
-  }
-  let upload = {
-    position: 'absolute',
-    transform: 'translate(-50%, -50%)',
-    top: '50%',
-    left: '50%',
-    textAlign: 'center',
-  }
-
-  let oldfileBtn = {
-    opacity: '0',
-    position: 'absolute',
-    zIndex: '-1',
   }
 
   const [show, setShow] = useState(false)
-  const handlePassword = () => setShow(!show)
-  const [selectedFile, setSelectedFile] = useState()
-  const [preview, setPreview] = useState()
   const [isError, setIsError] = useState(false)
   const toast = useToast()
   const router = useRouter()
-
   const onClickCancel = () => {
     router.push('/')
   }
-
   const [form, setForm] = useState({
-    firstname: '',
-    lastname: '',
+    firstName: '',
+    lastName: '',
     username: '',
     password: '',
-    birthdate: '',
-    citizenid: '',
-    licenseno: '',
+    birthDate: '',
+    citizenID: '',
+    licenseNO: '',
     department: '',
-    phonenumber: '',
+    phoneNumber: '',
     email: '',
-    photo: '',
+    image: '',
   })
-
-  // create a preview, whenever selected file is changed
-  useEffect(() => {
-    if (!selectedFile) {
-      setPreview(undefined)
-      return
-    }
-    const objectUrl = URL.createObjectURL(selectedFile)
-    setPreview(objectUrl)
-    setForm({ ...form, photo: objectUrl })
-    // free memory when ever this component is unmounted
-    return () => URL.revokeObjectURL(objectUrl)
-  }, [selectedFile])
-  const onSelectFile = (e) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined)
-      return
-    }
-    // use one file
-    setSelectedFile(e.target.files[0])
-  }
 
   // check phone number format
   const checkPhone = (e) => {
@@ -114,35 +54,43 @@ export default function CreateDoctorAccount() {
     let result = regExp.test(e.target.value)
     let phone = e.target.value
 
-    if (result && phone.length === 10) setForm({ ...form, phonenumber: phone })
-    else setForm({ ...form, phonenumber: '' })
+    if (result && phone.length === 10) setForm({ ...form, phoneNumber: phone })
+    else setForm({ ...form, phoneNumber: '' })
   }
 
-  const onCreateDoctor = () => {
+  //Create Doctor Account
+  const onCreateDoctor = async () => {
+    console.log('form', form)
     if (
-      form.firstname &&
-      form.lastname &&
+      form.firstName &&
+      form.lastName &&
       form.username &&
       form.password &&
-      form.birthdate &&
-      form.citizenid &&
-      form.licenseno &&
+      form.birthDate &&
+      form.citizenID &&
+      form.licenseNO &&
       form.department &&
-      form.phonenumber
+      form.phoneNumber
     ) {
       setIsError(false)
-      console.log('form is valid')
-      console.log(form)
-      toast({
-        title: 'Submit successfully',
-        description: 'Your account has been created.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
+      try {
+        const res = await axios.post('/api/doctorManager/addDoctor', form)
+        console.log('res', res)
+        console.log('form is valid')
+        console.log(form)
+        toast({
+          title: 'Submit successfully',
+          description: 'Your account has been created.',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        })
+      } catch (err) {
+        console.log('err', err)
+      }
       //reload page
       setTimeout(() => {
-        window.location.reload()
+        router.push('./')
       }, 4000)
     } else {
       setIsError(true)
@@ -164,43 +112,23 @@ export default function CreateDoctorAccount() {
       <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
         {/* ==================== Basic information ==================== */}
         <Text sx={GlobalStyle.headingText}>Basic Information</Text>
-        <Flex sx={flexStyle}>
-          <FormControl>
-            {selectedFile ? (
-              <>
-                <FormLabel cursor="pointer">
-                  <Avatar src={preview} sx={GlobalStyle.profileImg} />
-                </FormLabel>
-                <Input type="file" onChange={onSelectFile} sx={oldfileBtn} />
-              </>
-            ) : (
-              <>
-                <FormLabel sx={fileBtn}>
-                  <Text sx={upload}>Upload photo</Text>
-                </FormLabel>
-                <Input type="file" onChange={onSelectFile} sx={oldfileBtn} />
-              </>
-            )}
-          </FormControl>
-        </Flex>
-
         <SimpleGrid columns={{ base: 1, sm: 2 }} sx={GlobalStyle.gridStyle}>
-          <FormControl isRequired isInvalid={isError && !form.firstname}>
+          <FormControl isRequired isInvalid={isError && !form.firstName}>
             <FormLabel sx={GlobalStyle.labelText}>First Name</FormLabel>
             <Input
               sx={GlobalStyle.inputStyle}
               onChange={(e) => {
-                setForm({ ...form, firstname: e.target.value })
+                setForm({ ...form, firstName: e.target.value })
               }}
             />
           </FormControl>
 
-          <FormControl isRequired isInvalid={isError && !form.lastname}>
+          <FormControl isRequired isInvalid={isError && !form.lastName}>
             <FormLabel sx={GlobalStyle.labelText}>Last Name</FormLabel>
             <Input
               sx={GlobalStyle.inputStyle}
               onChange={(e) => {
-                setForm({ ...form, lastname: e.target.value })
+                setForm({ ...form, lastName: e.target.value })
               }}
             />
           </FormControl>
@@ -217,56 +145,47 @@ export default function CreateDoctorAccount() {
 
           <FormControl isRequired isInvalid={isError && !form.password}>
             <FormLabel sx={GlobalStyle.labelText}>Password</FormLabel>
-            <InputGroup>
-              <Input
-                sx={GlobalStyle.inputStyle}
-                type={show ? 'text' : 'password'}
-                onChange={(e) => {
-                  setForm({ ...form, password: e.target.value })
-                }}
-              />
-              <InputRightElement>
-                {show ? (
-                  <ViewIcon sx={iconInput} onClick={handlePassword} />
-                ) : (
-                  <ViewOffIcon sx={iconInput} onClick={handlePassword} />
-                )}
-              </InputRightElement>
-            </InputGroup>
+            <Input
+              sx={GlobalStyle.inputStyle}
+              type={show ? 'text' : 'password'}
+              onChange={(e) => {
+                setForm({ ...form, password: e.target.value })
+              }}
+            />
           </FormControl>
 
-          <FormControl isRequired isInvalid={isError && !form.birthdate}>
+          <FormControl isRequired isInvalid={isError && !form.birthDate}>
             <FormLabel sx={GlobalStyle.labelText}>Date of birth</FormLabel>
             <Input
               type="date"
               sx={GlobalStyle.inputStyle}
               onChange={(e) => {
-                setForm({ ...form, birthdate: e.target.value })
+                setForm({ ...form, birthDate: e.target.value })
               }}
             />
           </FormControl>
 
-          <FormControl isRequired isInvalid={isError && !form.citizenid}>
+          <FormControl isRequired isInvalid={isError && !form.citizenID}>
             <FormLabel sx={GlobalStyle.labelText}>Citizen ID</FormLabel>
             <Input
               type="number"
               sx={GlobalStyle.inputStyle}
               onChange={(e) => {
-                setForm({ ...form, citizenid: e.target.value })
+                setForm({ ...form, citizenID: e.target.value })
               }}
             />
           </FormControl>
         </SimpleGrid>
 
         <VStack spacing="24px">
-          <FormControl isRequired isInvalid={isError && !form.licenseno}>
+          <FormControl isRequired isInvalid={isError && !form.licenseNO}>
             <FormLabel sx={GlobalStyle.labelText}>
               Medical License Number
             </FormLabel>
             <Input
               sx={GlobalStyle.inputStyle}
               onChange={(e) => {
-                setForm({ ...form, licenseno: e.target.value })
+                setForm({ ...form, licenseNO: e.target.value })
               }}
             />
             <FormHelperText sx={GlobalStyle.greyMediumText}>
@@ -291,7 +210,7 @@ export default function CreateDoctorAccount() {
         {/* ==================== Contact information ==================== */}
         <Text sx={GlobalStyle.headingText}>Contact Information</Text>
         <Flex sx={flexStyle}>
-          <FormControl isRequired isInvalid={isError && !form.phonenumber}>
+          <FormControl isRequired isInvalid={isError && !form.phoneNumber}>
             <FormLabel sx={GlobalStyle.labelText}>Phone Number</FormLabel>
             <Input
               sx={GlobalStyle.inputStyle}

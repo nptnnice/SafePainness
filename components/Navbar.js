@@ -112,7 +112,9 @@ export default function Navbar() {
     sessionStorage.clear()
     router.push('/')
   }
-
+  const onClickSignUp = () => {
+    router.push('../create-doctor-account')
+  }
   // set menu in popover
   const MenuAccount = () => {
     return (
@@ -133,7 +135,9 @@ export default function Navbar() {
         <Image sx={logo} src="/images/Logo.png" onClick={onClickLogo} />
 
         <Flex sx={menuFlex}>
-          <Text sx={signup}>Sign Up</Text>
+          <Text sx={signup} onClick={onClickSignUp}>
+            Sign Up
+          </Text>
           <Text sx={login} onClick={() => setOpen(true)}>
             Login
           </Text>
