@@ -19,7 +19,19 @@ import { useAppContext } from '/context/UserContext'
 import url from '/url'
 
 export default function Feedback(props) {
-  const { feedback, allResponses } = props
+  const { feedback, allResponses, feedbacklist } = props
+
+  // find the index of the feedback
+  const [feedbackIndex, setFeedbackIndex] = useState(0)
+  useEffect(() => {
+    for (let i = 0; i < feedbacklist.length; i++) {
+      console.log(i, feedbacklist[i])
+      console.log(feedback.feedbackID)
+      if (feedbacklist[i].feedbackID === feedback.feedbackID) {
+        setFeedbackIndex(feedbacklist.length - i)
+      }
+    }
+  }, [])
 
   // check role
   const { user } = useAppContext()
@@ -86,7 +98,7 @@ export default function Feedback(props) {
           doctor="Alan Smith"
         />
         <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
-          <Text sx={GlobalStyle.headingText}>Feedback #</Text>
+          <Text sx={GlobalStyle.headingText}>Feedback #{feedbackIndex}</Text>
           <Box sx={GlobalStyle.infoBox}>
             <Responses
               feedback={feedback}
@@ -122,6 +134,7 @@ export default function Feedback(props) {
 
 export async function getServerSideProps(context) {
   const feedbackID = context.params.feedbackID
+  const caseID = context.params.caseID
   const result = await axios.get(`${url}/api/feedbackManager/getFeedback`, {
     headers: {
       feedbackid: feedbackID,
@@ -135,10 +148,16 @@ export async function getServerSideProps(context) {
       },
     }
   )
+  const result3 = await axios.get(`${url}/api/feedbackManager/getAllFeedback`, {
+    headers: {
+      caseid: caseID,
+    },
+  })
   return {
     props: {
       feedback: result.data,
       allResponses: result2.data,
+      feedbacklist: result3.data,
     },
   }
 }
