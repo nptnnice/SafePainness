@@ -14,12 +14,20 @@ import SummaryBox from '/components/SummaryBox'
 import Dashboard from '/components/Dashboard'
 import HeadInfo from '/components/HeadInfo'
 import ConfirmModal from '/components/ConfirmModal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import axios from 'axios'
+import url from '/url'
 
-export default function Case() {
+export default function Case(props) {
+  const { caseInfo } = props
+
+  useEffect(() => {
+    sessionStorage.setItem('caseDoctor', caseInfo.doctorID)
+    console.log(sessionStorage.getItem('caseDoctor'))
+  }, [])
+
   let layout = {
     width: '90%',
     margin: '0 auto',
@@ -77,6 +85,9 @@ export default function Case() {
   const onConfirmDiagnosis = () => setShowModal(!showModal)
   const router = useRouter()
 
+  // useEffect(() => {
+  //     if (isconfirm) {
+
   return (
     <Box sx={GlobalStyle.bgColor}>
       <HeadInfo
@@ -122,3 +133,16 @@ export default function Case() {
   )
 }
 
+export async function getServerSideProps(context) {
+  const caseID = context.params.caseID
+  const result = await axios.get(`${url}/api/caseManager/getCase`, {
+    headers: {
+      caseid: caseID,
+    },
+  })
+  return {
+    props: {
+      caseInfo: result.data,
+    },
+  }
+}
