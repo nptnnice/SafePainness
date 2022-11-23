@@ -19,7 +19,7 @@ export default function Records() {
         return (
           <Flex sx={GlobalStyle.recordBox} onClick={handleClick}>
             <Text sx={GlobalStyle.boldText}>Record #{record.id}</Text>
-            <Text sx={GlobalStyle.greyMediumText}>{record.date}</Text>
+            <Text sx={GlobalStyle.greyMediumText}>{new Date(record.date).toLocaleString()}</Text>
             <RecordModal isOpen={showModal} onClose={handleClick} />
           </Flex>
         )

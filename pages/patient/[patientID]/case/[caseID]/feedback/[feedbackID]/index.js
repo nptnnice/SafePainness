@@ -15,11 +15,20 @@ import { useState, useEffect } from 'react'
 import GlobalStyle from '/Style'
 import HeadInfo from '/components/HeadInfo'
 import Responses from '/components/Responses'
+import { useRouter } from 'next/router'
 import { useAppContext } from '/context/UserContext'
 import url from '/url'
 
 export default function Feedback(props) {
   const { feedback, allResponses, feedbacklist } = props
+
+  console.log(feedbacklist)
+
+  const router = useRouter()
+  console.log(router)
+  const { caseID, patientID } = router.query
+
+  
 
   // find the index of the feedback
   const [feedbackIndex, setFeedbackIndex] = useState(0)
@@ -87,15 +96,18 @@ export default function Feedback(props) {
     }
   }
 
+  
+  console.log(feedbackIndex)
+
   return (
     <>
       <Box sx={GlobalStyle.bgColor}>
         <HeadInfo
           name="Patient ID"
-          patientID="PT000001"
-          caseID="2022-000001"
+          patientID={patientID}
+          caseID={caseID}
           caseName="Grammar addict"
-          doctor="Alan Smith"
+          doctor={user.name}
         />
         <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
           <Text sx={GlobalStyle.headingText}>Feedback #{feedbackIndex}</Text>
@@ -132,9 +144,13 @@ export default function Feedback(props) {
   )
 }
 
+
+
 export async function getServerSideProps(context) {
   const feedbackID = context.params.feedbackID
   const caseID = context.params.caseID
+
+
   const result = await axios.get(`${url}/api/feedbackManager/getFeedback`, {
     headers: {
       feedbackid: feedbackID,

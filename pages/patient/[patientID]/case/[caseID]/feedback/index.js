@@ -15,6 +15,7 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 import AddFeedback from '/components/AddFeedback'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
+import { useAppContext } from '/context/UserContext'
 import url from '/url'
 
 export default function Case(props) {
@@ -36,9 +37,19 @@ export default function Case(props) {
   }
 
   // router
-  const router = useRouter()
-  const { patientID, caseID } = router.query
+  const { user } = useAppContext()
+  console.log("This is user")
+  console.log(user)
 
+  const router = useRouter()
+  console.log("This is router" + router)
+  console.log(router)
+  const { caseID, name } = router.query
+  const patientID = router.query.patientID
+  console.log("This is patientID: " + patientID)
+  console.log("This is caseID: " + caseID)
+  console.log("This is name: " + name)
+  
   const [feedbackAmount, setFeedbackAmount] = useState(feedbackList.length)
 
   // add feedback
@@ -54,10 +65,10 @@ export default function Case(props) {
     <Box sx={GlobalStyle.bgColor}>
       <HeadInfo
         name="Patient ID"
-        patientID="XXXXXX"
-        caseID="XXXX"
+        patientID={patientID}
+        caseID={caseID}
         caseName="Grammar addict"
-        doctor="Alan Smith"
+        doctor={user.name}
       />
 
       <Box sx={GlobalStyle.layout}>
