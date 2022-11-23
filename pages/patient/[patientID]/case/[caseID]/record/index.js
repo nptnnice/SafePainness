@@ -14,18 +14,34 @@ import { useRouter } from 'next/router'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import { RecordList } from '/RecordList'
 import RecordModal from '/components/RecordModal'
+import { useAppContext } from '/context/UserContext'
 import axios from 'axios'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-export default function Case({getAllRecords, props}) {
+export default function Case(props) {
+
+  const {getAllRecords, getRecord} = props
 
   let total = getAllRecords.length + 1
 
-  console.log("This is getAllRecords")
-  console.log(getAllRecords)
+  console.log("This sdadas")
+  console.log(props.getAllRecords)
 
-  console.log("This is props")
-  console.log(props)
+  console.log("This is getRecord")
+  console.log(props.getRecord)
+
+  const { user } = useAppContext()
+  console.log(user)
+
+  
+
+  // console.log("this is getRecord")
+  // console.log(getRecord)
+
+  // console.log("This is getAllRecords  ")
+  // console.log(getAllRecords)
+
+
 
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
@@ -56,6 +72,10 @@ export default function Case({getAllRecords, props}) {
     router.push(`/patient/${patientID}/case/${caseID}/add-record`)
   }
 
+
+  const [recordAmount, setRecordAmount] = useState(getAllRecords.length)
+
+
   const [showModal, setShowModal] = useState(false)
   const onClickRecord = () => setShowModal(!showModal)
 
@@ -63,10 +83,10 @@ export default function Case({getAllRecords, props}) {
     <Box sx={GlobalStyle.bgColor}>
       <HeadInfo
         name="Patient ID"
-        patientID="XXXXXX"
-        caseID="XXXX"
+        patientID={patientID}
+        caseID={caseID}
         caseName="Grammar addict"
-        doctor="Alan Smith"
+        doctor={user.name}
       />
 
       <Box sx={GlobalStyle.layout}>
@@ -80,9 +100,7 @@ export default function Case({getAllRecords, props}) {
           </Box>
 
           {getAllRecords.map((record, index) => {
-            
-            total = total - 1;
-
+            total = total - 1
             return (
               <Flex
                 key={index}
@@ -90,8 +108,8 @@ export default function Case({getAllRecords, props}) {
                 onClick={onClickRecord}
               >
                 <Text sx={GlobalStyle.boldText}>Record #{total}</Text>
-                <Text sx={GlobalStyle.greyMediumText}>{new Date(record.datetime).toLocaleString('en-GB')}</Text>
-                <RecordModal isOpen={showModal} onClose={onClickRecord} />
+                <Text sx={GlobalStyle.greyMediumText}>{new Date(record.datetime).toLocaleString()}</Text>
+                <RecordModal isOpen={showModal} onClose={onClickRecord} total={total} record={record} allrecord={getAllRecords}/>
               </Flex>
             )
           })}
@@ -101,11 +119,22 @@ export default function Case({getAllRecords, props}) {
   )
 }
 
-export async function getServerSideProps() {
+
+export async function getServerSideProps(context) {
+
+  //get recordID 
+  const recordID = context.params.recordID
+
   const result = await axios.get('http://localhost:3000/api/recordManager/getAllRecords')
+  const result2 = await axios.get('http://localhost:3000/api/recordManager/getRecord', {
+    headers: {
+      recordid: recordID,
+    },
+  })
   return {
     props: {
       getAllRecords: result.data,
+      getRecord: result2.data,
     },
   }
 }
