@@ -75,8 +75,10 @@ export default function Case(props) {
 
   const [recordAmount, setRecordAmount] = useState(getAllRecords.length)
 
+  const [focuskey, setFocuskey] = useState(0)
 
   const [showModal, setShowModal] = useState(false)
+
   const onClickRecord = () => setShowModal(!showModal)
 
   return (
@@ -86,7 +88,7 @@ export default function Case(props) {
         patientID={patientID}
         caseID={caseID}
         caseName="Grammar addict"
-        doctor={user.name}
+        doctor="dont forget"
       />
 
       <Box sx={GlobalStyle.layout}>
@@ -100,16 +102,24 @@ export default function Case(props) {
           </Box>
 
           {getAllRecords.map((record, index) => {
-            total = total - 1
+            
+            console.log(index, record.recordID)
+
             return (
               <Flex
                 key={index}
                 sx={GlobalStyle.recordBox}
-                onClick={onClickRecord}
+                onClick={() => {onClickRecord(); setFocuskey(index)}}
               >
-                <Text sx={GlobalStyle.boldText}>Record #{total}</Text>
+                <Text sx={GlobalStyle.boldText}>Record #{recordAmount - index}</Text>
                 <Text sx={GlobalStyle.greyMediumText}>{new Date(record.datetime).toLocaleString()}</Text>
-                <RecordModal isOpen={showModal} onClose={onClickRecord} total={total} record={record} allrecord={getAllRecords}/>
+
+                {/* {console.log(record)}
+                {console.log(index)}
+
+                {console.log(record[index])} */}
+
+                <RecordModal isOpen={showModal} index={index} focuskey={focuskey} onClose={onClickRecord} total={total} record={record} allrecord={getAllRecords}/>
               </Flex>
             )
           })}

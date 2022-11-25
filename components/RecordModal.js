@@ -13,17 +13,19 @@ import GlobalStyle from '../Style'
 import { useState, useEffect } from 'react'
 import { Image } from '@chakra-ui/react'
 
-export default function CreateAppointment({ isOpen, onClose, record, allrecord, total}) {
+export default function CreateAppointment({ isOpen, focuskey, index, onClose, record, allrecord ,total}) {
 
   // console.log("hehe")
   //  console.log(allrecord)
 
   //  console.log("This is record yeyeye : ")
   //  console.log(record)
+  // console.log(typeof(allrecord))
+  // console.log(allrecord[1])
 
   //console.log(allrecord.length)
 
-  // console.log("This is eiei") 
+  // console.log("This is eiei")
   // console.log(eiei)
   // const { getAllRecords } = props
 
@@ -36,17 +38,17 @@ export default function CreateAppointment({ isOpen, onClose, record, allrecord, 
   // console.log(allrecord[1].recordID)
   // console.log(record.recordID)
 
-  const [recordIndex, setRecordIndex] = useState(0)
-   useEffect(() => {
-     for (let i = 0; i < allrecord.length; i++) {
-      // console.log(i, allrecord[i])
-      // console.log("this os record.")
-      // console.log(record.recordID)
-       if (allrecord[i].recordID === record.recordID) {
-         setRecordIndex(allrecord.length - i)
-       }
-     }
-   }, [])
+  // const [recordIndex, setRecordIndex] = useState(0)
+  //  useEffect(() => {
+  //    for (let i = 0; i < allrecord.length; i++) {
+  //     // console.log(i, allrecord[i])
+  //     // console.log("this os record.")
+  //     // console.log(record.recordID)
+  //      if (allrecord[i].recordID === record.recordID) {
+  //        setRecordIndex(allrecord.length - i)
+  //      }
+  //    }
+  //  }, [])
 
 
   let modalStyle = {
@@ -74,12 +76,17 @@ export default function CreateAppointment({ isOpen, onClose, record, allrecord, 
   // console.log("wewe")
   //console.log(recordIndex)
 
-  console.log(record.image)
+  // console.log(record.image)
 
+  
+  
   return (
+    
     <>
+      {console.log("modal")}
+      {console.log(index, record.recordID)}
       <Modal
-        isOpen={isOpen}
+        isOpen={isOpen && focuskey === index}
         onClose={onClose}
         isCentered
         scrollBehavior="inside"
@@ -89,8 +96,8 @@ export default function CreateAppointment({ isOpen, onClose, record, allrecord, 
           <ModalCloseButton sx={closeButtonStyle} size="lg" />
           <ModalBody>
             <VStack align="start" spacing={4}>
-              {console.log(total)}
-              <Text sx={GlobalStyle.headingText}>Record #{total}</Text>
+
+              <Text sx={GlobalStyle.headingText}>Record #{record.recordID}</Text>
               <Text sx={GlobalStyle.greyMediumText} textAlign="right">
                 {new Date(record.datetime).toLocaleString("en-GB")}
               </Text>
@@ -111,7 +118,7 @@ export default function CreateAppointment({ isOpen, onClose, record, allrecord, 
                   <Image src={image
                   } sx={imgStyle} />
                 ))}
-                
+
                 {/* <Image sx={imgStyle} src={record.image[0]}/>
                 <Image sx={imgStyle} src={record.image[1]}/>
                 <Image sx={imgStyle} src={record.image[2]}/>
