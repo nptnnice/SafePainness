@@ -25,6 +25,7 @@ import { useState } from 'react'
 import { CloseIcon } from '@chakra-ui/icons'
 import { useToast } from '@chakra-ui/react'
 import axios from 'axios'
+import { useAppContext } from '/context/UserContext'
 import ReactLoading from 'react-loading'
 import { storage } from '/firebaseConfig'
 import {
@@ -35,6 +36,9 @@ import {
 } from 'firebase/storage'
 
 export default function AddRecord() {
+
+  const {user} = useAppContext()
+
   let imgStyle = {
     objectFit: 'cover',
     borderRadius: '12px',
@@ -197,6 +201,7 @@ export default function AddRecord() {
         console.log(form)
         try {
           const result = await axios.post('/api/recordManager/addRecord', {
+            caseID: user.caseID,
             symptom: form.symptom,
             painScale: form.painScale,
             comment: form.comment,
