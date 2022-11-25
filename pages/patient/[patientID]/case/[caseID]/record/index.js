@@ -12,19 +12,17 @@ import Colour from '/Colour'
 import HeadInfo from '/components/HeadInfo'
 import { useRouter } from 'next/router'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
-import { RecordList } from '/RecordList'
 import RecordModal from '/components/RecordModal'
 import axios from 'axios'
 import { useState } from 'react'
 
-export default function Case({getAllRecords, props}) {
-
+export default function Case({ getAllRecords, props }) {
   let total = getAllRecords.length + 1
 
-  console.log("This is getAllRecords")
+  console.log('This is getAllRecords')
   console.log(getAllRecords)
 
-  console.log("This is props")
+  console.log('This is props')
   console.log(props)
 
   let section2 = {
@@ -80,8 +78,7 @@ export default function Case({getAllRecords, props}) {
           </Box>
 
           {getAllRecords.map((record, index) => {
-            
-            total = total - 1;
+            total = total - 1
 
             return (
               <Flex
@@ -90,7 +87,9 @@ export default function Case({getAllRecords, props}) {
                 onClick={onClickRecord}
               >
                 <Text sx={GlobalStyle.boldText}>Record #{total}</Text>
-                <Text sx={GlobalStyle.greyMediumText}>{new Date(record.datetime).toLocaleString('en-GB')}</Text>
+                <Text sx={GlobalStyle.greyMediumText}>
+                  {new Date(record.datetime).toLocaleString('en-GB')}
+                </Text>
                 <RecordModal isOpen={showModal} onClose={onClickRecord} />
               </Flex>
             )
@@ -102,7 +101,9 @@ export default function Case({getAllRecords, props}) {
 }
 
 export async function getServerSideProps() {
-  const result = await axios.get('http://localhost:3000/api/recordManager/getAllRecords')
+  const result = await axios.get(
+    'http://localhost:3000/api/recordManager/getAllRecords'
+  )
   return {
     props: {
       getAllRecords: result.data,

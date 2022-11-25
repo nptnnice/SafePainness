@@ -1,6 +1,5 @@
 import { Text, Flex } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
-import { RecordList } from '../RecordList'
 import { useRouter } from 'next/router'
 import RecordModal from './RecordModal'
 import { useState } from 'react'
@@ -27,5 +26,3 @@ export default function Records() {
     </>
   )
 }
-
-
