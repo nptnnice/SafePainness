@@ -13,6 +13,7 @@ import {
   FormErrorMessage,
   chakra,
   VStack,
+  Wrap,
 } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 import HeadCenter from '../components/HeadCenter'
@@ -209,7 +210,10 @@ export default function CreatePatientAccount() {
             </FormControl>
           </Flex>
         </SimpleGrid>
-        <VStack spacing="24px">
+        <SimpleGrid
+          gap={{ base: '16px', md: '24px' }}
+          width={{ base: '100%', md: '75%' }}
+        >
           <FormControl isRequired isInvalid={isError && !form.citizenID}>
             <FormLabel sx={GlobalStyle.labelText}>Citizen ID</FormLabel>
             <Input
@@ -222,12 +226,12 @@ export default function CreatePatientAccount() {
           </FormControl>
 
           <FormControl isRequired isInvalid={isError && !form.medCondition}>
-            <FormLabel sx={GlobalStyle.labelText}>
+            <FormLabel sx={GlobalStyle.labelText} marginBottom="0">
               Medical conditions{' '}
-              <chakra.span sx={GlobalStyle.greyMediumText}>
-                (Fill the blank with dash (-), if the answer is no.)
-              </chakra.span>
             </FormLabel>
+            <Text sx={GlobalStyle.greyMediumText} marginBottom="5px">
+              (Fill the blank with dash (-), if the answer is no.)
+            </Text>
             <Textarea
               sx={GlobalStyle.inputStyle}
               onChange={(e) => {
@@ -237,12 +241,12 @@ export default function CreatePatientAccount() {
           </FormControl>
 
           <FormControl isRequired isInvalid={isError && !form.allergy}>
-            <FormLabel sx={GlobalStyle.labelText}>
-              Allergy{' '}
-              <chakra.span sx={GlobalStyle.greyMediumText}>
-                (Fill the blank with dash (-), if the answer is no.)
-              </chakra.span>
+            <FormLabel sx={GlobalStyle.labelText} marginBottom="0">
+              Allergy
             </FormLabel>
+            <Text sx={GlobalStyle.greyMediumText} marginBottom="5px">
+              (Fill the blank with dash (-), if the answer is no.)
+            </Text>
             <Textarea
               sx={GlobalStyle.inputStyle}
               onChange={(e) => {
@@ -250,7 +254,7 @@ export default function CreatePatientAccount() {
               }}
             />
           </FormControl>
-        </VStack>
+        </SimpleGrid>
 
         <Box sx={GlobalStyle.divider}></Box>
 
@@ -260,7 +264,7 @@ export default function CreatePatientAccount() {
           <FormControl isRequired isInvalid={isError && !form.phoneNumber}>
             <FormLabel sx={GlobalStyle.labelText}>Phone Number</FormLabel>
             <Input
-              type="tel"
+              type="number"
               sx={GlobalStyle.inputStyle}
               onChange={(e) => checkPhone(e)}
             />

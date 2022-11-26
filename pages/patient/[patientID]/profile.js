@@ -17,6 +17,7 @@ import {
   ButtonGroup,
   Grid,
   GridItem,
+  SimpleGrid,
 } from '@chakra-ui/react'
 import HeadCenter from '/components/HeadCenter'
 import GlobalStyle from '/Style'
@@ -38,6 +39,10 @@ export default function PatientProfile(props) {
   let flexStyle = {
     gap: '24px',
     flexDirection: { base: 'column', md: 'row' },
+  }
+  let flexStyle2 = {
+    gap: '24px',
+    // flexDirection: { base: 'column', md: 'row' },
   }
   let oldfileBtn = {
     opacity: '0',
@@ -297,7 +302,10 @@ export default function PatientProfile(props) {
               )}
             </FormControl>
             <Box flex="1">
-              <Grid sx={GlobalStyle.gridStyle}>
+              <SimpleGrid
+                columns={{ base: 1, sm: 2 }}
+                sx={GlobalStyle.gridStyle}
+              >
                 <FormControl>
                   <FormLabel sx={GlobalStyle.labelText}>First Name</FormLabel>
                   <Input
@@ -363,23 +371,27 @@ export default function PatientProfile(props) {
                   />
                 </FormControl>
 
-                <FormControl isReadOnly>
-                  <FormLabel sx={GlobalStyle.labelText}>Sex</FormLabel>
-                  <Input
-                    sx={GlobalStyle.inputStyle}
-                    value={form.sex}
-                    opacity="0.8"
-                  />
-                </FormControl>
+                <Flex sx={flexStyle2}>
+                  <FormControl isReadOnly>
+                    <FormLabel sx={GlobalStyle.labelText}>Sex</FormLabel>
+                    <Input
+                      sx={GlobalStyle.inputStyle}
+                      value={form.sex}
+                      opacity="0.8"
+                    />
+                  </FormControl>
 
-                <FormControl isReadOnly>
-                  <FormLabel sx={GlobalStyle.labelText}>Blood group</FormLabel>
-                  <Input
-                    sx={GlobalStyle.inputStyle}
-                    value={form.bloodGroup}
-                    opacity="0.8"
-                  />
-                </FormControl>
+                  <FormControl isReadOnly>
+                    <FormLabel sx={GlobalStyle.labelText}>
+                      Blood group
+                    </FormLabel>
+                    <Input
+                      sx={GlobalStyle.inputStyle}
+                      value={form.bloodGroup}
+                      opacity="0.8"
+                    />
+                  </FormControl>
+                </Flex>
 
                 <FormControl>
                   <FormLabel sx={GlobalStyle.labelText}>Phone number</FormLabel>
@@ -394,21 +406,19 @@ export default function PatientProfile(props) {
                   />
                 </FormControl>
 
-                <GridItem colSpan={{ base: 1, sm: 2 }}>
-                  <FormControl>
-                    <FormLabel sx={GlobalStyle.labelText}>Email</FormLabel>
-                    <Input
-                      sx={GlobalStyle.inputStyle}
-                      value={form.email}
-                      isDisabled={!isEdit}
-                      _disabled={{ opacity: 0.8 }}
-                      onChange={(e) => {
-                        setForm({ ...form, email: e.target.value })
-                      }}
-                    />
-                  </FormControl>
-                </GridItem>
-              </Grid>
+                <FormControl>
+                  <FormLabel sx={GlobalStyle.labelText}>Email</FormLabel>
+                  <Input
+                    sx={GlobalStyle.inputStyle}
+                    value={form.email}
+                    isDisabled={!isEdit}
+                    _disabled={{ opacity: 0.8 }}
+                    onChange={(e) => {
+                      setForm({ ...form, email: e.target.value })
+                    }}
+                  />
+                </FormControl>
+              </SimpleGrid>
             </Box>
           </Flex>
         </Box>
@@ -465,11 +475,11 @@ export default function PatientProfile(props) {
             </Button>
           ) : (
             <ButtonGroup gap={4}>
-              <Button sx={GlobalStyle.cancelBtn} onClick={handleCancel}>
+              <Button sx={GlobalStyle.whiteBtn} onClick={handleCancel}>
                 Cancel
               </Button>
               <Button
-                sx={GlobalStyle.saveBtn}
+                sx={GlobalStyle.blueBtn}
                 onClick={() => {
                   setIsEdit(!isEdit)
                   setShow(!show)
