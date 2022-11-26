@@ -25,6 +25,7 @@ import { useState } from 'react'
 import { CloseIcon } from '@chakra-ui/icons'
 import { useToast } from '@chakra-ui/react'
 import axios from 'axios'
+import { useAppContext } from '/context/UserContext'
 import ReactLoading from 'react-loading'
 import { storage } from '/firebaseConfig'
 import {
@@ -35,6 +36,9 @@ import {
 } from 'firebase/storage'
 
 export default function AddRecord() {
+
+  const {user} = useAppContext()
+
   let imgStyle = {
     objectFit: 'cover',
     borderRadius: '12px',
@@ -86,12 +90,16 @@ export default function AddRecord() {
   //input image and collect url
   const handleChange = (e) => {
     for (let i = 0; i < e.target.files.length; i++) {
-      setStoreImg(e.target.files[i])
+      //setStoreImg(e.target.files[i])
+      //push new image into array next to old one
+      setStoreImg((prevState) => [...prevState, e.target.files[i]])
+      //setStoreImg({ ...storeImg, [i]: e.target.files[i] })
+      //setStoreImg((prevState) => [...prevState, e.target.files[i]])
       const file = e.target.files[i]
       const date = new Date().toISOString().slice(0, 10)
       const storageRef = ref(storage, `/images/${date}-${file.name}`)
+      console.log(ref)
       const uploadTask = uploadBytesResumable(storageRef, file)
-      console.log('This is storageref', storageRef)
       uploadTask.on(
         'state_changed',
         (snapshot) => {
@@ -125,10 +133,10 @@ export default function AddRecord() {
   }
 
   //delete preview image from array and firebase storage
-  function rmImage(i) {
+  function rmImage (i) {
     const date = new Date().toISOString().slice(0, 10)
-    const deleteRef = ref(storage, `/images/${date}-${storeImg.name}`)
-    console.log('This is deleteRef')
+    const deleteRef = ref(storage, `/images/${date}-${storeImg[0].name}`)
+    console.log("This is deleteRef")
     console.log(deleteRef)
     deleteObject(deleteRef)
       .then(() => {
@@ -137,14 +145,15 @@ export default function AddRecord() {
       .catch((err) => {
         console.log(err)
       })
+   
+    const newStoreImg = [...storeImg]
+    newStoreImg.splice(i, 1)
+    setStoreImg(newStoreImg)
 
     const newImages = [...image]
     newImages.splice(i, 1)
     setImage(newImages)
   }
-
-  console.log('This is URL ' + form.image)
-  console.log(typeof form.image)
 
   function uploadSingleFile(e) {
     setIsExceed(false)
@@ -175,44 +184,57 @@ export default function AddRecord() {
     } else {
       if (image.length > 4) {
         setIsExceed(true)
-        setImage({ ...image, image: [] })
-        return
-      }
-      setIsError(false)
-      console.log('form is valid')
-      var now = new Date().toLocaleString()
-      setForm({ ...form, datetime: now })
-      console.log(form)
-      try {
-        const result = await axios.post('/api/recordManager/addRecord', {
-          symptom: form.symptom,
-          painScale: form.painScale,
-          comment: form.comment,
-          datetime: form.datetime,
-          image: image,
+        console.log('Too many files')
+        toast({
+          title: 'An error occurred.',
+          description: 'Too many files uploaded. Max 4 files.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
         })
-        console.log(result)
-      } catch (err) {
-        console.log(err)
+        
+      } else {
+        setIsError(false)
+        console.log('form is valid')
+        var now = new Date().toLocaleString()
+        setForm({ ...form, datetime: now })
+        console.log(form)
+        try {
+          const result = await axios.post('/api/recordManager/addRecord', {
+            caseID: user.caseID,
+            symptom: form.symptom,
+            painScale: form.painScale,
+            comment: form.comment,
+            datetime: form.datetime,
+            image: image,
+          })
+          console.log(result)
+        } catch (err) {
+          console.log(err)
+        }
+        toast({
+          title: 'Submit successfully',
+          description: 'Your record has been submitted.',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        })
+        // reload page
+        setTimeout(() => {
+          window.location.reload()
+        }, 4000)
       }
-      toast({
-        title: 'Submit successfully',
-        description: 'Your record has been submitted.',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
-      // reload page
-      setTimeout(() => {
-        window.location.reload()
-      }, 4000)
     }
   }
+
+  console.log(storeImg)
+  console.log(typeof(storeImg))
 
   // console.log('form', form)
   console.log('This is image ')
   console.log(image)
 
+  console.log(typeof(image))
   // console.log("This is "+files)
   // console.log(files)
   return (
@@ -229,6 +251,9 @@ export default function AddRecord() {
               onChange={getCurrentSymptom}
             />
             {console.log(form.symptom)}
+            <FormErrorMessage sx={GlobalStyle.errorText}>
+                Please fill in your current symptom
+              </FormErrorMessage>
           </FormControl>
 
           {/* ==================== Pain scale ==================== */}
@@ -297,7 +322,7 @@ export default function AddRecord() {
               </FormHelperText>
             ) : (
               <FormErrorMessage sx={GlobalStyle.errorText}>
-                Too many files selected.
+                Too many files selected. Please select up to 4 files.
               </FormErrorMessage>
             )}
             {/* show image preview */}

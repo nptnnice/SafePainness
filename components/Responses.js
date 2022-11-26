@@ -6,6 +6,10 @@ import axios from 'axios'
 
 export default function Responses(props) {
   const { feedback, allResponses, roleID } = props
+  
+  console.log("This is feedback")
+  console.log(feedback)
+
 
   let flexStyle = {
     alignItems: 'center',

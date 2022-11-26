@@ -16,17 +16,26 @@ import HeadInfo from '/components/HeadInfo'
 import ConfirmModal from '/components/ConfirmModal'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { useAppContext } from '/context/UserContext'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import axios from 'axios'
 import url from '/url'
 
-export default function Case(props) {
+export default function Case({ props, caseList }) {
   const { caseInfo } = props
 
   useEffect(() => {
     sessionStorage.setItem('caseDoctor', caseInfo.doctorID)
     console.log(sessionStorage.getItem('caseDoctor'))
   }, [])
+
+  console.log('this is caseList')
+  console.log(caseList)
+  console.log('this is props')
+  console.log(props)
+
+  const { user } = useAppContext()
+  console.log(user)
 
   let layout = {
     width: '90%',
@@ -84,6 +93,8 @@ export default function Case(props) {
   const [isconfirm, setConfirm] = useState(false)
   const onConfirmDiagnosis = () => setShowModal(!showModal)
   const router = useRouter()
+  const patientID = router.query.patientID
+  const caseID = router.query.caseID
 
   // useEffect(() => {
   //     if (isconfirm) {
@@ -92,10 +103,10 @@ export default function Case(props) {
     <Box sx={GlobalStyle.bgColor}>
       <HeadInfo
         name="Patient ID"
-        patientID="XXXXXX"
-        caseID="XXXX"
+        patientID={patientID}
+        caseID={caseID}
         caseName="Grammar addict"
-        doctor="Alan Smith"
+        doctor={user.name}
       />
 
       <Box sx={layout}>
@@ -103,7 +114,7 @@ export default function Case(props) {
         {!isconfirm ? (
           <Flex sx={diagnosisFlex}>
             <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
-              Case XXXX:
+              Case {caseID}:
             </Text>
             <Input placeholder="Disease name" sx={GlobalStyle.inputStyle} />
             <Button sx={GlobalStyle.yellowBtn} onClick={onConfirmDiagnosis}>
