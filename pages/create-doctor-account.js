@@ -177,19 +177,23 @@ export default function CreateDoctorAccount() {
           </FormControl>
         </SimpleGrid>
 
-        <VStack spacing="24px">
+        <SimpleGrid
+          gap={{ base: '16px', md: '24px' }}
+          width={{ base: '100%', md: '60%' }}
+        >
           <FormControl isRequired isInvalid={isError && !form.licenseNO}>
             <FormLabel sx={GlobalStyle.labelText}>
               Medical License Number
             </FormLabel>
             <Input
               sx={GlobalStyle.inputStyle}
+              width="100%"
               onChange={(e) => {
                 setForm({ ...form, licenseNO: e.target.value })
               }}
             />
             <FormHelperText sx={GlobalStyle.greyMediumText}>
-              Doctors must be verified by the medical license number
+              {/* Doctors must be verified by the medical license number */}
             </FormHelperText>
           </FormControl>
 
@@ -203,7 +207,7 @@ export default function CreateDoctorAccount() {
               }}
             />
           </FormControl>
-        </VStack>
+        </SimpleGrid>
 
         <Box sx={GlobalStyle.divider}></Box>
 

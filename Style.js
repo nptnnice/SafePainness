@@ -185,12 +185,16 @@ const editBtn = {
   color: Colour.white,
   padding: { base: '16px 24px', md: '24px 40px' },
   fontFamily: 'Lato',
-  fontSize: { base: '16px', md: '18px' },
+  fontSize: { base: '18px', md: '20px' },
   fontWeight: 'bold',
   borderRadius: '48px',
+  border: '3px solid',
+  borderColor: Colour.lightYellow,
+  transition: 'all 0.2s ease',
   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
   _hover: {
     backgroundColor: Colour.darkYellow,
+    borderColor: Colour.darkYellow,
   },
 }
 const cancelBtn = {
@@ -284,7 +288,6 @@ const sliderBox = {
   width: '96%',
   margin: '0 auto',
   marginTop: '16px',
-  
 }
 const gridStyle = {
   gap: { base: '16px', md: '24px' },

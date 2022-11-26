@@ -434,11 +434,11 @@ export default function DoctorProfile(props) {
             </Button>
           ) : (
             <ButtonGroup gap={4}>
-              <Button sx={GlobalStyle.cancelBtn} onClick={handleCancel}>
+              <Button sx={GlobalStyle.whiteBtn} onClick={handleCancel}>
                 Cancel
               </Button>
               <Button
-                sx={GlobalStyle.saveBtn}
+                sx={GlobalStyle.blueBtn}
                 onClick={() => {
                   setIsEdit(!isEdit)
                   setShow(!show)
