@@ -3,7 +3,6 @@ import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import { useState } from 'react'
 import axios from 'axios'
-import { ResponseList } from '../ResponseList'
 
 export default function Responses(props) {
   const { feedback, allResponses, roleID } = props

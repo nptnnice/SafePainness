@@ -14,19 +14,26 @@ import SummaryBox from '/components/SummaryBox'
 import Dashboard from '/components/Dashboard'
 import HeadInfo from '/components/HeadInfo'
 import ConfirmModal from '/components/ConfirmModal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAppContext } from '/context/UserContext'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import axios from 'axios'
+import url from '/url'
 
-export default function Case({props, caseList}) {
-  console.log("this is caseList")
+export default function Case({ props, caseList }) {
+  const { caseInfo } = props
+
+  useEffect(() => {
+    sessionStorage.setItem('caseDoctor', caseInfo.doctorID)
+    console.log(sessionStorage.getItem('caseDoctor'))
+  }, [])
+
+  console.log('this is caseList')
   console.log(caseList)
-  console.log("this is props")
+  console.log('this is props')
   console.log(props)
-  
-  
+
   const { user } = useAppContext()
   console.log(user)
 
@@ -89,6 +96,8 @@ export default function Case({props, caseList}) {
   const patientID = router.query.patientID
   const caseID = router.query.caseID
 
+  // useEffect(() => {
+  //     if (isconfirm) {
 
   return (
     <Box sx={GlobalStyle.bgColor}>
@@ -135,3 +144,16 @@ export default function Case({props, caseList}) {
   )
 }
 
+export async function getServerSideProps(context) {
+  const caseID = context.params.caseID
+  const result = await axios.get(`${url}/api/caseManager/getCase`, {
+    headers: {
+      caseid: caseID,
+    },
+  })
+  return {
+    props: {
+      caseInfo: result.data,
+    },
+  }
+}
