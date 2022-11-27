@@ -55,9 +55,9 @@ export default function ForgotPassword() {
       duration: 3000,
       isClosable: true,
     })
-    setTimeout(() => {
-      window.location.reload()
-    }, 4000)
+    // setTimeout(() => {
+    //   window.location.reload()
+    // }, 4000)
   }
 
   return (

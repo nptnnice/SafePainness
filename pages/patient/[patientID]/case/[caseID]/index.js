@@ -15,8 +15,9 @@ import SummaryBox from '/components/SummaryBox'
 import Dashboard from '/components/Dashboard'
 import HeadInfo from '/components/HeadInfo'
 import ConfirmModal from '/components/ConfirmModal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { useAppContext } from '/context/UserContext'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import axios from 'axios'
 import url from '/url'
@@ -117,7 +118,7 @@ export default function Case(props) {
         {!isconfirm ? (
           <Flex sx={diagnosisFlex}>
             <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
-              Case XXXX:
+              Case {caseID}:
             </Text>
             <Input placeholder="Disease name" sx={GlobalStyle.inputStyle} />
             <Button sx={GlobalStyle.yellowBtn} onClick={onConfirmDiagnosis}>

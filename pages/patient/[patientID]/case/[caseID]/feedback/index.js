@@ -13,11 +13,14 @@ import HeadInfo from '/components/HeadInfo'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import AddFeedbackModal from '/components/AddFeedbackModal'
+import AddFeedback from '/components/AddFeedback'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
-import { FeedbackList } from '/FeedbackList'
+import { useAppContext } from '/context/UserContext'
+import url from '/url'
 
-export default function Case() {
+export default function Case(props) {
+  const { feedbackList } = props
+
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
     position: 'relative',
@@ -32,20 +35,30 @@ export default function Case() {
     right: '0',
     top: { base: '-64px', md: '-72px' },
   }
-  const currentPage = {
-    color: Colour.darkBlue,
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: 'bold',
-    fontSize: { base: '16px', md: '18px' },
-  }
 
+  // router
+  const { user } = useAppContext()
+  console.log('This is user')
+  console.log(user)
+
+  const router = useRouter()
+  console.log('This is router' + router)
+  console.log(router)
+  const { caseID, name } = router.query
+  const patientID = router.query.patientID
+  console.log('This is patientID: ' + patientID)
+  console.log('This is caseID: ' + caseID)
+  console.log('This is name: ' + name)
+
+  const [feedbackAmount, setFeedbackAmount] = useState(feedbackList.length)
+
+  // add feedback
   const [showAddFeedback, setShowAddFeedback] = useState(false)
   const onClickAddFeedback = () => setShowAddFeedback(!showAddFeedback)
 
-  const router = useRouter()
-
+  // click feedback
   const onClickFeedback = (feedbackID) => {
-    router.push(`./feedback/${feedbackID}`)
+    router.push(`/patient/${patientID}/case/${caseID}/feedback/${feedbackID}`)
   }
 
   return (
@@ -61,20 +74,20 @@ export default function Case() {
               + Feedback
             </Button>
           </Box>
-          <AddFeedbackModal
-            isOpen={showAddFeedback}
-            onClose={onClickAddFeedback}
-          />
-          {/* <Feedbacks /> */}
-          {FeedbackList.map((feedback, index) => {
+          <AddFeedback isOpen={showAddFeedback} onClose={onClickAddFeedback} />
+          {feedbackList.map((feedback, index) => {
             return (
               <Flex
                 key={index}
                 sx={GlobalStyle.recordBox}
-                onClick={() => onClickFeedback(feedback.id)}
+                onClick={() => onClickFeedback(feedback.feedbackID)}
               >
-                <Text sx={GlobalStyle.boldText}>Feedback #{feedback.id}</Text>
-                <Text sx={GlobalStyle.greyMediumText}>{feedback.date}</Text>
+                <Text sx={GlobalStyle.boldText}>
+                  Feedback #{feedbackAmount - index}
+                </Text>
+                <Text sx={GlobalStyle.greyMediumText}>
+                  {new Date(feedback.datetime).toLocaleString()}
+                </Text>
               </Flex>
             )
           })}

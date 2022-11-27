@@ -3,11 +3,10 @@ import Colour from '../Colour'
 import GlobalStyle from '../Style'
 import LoginModal from './LoginModal'
 import { useState } from 'react'
+import { useAppContext } from '../context/UserContext'
+import Router, { useRouter } from 'next/router'
 
 export default function Header() {
-  const [open, setOpen] = useState(false)
-  const handleClick = () => setOpen(!open)
-
   let headBox = {
     backgroundColor: Colour.lightBlue,
     width: '100%',
@@ -41,6 +40,25 @@ export default function Header() {
     _hover: {
       backgroundColor: Colour.darkYellow,
     },
+  }
+
+  // router
+  const router = useRouter()
+
+  const [open, setOpen] = useState(false)
+
+  const { user, setUser } = useAppContext()
+
+  const handleClick = () => {
+    if (user) {
+      if (user.roleID == 1) {
+        router.push(`/doctor/${user.userID}`)
+      } else if (user.roleID == 2) {
+        router.push(`/patient/${user.userID}`)
+      }
+    } else {
+      setOpen(!open)
+    }
   }
 
   return (

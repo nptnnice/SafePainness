@@ -3,6 +3,7 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
+  ModalCloseButton,
   Flex,
   Avatar,
   VStack,
@@ -19,28 +20,22 @@ import {
   Td,
   TableContainer,
 } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
-import { SearchIcon, AddIcon } from '@chakra-ui/icons'
+import GlobalStyle from '/Style'
+import Colour from '/Colour'
+import { SearchIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import ConfirmAddCase from '/components/ConfirmAddCase'
 
-export default function CreateAppointment({ isOpen, onClose, props }) {
-  const [onClickPatient, setPatient] = useState(false)
-  const [selected, setSelected] = useState('')
-  const onClickHistorytaking = () => {
-    router.push('/patient/patientid/historytaking/part1')
-  }
-  const onClickNewPatient = () => {
-    router.push('/create-patient-account')
-  }
-  const router = useRouter()
+export default function CreateAppointment(props) {
+  const { isOpen, onClose, allpatients } = props
+
   let modalStyle = {
     maxWidth: '900px',
     maxHeight: '700px',
     width: '90%',
     borderRadius: '24px',
-    padding: { base: '20px', md: '24px' },
+    padding: { base: '24px 0px', md: '32px 16px' },
     backgroundColor: Colour.lightGrey,
   }
   let flexStyle = {
@@ -54,9 +49,6 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
     marginTop: { base: '0px', md: '8px' },
     boxSize: { base: '20px', md: '24px' },
   }
-  let addIconSize = {
-    boxSize: { base: '12px', md: '14px' },
-  }
   let hoverStyle = {
     cursor: 'pointer',
     transition: 'all 0.1s ease-in-out',
@@ -66,10 +58,10 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
   }
   let hoverStyleSelected = {
     ...hoverStyle,
-    backgroundColor: Colour.lightGrey,
-  }
-  let modalBodyStyle = {
-    padding: { base: '0px', md: '8px' },
+    backgroundColor: Colour.turquoise,
+    _hover: {
+      backgroundColor: Colour.turquoise,
+    },
   }
   let boxStyle = {
     justifyContent: 'flex-end',
@@ -85,6 +77,55 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
     height: { base: '320px', md: '400px' },
   }
 
+  // router
+  const router = useRouter()
+  const doctorID = router.query.doctorID
+
+  // choose patient
+  const [selected, setSelected] = useState('')
+  const [patientName, setPatientName] = useState('')
+  const choosePatient = (patientID, firstname, lastname) => {
+    if (selected === patientID) {
+      setSelected('')
+      setPatientName('')
+    } else {
+      setSelected(patientID)
+      const patientName = `${firstname} ${lastname}`
+      setPatientName(patientName)
+    }
+  }
+
+  // set to show modal
+  const [showModal, setShowModal] = useState(false)
+  const onCreateCase = () => setShowModal(!showModal)
+
+  // handle search
+  const [search, setSearch] = useState('')
+  const [searchResult, setSearchResult] = useState([])
+  useEffect(() => {
+    // if search is empty, show all patients
+    if (search === '') {
+      setSearchResult(allpatients)
+    } else {
+      // if search is not empty, show patients that match the search
+      const result = allpatients.filter((patient) => {
+        if (
+          patient.firstName.toLowerCase().includes(search.toLowerCase()) ||
+          patient.lastName.toLowerCase().includes(search.toLowerCase()) ||
+          patient.firstName
+            .toLowerCase()
+            .concat(' ', patient.lastName.toLowerCase())
+            .includes(search.toLowerCase())
+        ) {
+          return patient
+        } else {
+          return null
+        }
+      })
+      setSearchResult(result)
+    }
+  }, [search])
+
   return (
     <>
       <Modal
@@ -95,7 +136,8 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
       >
         <ModalOverlay />
         <ModalContent sx={modalStyle}>
-          <ModalBody sx={modalBodyStyle}>
+          <ModalCloseButton />
+          <ModalBody>
             <VStack spacing={8}>
               <Flex sx={flexStyle}>
                 {/* ==================== Search box ==================== */}
@@ -103,19 +145,14 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
                   <Input
                     sx={GlobalStyle.inputStyle}
                     placeholder="Search patient"
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                   <InputRightElement>
                     <SearchIcon sx={iconStyle} />
                   </InputRightElement>
                 </InputGroup>
-                <Button
-                  sx={GlobalStyle.turquoiseBtn}
-                  leftIcon={<AddIcon sx={addIconSize} />}
-                  onClick={() => onClickNewPatient()}
-                >
-                  New Patient
-                </Button>
               </Flex>
+
               {/* ==================== Patient table ==================== */}
               <Box sx={tableBox}>
                 <TableContainer>
@@ -127,47 +164,60 @@ export default function CreateAppointment({ isOpen, onClose, props }) {
                         <Th isNumeric></Th>
                       </Tr>
                     </Thead>
-                    {/* <Tbody>
-                      {props.map((doctor) => (
+                    <Tbody>
+                      {searchResult.map((patient, index) => (
                         <Tr
+                          key={index}
                           sx={
-                            selected == doctor.doctorID
+                            selected == patient.patientID
                               ? hoverStyleSelected
                               : hoverStyle
                           }
-                          onClick={() => {
-                            if (selected == doctor.doctorID) {
-                              setSelected('')
-                            } else {
-                              setSelected(doctor.doctorID)
-                            }
-                          }}
+                          onClick={() =>
+                            choosePatient(
+                              patient.patientID,
+                              patient.firstName,
+                              patient.lastName
+                            )
+                          }
                         >
-                          <Td sx={GlobalStyle.labelText}>{doctor.doctorID}</Td>
-                          <Td sx={GlobalStyle.labelText}>{doctor.firstName}</Td>
+                          <Td sx={GlobalStyle.labelText}>
+                            {patient.patientID}
+                          </Td>
+                          <Td sx={GlobalStyle.labelText}>
+                            {patient.firstName}&nbsp;{patient.lastName}
+                          </Td>
                           <Td isNumeric>
                             <Avatar
-                              src="/images/petch.JPG"
+                              src={patient.image}
                               sx={GlobalStyle.profileImgSmall}
                             />
                           </Td>
                         </Tr>
                       ))}
-                    </Tbody> */}
+                    </Tbody>
                   </Table>
                 </TableContainer>
               </Box>
             </VStack>
+
             {/* ==================== Button ==================== */}
             <Flex sx={boxStyle}>
               <Button
                 sx={GlobalStyle.yellowBtn}
                 disabled={selected == ''}
-                onClick={() => onClickHistorytaking()}
+                onClick={onCreateCase}
               >
-                Take History
+                Create case
               </Button>
             </Flex>
+            <ConfirmAddCase
+              isOpen={showModal}
+              onClose={onCreateCase}
+              patientName={patientName}
+              doctorID={doctorID}
+              patientID={selected}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>
