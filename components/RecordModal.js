@@ -13,7 +13,7 @@ import GlobalStyle from '../Style'
 import { useState, useEffect } from 'react'
 import { Image } from '@chakra-ui/react'
 
-export default function CreateAppointment({ isOpen, focuskey, index, onClose, record, allrecord ,total}) {
+export default function CreateAppointment({ isOpen, focuskey, rindex, index, onClose, record}) {
 
   // console.log("hehe")
   //  console.log(allrecord)
@@ -38,19 +38,6 @@ export default function CreateAppointment({ isOpen, focuskey, index, onClose, re
   // console.log(allrecord[1].recordID)
   // console.log(record.recordID)
 
-  // const [recordIndex, setRecordIndex] = useState(0)
-  //  useEffect(() => {
-  //    for (let i = 0; i < allrecord.length; i++) {
-  //     // console.log(i, allrecord[i])
-  //     // console.log("this os record.")
-  //     // console.log(record.recordID)
-  //      if (allrecord[i].recordID === record.recordID) {
-  //        setRecordIndex(allrecord.length - i)
-  //      }
-  //    }
-  //  }, [])
-
-
   let modalStyle = {
     maxWidth: '900px',
     maxHeight: '650px',
@@ -62,7 +49,7 @@ export default function CreateAppointment({ isOpen, focuskey, index, onClose, re
     padding: { base: '0px', md: '8px' },
   }
   let imgStyle = {
-    borderRadius: '24px',
+    borderRadius: '12px',
     boxSize: '190px',
     objectFit: 'cover',
   }
@@ -77,9 +64,6 @@ export default function CreateAppointment({ isOpen, focuskey, index, onClose, re
   //console.log(recordIndex)
 
   // console.log(record.image)
-
-  
-  
   return (
     
     <>
@@ -97,14 +81,12 @@ export default function CreateAppointment({ isOpen, focuskey, index, onClose, re
           <ModalBody>
             <VStack align="start" spacing={4}>
 
-              <Text sx={GlobalStyle.headingText}>Record #{record.recordID}</Text>
+              <Text sx={GlobalStyle.headingText}>Record #{rindex}</Text>
               <Text sx={GlobalStyle.greyMediumText} textAlign="right">
-                {new Date(record.datetime).toLocaleString("en-GB")}
+                {new Date(record.datetime).toLocaleString()}
               </Text>
               <Text sx={GlobalStyle.labelText}>Symptom</Text>
               <Text sx={GlobalStyle.regularText}>{record.symptom}</Text>
-              {/* <Text sx={GlobalStyle.regularText}>Lorem ipsum</Text>
-              <Text sx={GlobalStyle.regularText}>Lorem ipsum</Text> */}
               <Text sx={GlobalStyle.labelText}>
                 Pain severity:{' '}
                 <chakra.span sx={GlobalStyle.regularText}>{record.painScale}</chakra.span>
@@ -119,14 +101,9 @@ export default function CreateAppointment({ isOpen, focuskey, index, onClose, re
                   } sx={imgStyle} />
                 ))}
 
-                {/* <Image sx={imgStyle} src={record.image[0]}/>
-                <Image sx={imgStyle} src={record.image[1]}/>
-                <Image sx={imgStyle} src={record.image[2]}/>
-                <Image sx={imgStyle} src={record.image[3]}/> */}
               </SimpleGrid>
               <Text sx={GlobalStyle.labelText}>Comment</Text>
               <Text sx={GlobalStyle.regularText}>{record.comment}</Text>
-              {/* <Text sx={GlobalStyle.regularText}>Lorem ipsum</Text> */}
             </VStack>
           </ModalBody>
         </ModalContent>

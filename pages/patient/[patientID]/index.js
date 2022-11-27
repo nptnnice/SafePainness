@@ -8,6 +8,8 @@ import axios from 'axios'
 import url from '/url'
 
 export default function Patient(props) {
+
+
   let flexStyle = {
     margin: { base: '32px 0 16px', md: '48px 0 20px' },
     justifyContent: 'space-between',
@@ -53,6 +55,7 @@ export default function Patient(props) {
   const router = useRouter()
   const patientID = router.query.patientID
 
+  //click caseID
   const onClickCase = (caseID) => {
     router.push(`./${patientID}/case/${caseID}`)
   }

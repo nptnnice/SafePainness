@@ -15,9 +15,11 @@ import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import RecordModal from '/components/RecordModal'
 import { useAppContext } from '/context/UserContext'
 import axios from 'axios'
+import url from '/url'
 import { useState, useEffect } from 'react'
 
 export default function Case(props) {
+
   const { getAllRecords, getRecord } = props
 
   let total = getAllRecords.length + 1
@@ -62,6 +64,10 @@ export default function Case(props) {
   const patientID = router.query.patientID
   const caseID = router.query.caseID
 
+  
+  console.log(router)
+
+
   const onClickAddRecord = () => {
     router.push(`/patient/${patientID}/case/${caseID}/add-record`)
   }
@@ -81,7 +87,7 @@ export default function Case(props) {
         patientID={patientID}
         caseID={caseID}
         caseName="Grammar addict"
-        doctor="dont forget"
+        doctor={user.name}
       />
 
       <Box sx={GlobalStyle.layout}>
@@ -96,7 +102,6 @@ export default function Case(props) {
 
           {getAllRecords.map((record, index) => {
             console.log(index, record.recordID)
-
             return (
               <Flex
                 key={index}
@@ -117,7 +122,6 @@ export default function Case(props) {
                 {console.log(index)}
 
                 {console.log(record[index])} */}
-
                 <RecordModal
                   isOpen={showModal}
                   index={index}
@@ -139,6 +143,13 @@ export default function Case(props) {
 export async function getServerSideProps(context) {
   //get recordID
   const recordID = context.params.recordID
+  const caseID = context.params.caseID
+
+  const result = await axios.get('http://localhost:3000/api/recordManager/getAllRecords', {
+    headers: {
+      caseid: caseID,
+    },
+  })
 
   const result = await axios.get(
     'http://localhost:3000/api/recordManager/getAllRecords'
@@ -155,6 +166,7 @@ export async function getServerSideProps(context) {
     props: {
       getAllRecords: result.data,
       getRecord: result2.data,
+      caseList: caseList.data,
     },
   }
 }
