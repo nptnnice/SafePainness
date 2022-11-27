@@ -151,9 +151,6 @@ export async function getServerSideProps(context) {
     },
   })
 
-  const result = await axios.get(
-    'http://localhost:3000/api/recordManager/getAllRecords'
-  )
   const result2 = await axios.get(
     'http://localhost:3000/api/recordManager/getRecord',
     {
