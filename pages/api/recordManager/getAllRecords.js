@@ -1,11 +1,11 @@
 import db from '../../../db'
 
 export default async function handler(req, res) {
-  const { caseID } = req.body
+  const caseID = req.headers.caseid
 
   let result = await db.query(
     `SELECT * FROM "public"."Record" WHERE "caseID"=$1 ORDER BY "datetime" DESC`,
-    ["2022-000003"]
+    [caseID]
   )
   res.json(result.rows)
 }

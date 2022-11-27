@@ -110,6 +110,11 @@ export async function getServerSideProps(context) {
       caseid: caseID,
     },
   })
+  const result3 = await axios.get(`${url}/api/feedbackManager/getAllFeedback`, {
+    headers: {
+      caseid: caseID,
+    },
+  })
   return {
     props: {
       feedbackList: result.data,

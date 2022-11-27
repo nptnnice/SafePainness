@@ -16,11 +16,15 @@ import { RecordList } from '/RecordList'
 import RecordModal from '/components/RecordModal'
 import { useAppContext } from '/context/UserContext'
 import axios from 'axios'
+import url from '/url'
 import { useState, useEffect } from 'react'
 
 export default function Case(props) {
 
-  const {getAllRecords, getRecord} = props
+  const {getAllRecords} = props
+
+  console.log("WEWE")
+  console.log(props.caseList)
 
   let total = getAllRecords.length + 1
 
@@ -68,10 +72,13 @@ export default function Case(props) {
   const patientID = router.query.patientID
   const caseID = router.query.caseID
 
+  
+  console.log(router)
+
+
   const onClickAddRecord = () => {
     router.push(`/patient/${patientID}/case/${caseID}/add-record`)
   }
-
 
   const [recordAmount, setRecordAmount] = useState(getAllRecords.length)
 
@@ -88,7 +95,7 @@ export default function Case(props) {
         patientID={patientID}
         caseID={caseID}
         caseName="Grammar addict"
-        doctor="dont forget"
+        doctor={user.name}
       />
 
       <Box sx={GlobalStyle.layout}>
@@ -102,9 +109,7 @@ export default function Case(props) {
           </Box>
 
           {getAllRecords.map((record, index) => {
-            
             console.log(index, record.recordID)
-
             return (
               <Flex
                 key={index}
@@ -119,7 +124,7 @@ export default function Case(props) {
 
                 {console.log(record[index])} */}
 
-                <RecordModal isOpen={showModal} index={index} focuskey={focuskey} onClose={onClickRecord} total={total} record={record} allrecord={getAllRecords}/>
+                <RecordModal isOpen={showModal} index={index} rindex={recordAmount-index} focuskey={focuskey} onClose={onClickRecord} total={total} record={record} allrecord={getAllRecords}/>
               </Flex>
             )
           })}
@@ -134,17 +139,28 @@ export async function getServerSideProps(context) {
 
   //get recordID 
   const recordID = context.params.recordID
+  const caseID = context.params.caseID
 
-  const result = await axios.get('http://localhost:3000/api/recordManager/getAllRecords')
+  const result = await axios.get('http://localhost:3000/api/recordManager/getAllRecords', {
+    headers: {
+      caseid: caseID,
+    },
+  })
+
   const result2 = await axios.get('http://localhost:3000/api/recordManager/getRecord', {
     headers: {
       recordid: recordID,
     },
   })
+
+  const caseList = await axios.post(`${url}/api/caseManager/getMyCases`, {
+    patientID: context.params.patientID,
+  })
   return {
     props: {
       getAllRecords: result.data,
       getRecord: result2.data,
+      caseList: caseList.data,
     },
   }
 }

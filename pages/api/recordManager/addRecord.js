@@ -1,10 +1,8 @@
 import db from '../../../db'
 
 export default async function handler(req, res) {
-  const { symptom, painScale, comment, image } = req.body;
+  const {  caseID, symptom, painScale, comment, image } = req.body;
   const datetime = new Date();
-
-  const caseID = '2022-000003';
 
   console.log(req.body)
 
