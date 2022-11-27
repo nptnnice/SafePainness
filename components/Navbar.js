@@ -113,7 +113,7 @@ export default function Navbar() {
     router.push('/')
   }
   const onClickSignUp = () => {
-    router.push('../create-doctor-account')
+    router.push('../select-role')
   }
   // set menu in popover
   const MenuAccount = () => {
