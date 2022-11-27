@@ -50,13 +50,7 @@ export default function Case() {
 
   return (
     <Box sx={GlobalStyle.bgColor}>
-      <HeadInfo
-        name="Patient ID"
-        patientID="XXXXXX"
-        caseID="XXXX"
-        caseName="Grammar addict"
-        doctor="Alan Smith"
-      />
+      <HeadInfo />
 
       <Box sx={GlobalStyle.layout}>
         <BreadcrumbMenu />
@@ -89,5 +83,3 @@ export default function Case() {
     </Box>
   )
 }
-
-

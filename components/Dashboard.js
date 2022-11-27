@@ -4,6 +4,7 @@ import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import Chart from 'chart.js/auto'
 import { Line } from 'react-chartjs-2'
+import axios from 'axios'
 
 export default function Dashboard() {
   const [painGraph, setPainGraph] = useState({
@@ -11,7 +12,7 @@ export default function Dashboard() {
   })
 
   const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    // labels: array(date),
     datasets: [
       {
         label: 'Pain Severity',
@@ -19,7 +20,7 @@ export default function Dashboard() {
         lineTension: 0.1,
         backgroundColor: Colour.turquoise,
         borderColor: Colour.turquoise,
-        data: [8, 7, 6, 5, 4, 3, 2],
+        // data: array(painScale),
       },
     ],
   }
