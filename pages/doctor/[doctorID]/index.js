@@ -1,3 +1,11 @@
+import { useRouter } from 'next/router'
+import axios from 'axios'
+import url from '/url'
+import { useState, useEffect } from 'react'
+import jwt_decode from 'jwt-decode'
+import { useAppContext } from '../../../context/UserContext'
+import HeadCenter from '/components/HeadCenter'
+import AddCase from '/components/AddCase'
 import {
   Text,
   Box,
@@ -17,53 +25,51 @@ import {
   VStack,
   IconButton,
 } from '@chakra-ui/react'
-import GlobalStyle from '/Style'
-import Colour from '/Colour'
-import { SearchIcon } from '@chakra-ui/icons'
-import HeadCenter from '/components/HeadCenter'
-import { useRouter } from 'next/router'
-import { ArrowLeftIcon, ArrowRightIcon, AddIcon } from '@chakra-ui/icons'
-import axios from 'axios'
-import AddCase from '/components/AddCase'
-import { useState, useEffect } from 'react'
-import url from '/url'
+import {
+  SearchIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  AddIcon,
+} from '@chakra-ui/icons'
+import {
+  layout,
+  inputStyle,
+  searchIconStyle,
+  btnGroup,
+  turquoiseBtn,
+  paginationBtn,
+  addIconStyle,
+  contentBox,
+  boldText,
+  mediumText,
+  hoverStyle,
+  profileImgSmall,
+  flexStyle,
+} from '/style-props/Sharedstyles'
 
 export default function MyPatients(props) {
   const { allpatients } = props
-  let iconStyle = {
-    color: Colour.darkGrey,
-    marginTop: { base: '0px', md: '8px' },
-    boxSize: { base: '20px', md: '24px' },
-  }
-  let flexStyle = {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: { base: '8px', md: '16px' },
-    width: '100%',
-  }
-  let btnFlex = {
-    marginTop: '24px',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '24px',
-  }
-  let hoverStyle = {
-    cursor: 'pointer',
-    transition: 'all 0.1s ease-in-out',
-    _hover: {
-      backgroundColor: Colour.lightGrey,
-    },
-  }
-  let arrowStyle = {
-    color: Colour.lightBlack,
-    boxSize: { base: '12px', md: '14px' },
-  }
-  let addIconSize = {
-    boxSize: { base: '12px', md: '14px' },
-  }
 
   // router
   const router = useRouter()
+
+  // context
+  const { user, setUser } = useAppContext()
+  // console.log('1', user.name)
+
+  // check if user is logged in
+  useEffect(() => {
+    if (sessionStorage.getItem('token') == null) {
+      sessionStorage.clear()
+      setUser(null)
+      router.push('/')
+      alert('Please login first')
+    } else {
+      if (jwt_decode(sessionStorage.getItem('token')).role != 'doctor') {
+        alert('You cannot access this page')
+      }
+    }
+  }, [])
 
   // redirect to patient info page
   const onClickPatient = (patientID) => {
@@ -72,20 +78,26 @@ export default function MyPatients(props) {
 
   // set modal
   const [createCase, setCreateCase] = useState(false)
-  const handleClickModal = () => setCreateCase(!createCase)
+  const handleCreateCase = () => setCreateCase(!createCase)
 
-  // set search
+  // set search and pagination
   const [mypatients, setMyPatients] = useState([])
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [pageAmount, setPageAmount] = useState(1)
   useEffect(() => {
-    const fetchMyPatients = async () => {
-      let result = await axios.post(`${url}/api/patientManager/getMyPatients`, {
-        doctorID: router.query.doctorID,
-        page: page,
-        search: search.toLowerCase(),
-      })
+    // data to be sent to backend
+    let searchBody = {
+      doctorID: router.query.doctorID,
+      page: page,
+      search: search.toLowerCase(),
+    }
+    // fetch data from backend
+    let fetchMyPatients = async () => {
+      let result = await axios.post(
+        `${url}/api/patientManager/getMyPatients`,
+        searchBody
+      )
       setMyPatients(result.data)
       if (result.data.length > 0) {
         setPageAmount(result.data[0].page_amount)
@@ -94,56 +106,60 @@ export default function MyPatients(props) {
     fetchMyPatients()
   }, [page, search])
 
-  // set pagination
-  const onClickPrevious = () => {
-    if (page > 1) {
-      setPage(page - 1)
-    }
-  }
-  const onClickNext = () => {
-    if (page != pageAmount) {
-      setPage(page + 1)
+  // set pagination button
+  const onClickPageButton = (direction) => {
+    switch (direction) {
+      case 'previous':
+        if (page > 1) {
+          setPage(page - 1)
+        }
+        break
+      case 'next':
+        if (page != pageAmount) {
+          setPage(page + 1)
+        }
+        break
     }
   }
 
   return (
     <>
       <HeadCenter topic="My Patients" />
-      <VStack sx={GlobalStyle.layout} spacing={8}>
+      <VStack sx={layout} spacing={8}>
         <Flex sx={flexStyle}>
           {/* ==================== Search box ==================== */}
           <InputGroup>
             <Input
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               placeholder="Search patient"
               onChange={(e) => setSearch(e.target.value)}
             />
             <InputRightElement>
-              <SearchIcon sx={iconStyle} />
+              <SearchIcon sx={searchIconStyle} />
             </InputRightElement>
           </InputGroup>
           <Button
-            sx={GlobalStyle.turquoiseBtn}
-            leftIcon={<AddIcon sx={addIconSize} />}
-            onClick={handleClickModal}
+            sx={turquoiseBtn}
+            leftIcon={<AddIcon sx={addIconStyle} />}
+            onClick={() => handleCreateCase()}
           >
             Add Case
           </Button>
           <AddCase
             isOpen={createCase}
-            onClose={handleClickModal}
+            onClose={handleCreateCase}
             allpatients={allpatients}
           />
         </Flex>
 
         {/* ==================== Patient table ==================== */}
-        <Box sx={GlobalStyle.infoBox}>
+        <Box sx={contentBox}>
           <TableContainer>
             <Table variant="simple">
               <Thead>
                 <Tr>
-                  <Th sx={GlobalStyle.boldText}>Patient ID</Th>
-                  <Th sx={GlobalStyle.boldText}>Name</Th>
+                  <Th sx={boldText}>Patient ID</Th>
+                  <Th sx={boldText}>Name</Th>
                   <Th isNumeric></Th>
                 </Tr>
               </Thead>
@@ -154,15 +170,12 @@ export default function MyPatients(props) {
                     sx={hoverStyle}
                     onClick={() => onClickPatient(item.patientID)}
                   >
-                    <Td sx={GlobalStyle.labelText}>{item.patientID}</Td>
-                    <Td sx={GlobalStyle.labelText}>
+                    <Td sx={mediumText}>{item.patientID}</Td>
+                    <Td sx={mediumText}>
                       {item.firstName}&nbsp;{item.lastName}
                     </Td>
                     <Td isNumeric>
-                      <Avatar
-                        src={item.image}
-                        sx={GlobalStyle.profileImgSmall}
-                      />
+                      <Avatar src={item.image} sx={profileImgSmall} />
                     </Td>
                   </Tr>
                 ))}
@@ -172,16 +185,16 @@ export default function MyPatients(props) {
         </Box>
 
         {/* ==================== Button ==================== */}
-        <Flex sx={btnFlex}>
+        <Flex sx={btnGroup}>
           <IconButton
-            icon={<ArrowLeftIcon sx={arrowStyle} />}
-            onClick={onClickPrevious}
+            icon={<ArrowLeftIcon sx={paginationBtn} />}
+            onClick={() => onClickPageButton('previous')}
             isDisabled={page === 1}
           />
-          <Text sx={GlobalStyle.labelText}>{page}</Text>
+          <Text sx={mediumText}>{page}</Text>
           <IconButton
-            icon={<ArrowRightIcon sx={arrowStyle} />}
-            onClick={onClickNext}
+            icon={<ArrowRightIcon sx={paginationBtn} />}
+            onClick={() => onClickPageButton('next')}
             isDisabled={page == pageAmount}
           />
         </Flex>
@@ -190,13 +203,12 @@ export default function MyPatients(props) {
   )
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   const allpatients = await axios.get(
     `${url}/api/patientManager/getAllPatients`
   )
   return {
     props: {
-      // mypatients: mypatients.data,
       allpatients: allpatients.data,
     },
   }

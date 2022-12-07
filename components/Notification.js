@@ -20,6 +20,7 @@ import { useState, useEffect } from 'react'
 import { useAppContext } from '../context/UserContext'
 import url from '../url'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 
 export default function Notification() {
   let iconButton = {
@@ -82,10 +83,28 @@ export default function Notification() {
     fetchNotification()
   }, [user])
 
+  const router = useRouter()
+
   // click notification to mark as read
-  // const onClickNoti = async (notificationID) => {
-  //   try {
-  //     const
+  const onClickNotification = async (notification) => {
+    try {
+      const res = await axios.put(`${url}/api/notificationManager/markAsRead`, {
+        notificationid: notification.notificationID,
+      })
+      console.log(res)
+      // if notification type is response
+      if (
+        notification.type === 'feedback' ||
+        notification.type === 'response'
+      ) {
+        router.push(
+          `/patient/${notification.receiverID}/case/${notification.caseID}/feedback/${notification.pageID}`
+        )
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   return (
     <Popover>
@@ -99,7 +118,7 @@ export default function Notification() {
             <Flex
               sx={notificationBox}
               key={index}
-              // onClick={onClickNoti(item.notificationID)}
+              onClick={() => onClickNotification(item)}
             >
               <VStack alignItems="start">
                 <Text sx={GlobalStyle.regularText}>{item.description}</Text>

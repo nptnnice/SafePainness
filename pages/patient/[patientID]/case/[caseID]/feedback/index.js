@@ -38,18 +38,18 @@ export default function Case(props) {
 
   // router
   const { user } = useAppContext()
-  console.log("This is user")
+  console.log('This is user')
   console.log(user)
 
   const router = useRouter()
-  console.log("This is router" + router)
+  console.log('This is router' + router)
   console.log(router)
   const { caseID, name } = router.query
   const patientID = router.query.patientID
-  console.log("This is patientID: " + patientID)
-  console.log("This is caseID: " + caseID)
-  console.log("This is name: " + name)
-  
+  console.log('This is patientID: ' + patientID)
+  console.log('This is caseID: ' + caseID)
+  console.log('This is name: ' + name)
+
   const [feedbackAmount, setFeedbackAmount] = useState(feedbackList.length)
 
   // add feedback
@@ -68,7 +68,7 @@ export default function Case(props) {
         patientID={patientID}
         caseID={caseID}
         caseName="Grammar addict"
-        doctor={user.name}
+        // doctor={user.name}
       />
 
       <Box sx={GlobalStyle.layout}>

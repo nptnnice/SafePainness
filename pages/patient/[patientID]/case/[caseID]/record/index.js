@@ -19,7 +19,6 @@ import url from '/url'
 import { useState, useEffect } from 'react'
 
 export default function Case(props) {
-
   const { getAllRecords, getRecord } = props
 
   let total = getAllRecords.length + 1
@@ -31,7 +30,7 @@ export default function Case(props) {
   console.log(props.getRecord)
 
   const { user } = useAppContext()
-  console.log(user)
+  console.log('user test', user)
 
   // console.log("this is getRecord")
   // console.log(getRecord)
@@ -64,9 +63,7 @@ export default function Case(props) {
   const patientID = router.query.patientID
   const caseID = router.query.caseID
 
-  
   console.log(router)
-
 
   const onClickAddRecord = () => {
     router.push(`/patient/${patientID}/case/${caseID}/add-record`)
@@ -145,11 +142,14 @@ export async function getServerSideProps(context) {
   const recordID = context.params.recordID
   const caseID = context.params.caseID
 
-  const result = await axios.get('http://localhost:3000/api/recordManager/getAllRecords', {
-    headers: {
-      caseid: caseID,
-    },
-  })
+  const result = await axios.get(
+    'http://localhost:3000/api/recordManager/getAllRecords',
+    {
+      headers: {
+        caseid: caseID,
+      },
+    }
+  )
 
   const result2 = await axios.get(
     'http://localhost:3000/api/recordManager/getRecord',
@@ -163,7 +163,7 @@ export async function getServerSideProps(context) {
     props: {
       getAllRecords: result.data,
       getRecord: result2.data,
-      caseList: caseList.data,
+      // caseList: caseList.data,
     },
   }
 }

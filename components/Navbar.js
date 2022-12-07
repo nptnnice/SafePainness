@@ -12,67 +12,21 @@ import {
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import LoginModal from './LoginModal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Notification from './Notification'
 import { useRouter } from 'next/router'
+import jwt_decode from 'jwt-decode'
 import { useAppContext } from '../context/UserContext'
+import {
+  navbar,
+  logo,
+  menuFlex,
+  signup,
+  login,
+  menuBox,
+} from '/style-props/Navbarstyles'
 
 export default function Navbar() {
-  let navbar = {
-    backgroundColor: Colour.lightBlack,
-    height: '72px',
-    width: '100%',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: { base: '0 24px', md: '0 40px' },
-    position: 'fixed',
-    zIndex: '1000',
-    top: 0,
-  }
-  let logo = {
-    width: { base: '120px', md: '160px' },
-    height: 'auto',
-    cursor: 'pointer',
-  }
-  let menuFlex = {
-    alignItems: 'center',
-    gap: { base: '16px', md: '24px' },
-  }
-  let signup = {
-    color: '#fff',
-    fontFamily: 'Lato',
-    fontSize: { base: '16px', md: '18px' },
-    fontWeight: 'semi-bold',
-    cursor: 'pointer',
-    transition: 'all 0.1s ease',
-    _hover: {
-      color: Colour.turquoise,
-    },
-  }
-  let login = {
-    color: '#fff',
-    fontFamily: 'Lato',
-    fontSize: { base: '16px', md: '18px' },
-    fontWeight: 'semi-bold',
-    border: '3px solid #62C4C3',
-    borderRadius: '32px',
-    padding: { base: '4px 24px', md: '4px 40px' },
-    boxSizing: 'border-box',
-    cursor: 'pointer',
-    transition: 'all 0.1s ease',
-    _hover: {
-      color: '#62C4C3',
-    },
-  }
-  let menuBox = {
-    padding: '16px 8px',
-    cursor: 'pointer',
-    transition: 'all 0.1s ease',
-    _hover: {
-      backgroundColor: Colour.lightGrey,
-    },
-  }
-
   // set login modal
   const [open, setOpen] = useState(false)
 
@@ -85,9 +39,9 @@ export default function Navbar() {
   // handle click logo
   const onClickLogo = () => {
     if (user) {
-      if (user.roleID == 1) {
+      if (user.role == 'doctor') {
         router.push(`/doctor/${user.userID}`)
-      } else if (user.roleID == 2) {
+      } else if (user.role == 'patient') {
         router.push(`/patient/${user.userID}`)
       }
     } else {
@@ -99,9 +53,9 @@ export default function Navbar() {
 
   // navigate to profile page
   const onClickProfile = () => {
-    if (user.roleID == 1) {
+    if (user.role == 'doctor') {
       router.push(`/doctor/${user.userID}/profile`)
-    } else if (user.roleID == 2) {
+    } else if (user.role == 'patient') {
       router.push(`/patient/${user.userID}/profile`)
     }
   }
@@ -119,10 +73,10 @@ export default function Navbar() {
   const MenuAccount = () => {
     return (
       <>
-        <Box sx={menuBox} onClick={onClickProfile}>
+        <Box sx={menuBox} onClick={() => onClickProfile()}>
           <Text sx={GlobalStyle.regularText}>Profile</Text>
         </Box>
-        <Box sx={menuBox} onClick={onLogout}>
+        <Box sx={menuBox} onClick={() => onLogout()}>
           <Text sx={GlobalStyle.regularText}>Log out</Text>
         </Box>
       </>
@@ -132,10 +86,10 @@ export default function Navbar() {
   if (!user) {
     return (
       <Flex sx={navbar}>
-        <Image sx={logo} src="/images/Logo.png" onClick={onClickLogo} />
+        <Image sx={logo} src="/images/Logo.png" onClick={() => onClickLogo()} />
 
         <Flex sx={menuFlex}>
-          <Text sx={signup} onClick={onClickSignUp}>
+          <Text sx={signup} onClick={() => onClickSignUp()}>
             Sign Up
           </Text>
           <Text sx={login} onClick={() => setOpen(true)}>
@@ -148,7 +102,7 @@ export default function Navbar() {
   } else {
     return (
       <Flex sx={navbar}>
-        <Image sx={logo} src="/images/Logo.png" onClick={onClickLogo} />
+        <Image sx={logo} src="/images/Logo.png" onClick={() => onClickLogo()} />
 
         <Flex sx={menuFlex}>
           <Notification />

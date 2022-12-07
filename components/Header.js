@@ -4,7 +4,7 @@ import GlobalStyle from '../Style'
 import LoginModal from './LoginModal'
 import { useState } from 'react'
 import { useAppContext } from '../context/UserContext'
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 
 export default function Header() {
   let headBox = {
@@ -45,9 +45,10 @@ export default function Header() {
   // router
   const router = useRouter()
 
-  const [open, setOpen] = useState(false)
-
+  // context
   const { user, setUser } = useAppContext()
+
+  const [open, setOpen] = useState(false)
 
   const handleClick = () => {
     if (user) {

@@ -28,8 +28,6 @@ export default function Feedback(props) {
   console.log(router)
   const { caseID, patientID } = router.query
 
-  
-
   // find the index of the feedback
   const [feedbackIndex, setFeedbackIndex] = useState(0)
   useEffect(() => {
@@ -75,6 +73,9 @@ export default function Feedback(props) {
           senderID: user.userID,
           message: form.message,
           datetime: new Date(),
+          senderName: user.name,
+          receiverID: patientID,
+          caseID: caseID,
         })
         console.log(res)
       } catch (err) {
@@ -96,7 +97,6 @@ export default function Feedback(props) {
     }
   }
 
-  
   console.log(feedbackIndex)
 
   return (
@@ -107,7 +107,7 @@ export default function Feedback(props) {
           patientID={patientID}
           caseID={caseID}
           caseName="Grammar addict"
-          doctor={user.name}
+          // doctor={user.name}
         />
         <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
           <Text sx={GlobalStyle.headingText}>Feedback #{feedbackIndex}</Text>
@@ -144,12 +144,9 @@ export default function Feedback(props) {
   )
 }
 
-
-
 export async function getServerSideProps(context) {
   const feedbackID = context.params.feedbackID
   const caseID = context.params.caseID
-
 
   const result = await axios.get(`${url}/api/feedbackManager/getFeedback`, {
     headers: {
