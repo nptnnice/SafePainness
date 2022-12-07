@@ -8,7 +8,6 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   PopoverAnchor,
-  Tag,
   Flex,
   Box,
   Text,
@@ -17,6 +16,10 @@ import {
 import { BellIcon } from '@chakra-ui/icons'
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
+import { useState, useEffect } from 'react'
+import { useAppContext } from '../context/UserContext'
+import url from '../url'
+import axios from 'axios'
 
 export default function Notification() {
   let iconButton = {
@@ -30,13 +33,13 @@ export default function Notification() {
   }
   let notificationBox = {
     justifyContent: 'space-between',
+    alignItems: 'start',
     borderBottom: '2px solid',
     borderColor: Colour.grey,
     padding: { base: '8px 16px', md: '8px 20px' },
     cursor: 'pointer',
     transition: 'all 0.1s ease-out',
     width: '100%',
-    height: '90px',
     _hover: {
       backgroundColor: Colour.lightGrey,
       borderColor: Colour.turquoise,
@@ -44,49 +47,73 @@ export default function Notification() {
   }
   let statusBox = {
     backgroundColor: Colour.green,
+    padding: '4px 8px',
+    borderRadius: '4px',
     color: Colour.white,
-    size: 'md',
+    textAlign: 'center',
     fontFamily: 'Lato',
     fontWeight: 'bold',
+    fontSize: '14px',
   }
   let dateText = {
     color: Colour.darkGrey,
     fontFamily: 'IBM Plex Sans',
+    textAlign: 'right',
   }
+
+  const { user } = useAppContext()
+  const [notifications, setNotifications] = useState([])
+  useEffect(() => {
+    const fetchNotification = async () => {
+      try {
+        const res = await axios.get(
+          `${url}/api/notificationManager/getNotifications`,
+          {
+            headers: {
+              receiverid: user.userID,
+            },
+          }
+        )
+        setNotifications(res.data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetchNotification()
+  }, [user])
+
+  // click notification to mark as read
+  // const onClickNoti = async (notificationID) => {
+  //   try {
+  //     const
+
   return (
     <Popover>
       <PopoverTrigger>
-        <BellIcon role="button" tabIndex="0" sx={iconButton} />
+        <BellIcon tabIndex="0" sx={iconButton} />
       </PopoverTrigger>
       <PopoverContent width="480px">
         <PopoverArrow />
         <PopoverBody>
-          <Flex sx={notificationBox}>
-            <Text sx={GlobalStyle.regularText} width="60%">
-              Your case has been diagnosed
-            </Text>
-            <VStack align="end" spacing={6} justify="end">
-              <Tag sx={statusBox}>NEW</Tag>
-              <Text sx={dateText}>Tue 11 Oct 12:35 AM</Text>
-            </VStack>
-          </Flex>
-          <Flex sx={notificationBox}>
-            <Text sx={GlobalStyle.regularText} width="60%">
-              Doctor has reviewed and feedback on your records
-            </Text>
-            <VStack align="end" spacing={6} justify="end">
-              <Tag sx={statusBox}>NEW</Tag>
-              <Text sx={dateText}>Tue 11 Oct 12:35 AM</Text>
-            </VStack>
-          </Flex>
-          <Flex sx={notificationBox}>
-            <Text sx={GlobalStyle.regularText} width="60%">
-              Patient has responsed to your feedback
-            </Text>
-            <VStack align="end" spacing={6} justify="end">
-              <Text sx={dateText}>Tue 11 Oct 12:35 AM</Text>
-            </VStack>
-          </Flex>
+          {notifications.map((item, index) => (
+            <Flex
+              sx={notificationBox}
+              key={index}
+              // onClick={onClickNoti(item.notificationID)}
+            >
+              <VStack alignItems="start">
+                <Text sx={GlobalStyle.regularText}>{item.description}</Text>
+                <Text sx={dateText}>
+                  {new Date(item.datetime).toLocaleString()}
+                </Text>
+              </VStack>
+              {item.status == 1 && (
+                <Box sx={statusBox}>
+                  <Text>New</Text>
+                </Box>
+              )}
+            </Flex>
+          ))}
         </PopoverBody>
       </PopoverContent>
     </Popover>

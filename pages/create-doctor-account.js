@@ -29,11 +29,14 @@ export default function CreateDoctorAccount() {
 
   const [show, setShow] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [isErrorUsername, setIsErrorUsername] = useState(false)
+  const [isErrorPhone, setIsErrorPhone] = useState(false)
   const toast = useToast()
   const router = useRouter()
   const onClickCancel = () => {
     router.push('/')
   }
+
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -48,14 +51,31 @@ export default function CreateDoctorAccount() {
     image: '',
   })
 
+  //check username is already in database
+  const checkUsername = async (e) => {
+    let username = e.target.value
+    let res = await axios.post('/api/checkUsername', { username: username })
+    if (res.data === 'User already exist') {
+      setIsErrorUsername(true)
+      setForm({ ...form, username: '' })
+    } else {
+      setIsErrorUsername(false)
+      setForm({ ...form, username: username })
+    }
+  }
   // check phone number format
   const checkPhone = (e) => {
     let regExp = /^[0-9]+$/g
     let result = regExp.test(e.target.value)
     let phone = e.target.value
 
-    if (result && phone.length === 10) setForm({ ...form, phoneNumber: phone })
-    else setForm({ ...form, phoneNumber: '' })
+    if (result && phone.length === 10) {
+      setForm({ ...form, phoneNumber: phone })
+      setIsErrorPhone(false)
+    } else {
+      setForm({ ...form, phoneNumber: '' })
+      setIsErrorPhone(true)
+    }
   }
 
   //Create Doctor Account
@@ -133,14 +153,20 @@ export default function CreateDoctorAccount() {
             />
           </FormControl>
 
-          <FormControl isRequired isInvalid={isError && !form.username}>
+          <FormControl
+            isRequired
+            isInvalid={
+              (isErrorUsername && !form.username) || (isError && !form.username)
+            }
+          >
             <FormLabel sx={GlobalStyle.labelText}>Username</FormLabel>
             <Input
               sx={GlobalStyle.inputStyle}
-              onChange={(e) => {
-                setForm({ ...form, username: e.target.value })
-              }}
+              onChange={(e) => checkUsername(e)}
             />
+            {isErrorUsername ? (
+              <FormErrorMessage>Username is already exist</FormErrorMessage>
+            ) : null}
           </FormControl>
 
           <FormControl isRequired isInvalid={isError && !form.password}>
@@ -214,14 +240,22 @@ export default function CreateDoctorAccount() {
         {/* ==================== Contact information ==================== */}
         <Text sx={GlobalStyle.headingText}>Contact Information</Text>
         <Flex sx={flexStyle}>
-          <FormControl isRequired isInvalid={isError && !form.phoneNumber}>
+          <FormControl
+            isRequired
+            isInvalid={
+              (isErrorPhone && !form.phoneNumber) ||
+              (isError && !form.phoneNumber)
+            }
+          >
             <FormLabel sx={GlobalStyle.labelText}>Phone Number</FormLabel>
             <Input
               sx={GlobalStyle.inputStyle}
               type="number"
               onChange={(e) => checkPhone(e)}
             />
-            <FormErrorMessage>Please enter 10 digit numbers</FormErrorMessage>
+            {isErrorPhone ? (
+              <FormErrorMessage>Please enter 10 digit numbers</FormErrorMessage>
+            ) : null}
           </FormControl>
 
           <FormControl>

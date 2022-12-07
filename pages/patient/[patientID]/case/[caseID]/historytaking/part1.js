@@ -391,14 +391,17 @@ export default function History1() {
               <FormLabel sx={GlobalStyle.labelText}>
                 5. Does the pain radiate anywhere else?
               </FormLabel>
+              <Text sx={GlobalStyle.greyMediumText} marginBottom="8px">
+                (Fill the blank with dash (-), if the answer is no.)
+              </Text>
               <Input
                 sx={GlobalStyle.inputStyle}
                 onChange={getRadiation}
                 value={form.radiation}
               />
-              <FormHelperText sx={GlobalStyle.greyMediumText}>
+              {/* <FormHelperText sx={GlobalStyle.greyMediumText}>
                 (Fill the blank with dash (-), if the answer is no.)
-              </FormHelperText>
+              </FormHelperText> */}
             </FormControl>
 
             {/* =================== Question 6 =================== */}

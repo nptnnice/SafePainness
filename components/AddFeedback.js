@@ -1,6 +1,6 @@
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {
   Modal,
@@ -18,12 +18,18 @@ import {
   Center,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import { useAppContext } from '../context/UserContext'
 
-export default function AddFeedbackModal({ isOpen, onClose }) {
+export default function AddFeedbackModal(props) {
+  const { isOpen, onClose } = props
+
   let inputBox = {
     ...GlobalStyle.inputStyle,
     height: '160px',
   }
+
+  // user
+  const { user } = useAppContext()
 
   // router
   const router = useRouter()
@@ -55,6 +61,9 @@ export default function AddFeedbackModal({ isOpen, onClose }) {
           caseID: caseID,
           message: feedback,
           datetime: new Date(),
+          senderID: user.userID,
+          receiverID: patientID,
+          senderName: `Dr. ${user.name}`,
         })
         console.log(res)
       } catch (err) {
