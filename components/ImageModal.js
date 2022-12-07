@@ -5,7 +5,6 @@ import {
     ModalContent,
     ModalBody,
     ModalCloseButton,
-    center,
     VStack,
     chakra,
     SimpleGrid,
@@ -45,10 +44,8 @@ import {
             <ModalOverlay />
             <ModalContent sx={modalStyle} >
                 <ModalCloseButton sx={closeButtonStyle} size="lg"  />
-                <ModalBody>
-                    <center>
+                <ModalBody>           
                       <Image sx={img} src={image} />
-                    </center>
                 </ModalBody>
             </ModalContent>
         </Modal>
