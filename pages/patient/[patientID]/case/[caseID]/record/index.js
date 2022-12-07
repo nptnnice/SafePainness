@@ -37,16 +37,6 @@ export default function Case(props) {
   const { user } = useAppContext()
   console.log(user)
 
-  
-
-  // console.log("this is getRecord")
-  // console.log(getRecord)
-
-  // console.log("This is getAllRecords  ")
-  // console.log(getAllRecords)
-
-
-
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
     position: 'relative',

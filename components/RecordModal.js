@@ -7,16 +7,22 @@ import {
   ModalCloseButton,
   VStack,
   chakra,
+  Button,
   SimpleGrid,
 } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
 import { useState, useEffect } from 'react'
+import ImageModal from './ImageModal'
 import { Image } from '@chakra-ui/react'
 
-export default function CreateAppointment({ isOpen, focuskey, rindex, index, onClose, record}) {
+export default function CreateAppointment({ isOpen, focuskey, rindex, index, onClose, record }) {
 
   // console.log("hehe")
   //  console.log(allrecord)
+  const [focuskey2 , setFocuskey2] = useState(0)
+
+  const [showImgModal, setShowImgModal] = useState(false)
+  const onClickImgModal = () => setShowImgModal(!showImgModal)
 
   //  console.log("This is record yeyeye : ")
   //  console.log(record)
@@ -65,7 +71,7 @@ export default function CreateAppointment({ isOpen, focuskey, rindex, index, onC
 
   // console.log(record.image)
   return (
-    
+
     <>
       {console.log("modal")}
       {console.log(index, record.recordID)}
@@ -75,7 +81,7 @@ export default function CreateAppointment({ isOpen, focuskey, rindex, index, onC
         isCentered
         scrollBehavior="inside"
       >
-        <ModalOverlay/>
+        <ModalOverlay />
         <ModalContent sx={modalStyle}>
           <ModalCloseButton sx={closeButtonStyle} size="lg" />
           <ModalBody>
@@ -96,14 +102,16 @@ export default function CreateAppointment({ isOpen, focuskey, rindex, index, onC
                 sx={GlobalStyle.gridStyle}
               >
                 {/* Show all images in Record */}
-                {record.image.map((image) => (
-                  <Image src={image
-                  } sx={imgStyle} />
+                {record.image.map((image, index) => (
+                  <>
+                    <Image src={image} sx={imgStyle} onClick={()=>{onClickImgModal(); setFocuskey2(index)}} />
+                    <ImageModal isOpen={showImgModal} onClose={onClickImgModal} focuskey2={focuskey2} index={index} image={image} />
+                  </>
                 ))}
-
               </SimpleGrid>
               <Text sx={GlobalStyle.labelText}>Comment</Text>
               <Text sx={GlobalStyle.regularText}>{record.comment}</Text>
+              {/* <Button onClick={onClickImgModal}> test </Button> */}
             </VStack>
           </ModalBody>
         </ModalContent>
