@@ -21,7 +21,7 @@ import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import axios from 'axios'
 import url from '/url'
 
-export default function Case({ props, caseList }) {
+export default function Case(props) {
   const { caseInfo } = props
 
   useEffect(() => {
@@ -29,8 +29,6 @@ export default function Case({ props, caseList }) {
     console.log(sessionStorage.getItem('caseDoctor'))
   }, [])
 
-  console.log('this is caseList')
-  console.log(caseList)
   console.log('this is props')
   console.log(props)
 
@@ -106,7 +104,7 @@ export default function Case({ props, caseList }) {
         patientID={patientID}
         caseID={caseID}
         caseName="Grammar addict"
-        doctor={user.name}
+        doctor="name"
       />
 
       <Box sx={layout}>

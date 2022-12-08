@@ -1,0 +1,17 @@
+export default {
+  turquoise: '#62C4C3',
+  lightBlue: '#5193B3',
+  darkBlue: '#0275AC',
+  lightYellow: '#FFBE56',
+  darkYellow: '#FF8B20',
+  lightRed: '#FF8484',
+  red: '#F84747',
+  cream: '#F8E6CB',
+  lightBlack: '#1E2836',
+  lightGrey: '#F3F4F6',
+  darkGrey: '#8A8A8A',
+  grey: '#D9D9D9',
+  white: '#fff',
+  black: '#000',
+  green: '#0FD42E',
+}

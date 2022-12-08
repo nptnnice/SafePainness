@@ -1,59 +1,31 @@
-import { Text, Box, Button } from '@chakra-ui/react'
-import Colour from '../Colour'
-import GlobalStyle from '../Style'
-import LoginModal from './LoginModal'
 import { useState } from 'react'
 import { useAppContext } from '../context/UserContext'
-import Router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
+import LoginModal from './LoginModal'
+import { Text, Box, Button } from '@chakra-ui/react'
+import {
+  headBox,
+  headText,
+  subText,
+  startBtn,
+} from '/style-props/Homepagestyles'
 
 export default function Header() {
-  let headBox = {
-    backgroundColor: Colour.lightBlue,
-    width: '100%',
-    textAlign: 'center',
-    padding: '150px 0 100px',
-  }
-  let headText = {
-    color: '#fff',
-    fontFamily: 'Lato',
-    fontSize: { base: '48px', md: '56px' },
-    fontWeight: 'black',
-  }
-  let subText = {
-    color: '#fff',
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: 'medium',
-    fontSize: { base: '18px', md: '20px' },
-    width: { base: '80%', md: '60%' },
-    margin: '16px auto 32px',
-  }
-  let btn = {
-    backgroundColor: Colour.lightYellow,
-    color: Colour.white,
-    padding: '32px 40px',
-    fontFamily: 'Lato',
-    fontSize: { base: '20px', md: '22px' },
-    fontWeight: 'bold',
-    borderRadius: '40px',
-    transition: 'all 0.2s ease',
-    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
-    _hover: {
-      backgroundColor: Colour.darkYellow,
-    },
-  }
-
   // router
   const router = useRouter()
 
-  const [open, setOpen] = useState(false)
-
+  // context
   const { user, setUser } = useAppContext()
 
-  const handleClick = () => {
+  // set login modal
+  const [open, setOpen] = useState(false)
+
+  // handle click start tracking
+  const onClickStart = () => {
     if (user) {
-      if (user.roleID == 1) {
+      if (user.role == 'doctor') {
         router.push(`/doctor/${user.userID}`)
-      } else if (user.roleID == 2) {
+      } else if (user.role == 'patient') {
         router.push(`/patient/${user.userID}`)
       }
     } else {
@@ -68,10 +40,10 @@ export default function Header() {
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua.
       </Text>
-      <Button sx={btn} onClick={handleClick}>
+      <Button sx={startBtn} onClick={() => onClickStart()}>
         Start tracking
       </Button>
-      <LoginModal isOpen={open} onClose={handleClick} />
+      <LoginModal isOpen={open} onClose={() => onClickStart()} />
     </Box>
   )
 }

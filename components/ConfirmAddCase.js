@@ -25,13 +25,13 @@ export default function QR(props) {
   // toast
   const toast = useToast()
 
+  // confirm to create case
   const onClickConfirm = async () => {
     const caseData = {
       doctorID: doctorID,
       patientID: patientID,
       date: new Date(),
     }
-    console.log(caseData)
     try {
       const res = await axios.post('/api/caseManager/addCase', caseData)
       console.log('res', res)
@@ -74,7 +74,7 @@ export default function QR(props) {
             <Button sx={GlobalStyle.cancelBtn} onClick={onClose}>
               Cancel
             </Button>
-            <Button sx={GlobalStyle.saveBtn} onClick={onClickConfirm}>
+            <Button sx={GlobalStyle.saveBtn} onClick={() => onClickConfirm()}>
               Confirm
             </Button>
           </ButtonGroup>

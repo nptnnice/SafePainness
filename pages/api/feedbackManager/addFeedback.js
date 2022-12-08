@@ -12,11 +12,22 @@ export default async function handler(req, res) {
     [caseID, datetime, message]
   )
 
+  // get the feedbackID after insert
+  let feedback = await db.query(
+    `SELECT "feedbackID" FROM "public"."Feedback" WHERE "caseID" = $1 AND "datetime" = $2`,
+    [caseID, datetime]
+  )
+  let feedbackID = feedback.rows[0].feedbackID
+  // add notification
   let notification = await addNotification(
     senderID,
     receiverID,
     datetime,
-    `You have received a new feedback from ${senderName}`
+    `You have received a new feedback from ${senderName}`,
+    caseID,
+    feedbackID,
+    'feedback'
   )
+
   res.json(result.rows)
 }

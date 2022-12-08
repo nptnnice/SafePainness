@@ -37,7 +37,7 @@ export default function Tutorial(props) {
   const [phoneValid, setPhoneValid] = useState(true)
 
   // save temporary image file
-  const [img, setImg] = useState('')
+  const [img, setImg] = useState([])
 
   // set loading to true when image is uploading
   const [loading, setLoading] = useState(false)
@@ -48,7 +48,7 @@ export default function Tutorial(props) {
     firstname: '',
     lastname: '',
     phone: '',
-    img: '',
+    img: [],
   })
 
   // handle input change
@@ -78,15 +78,16 @@ export default function Tutorial(props) {
   // handle change for image
   const getImg = (e) => {
     // handle when change image without deleting the previous one
-    if (img) {
-      deleteImg()
-    }
+    // if (img) {
+    //   deleteImg()
+    // }
     // upload image to firebase when user choose an image
-    if (e.target.files[0]) {
+    if (e.target.files) {
+      console.log(e.target.files)
       setImg(e.target.files[0])
       const file = e.target.files[0]
       const date = new Date().toISOString().slice(0, 10)
-      const storageRef = ref(storage, `/images/${date}-${file.name}`)
+      const storageRef = ref(storage, `/images/records/${date}-${file.name}`)
       const uploadTask = uploadBytesResumable(storageRef, file)
       uploadTask.on(
         'state_changed',
@@ -120,12 +121,12 @@ export default function Tutorial(props) {
     }
   }
 
-  console.log("This is url " + form.img)
-  console.log(typeof(form.img))
+  console.log('This is url ' + form.img)
+  console.log(typeof form.img)
   // cancel upload image
   function deleteImg() {
     const date = new Date().toISOString().slice(0, 10)
-    const deleteRef = ref(storage, `/images/${date}-${img.name}`)
+    const deleteRef = ref(storage, `/images/records/${date}-${img.name}`)
     deleteObject(deleteRef)
       .then(() => {
         console.log('delete success')
@@ -146,7 +147,7 @@ export default function Tutorial(props) {
       // send form data to database
       try {
         const res = await axios.post('/api/postTest', form)
-        console.log("This is res " + res)
+        console.log('This is res ' + res)
         // notify user that the form is submitted
         toast({
           title: 'Success',
@@ -175,9 +176,88 @@ export default function Tutorial(props) {
     }
   }
 
-  console.log('form', form)
+  const [isExceed, setIsExceed] = useState(false)
+  const [isError, setIsError] = useState(false)
+  const [tempImg, setTempImg] = useState([])
+  function uploadFile(e) {
+    setIsExceed(false)
+    if (e.target.files.length > 4 - form.img.length) {
+      setIsExceed(true)
+      return
+    }
+    setIsError(false)
+    if (e.target.files) {
+      const date = new Date().toISOString().slice(0, 10)
+      for (let i = 0; i < e.target.files.length; i++) {
+        const storageRef = ref(
+          storage,
+          `/images/records/${date}-${e.target.files[i].name}`
+        )
+        const uploadTask = uploadBytesResumable(storageRef, e.target.files[i])
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            setLoading(true)
+            const percent = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            )
+            console.log('Upload progress is ' + percent)
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused')
+                break
+              case 'running':
+                console.log('Upload is running')
+                break
+            }
+          },
+          // Handle unsuccessful uploads
+          (err) => console.log(err),
+          () => {
+            // Handle successful uploads on complete
+            setLoading(false)
+            // download firebase storage image url
+            getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+              let temp = form.img
+              temp.push(url)
+              setForm({ ...form, img: temp })
+              setTempImg((prevState) => [...prevState, e.target.files[i]])
+            })
+          }
+        )
+      }
+    }
+  }
 
-  console
+  function deleteFile(index) {
+    // console.log(index)
+    // console.log(tempImg[index])
+    // console.log(form.img[index])
+    const s = form.img.filter((item, i) => index !== i)
+    setForm({ ...form, img: s })
+    // delete image from firebase storage
+    const date = new Date().toISOString().slice(0, 10)
+    for (let i = 0; i < tempImg.length; i++) {
+      if (i === index) {
+        const deleteRef = ref(
+          storage,
+          `/images/records/${date}-${tempImg[i].name}`
+        )
+        deleteObject(deleteRef)
+          .then(() => {
+            console.log('delete success')
+          })
+          .catch((error) => {
+            console.log('delete error', error)
+          })
+      }
+    }
+    const temp = tempImg.filter((item, i) => index !== i)
+    setTempImg(temp)
+  }
+
+  console.log('Form', form)
 
   return (
     <Box sx={GlobalStyle.layout}>
@@ -208,7 +288,7 @@ export default function Tutorial(props) {
           </FormControl>
           {/* get image */}
           <FormControl id="img">
-            <Input type="file" onChange={getImg} />
+            <Input type="file" multiple onChange={uploadFile} />
             {/* show uploading progress */}
             {loading && (
               <ReactLoading
@@ -218,13 +298,19 @@ export default function Tutorial(props) {
                 width={'20px'}
               />
             )}
-              {/* show image preview */}
-              {form.img ? (
-                <Flex align="center">
-                  <Image src={form.img} sx={GlobalStyle.profileImg} />
-                  <Button onClick={deleteImg}>cancel</Button>
-                </Flex>
-              ) : null}
+            {/* show image preview */}
+            {form.img.map((img, index) => (
+              <Flex align="center">
+                <Image src={img} sx={GlobalStyle.profileImg} />
+                <Button
+                  onClick={() => {
+                    deleteFile(index)
+                  }}
+                >
+                  cancel
+                </Button>
+              </Flex>
+            ))}
           </FormControl>
           {/* submit form */}
           <Button onClick={onSubmit}>Submit</Button>

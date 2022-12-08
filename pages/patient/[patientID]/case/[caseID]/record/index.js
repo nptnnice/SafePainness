@@ -19,7 +19,6 @@ import url from '/url'
 import { useState, useEffect } from 'react'
 
 export default function Case(props) {
-
   const { getAllRecords, getRecord } = props
 
   let total = getAllRecords.length + 1
@@ -31,17 +30,14 @@ export default function Case(props) {
   console.log(props.getRecord)
 
   const { user } = useAppContext()
-  console.log(user)
+  console.log('user test', user)
 
-<<<<<<< HEAD
-=======
   // console.log("this is getRecord")
   // console.log(getRecord)
 
   // console.log("This is getAllRecords  ")
   // console.log(getAllRecords)
 
->>>>>>> 36eee776183398e62f7f7ca1ffa4c5782e0b3ed5
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
     position: 'relative',
@@ -67,9 +63,7 @@ export default function Case(props) {
   const patientID = router.query.patientID
   const caseID = router.query.caseID
 
-  
   console.log(router)
-
 
   const onClickAddRecord = () => {
     router.push(`/patient/${patientID}/case/${caseID}/add-record`)
@@ -90,7 +84,7 @@ export default function Case(props) {
         patientID={patientID}
         caseID={caseID}
         caseName="Grammar addict"
-        doctor={user.name}
+        // doctor={user.name}
       />
 
       <Box sx={GlobalStyle.layout}>
@@ -148,11 +142,14 @@ export async function getServerSideProps(context) {
   const recordID = context.params.recordID
   const caseID = context.params.caseID
 
-  const result = await axios.get('http://localhost:3000/api/recordManager/getAllRecords', {
-    headers: {
-      caseid: caseID,
-    },
-  })
+  const result = await axios.get(
+    'http://localhost:3000/api/recordManager/getAllRecords',
+    {
+      headers: {
+        caseid: caseID,
+      },
+    }
+  )
 
   const result2 = await axios.get(
     'http://localhost:3000/api/recordManager/getRecord',
@@ -166,7 +163,7 @@ export async function getServerSideProps(context) {
     props: {
       getAllRecords: result.data,
       getRecord: result2.data,
-      caseList: caseList.data,
+      // caseList: caseList.data,
     },
   }
 }
