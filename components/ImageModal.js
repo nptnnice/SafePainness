@@ -1,20 +1,19 @@
 import {
-    Text,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalBody,
-    ModalCloseButton,
-    VStack,
-    chakra,
-    SimpleGrid,
-  } from '@chakra-ui/react'
-  import GlobalStyle from '../Style'
-  import { useState, useEffect } from 'react'
-  import { Image } from '@chakra-ui/react'
+  Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalCloseButton,
+  VStack,
+  chakra,
+  SimpleGrid,
+} from '@chakra-ui/react'
+import GlobalStyle from '../Style'
+import { useState, useEffect } from 'react'
+import { Image } from '@chakra-ui/react'
 
-  export default function ImageModal ({isOpen, onClose,focuskey2, index,  image}) {
-
+export default function ImageModal({ isOpen, onClose, index, image }) {
   //set max width and height of image size
 
   let img = {
@@ -38,17 +37,17 @@ import {
     top: '12px',
   }
 
-    return (
-        <>
-        <Modal isOpen={isOpen && focuskey2 == index} onClose={onClose} isCentered>
-            <ModalOverlay />
-            <ModalContent sx={modalStyle} >
-                <ModalCloseButton sx={closeButtonStyle} size="lg"  />
-                <ModalBody>           
-                      <Image sx={img} src={image} />
-                </ModalBody>
-            </ModalContent>
-        </Modal>
-        </>
-    )
-  }
+  return (
+    <>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent sx={modalStyle}>
+          <ModalCloseButton sx={closeButtonStyle} size="lg" />
+          <ModalBody>
+            <Image sx={img} src={image} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}

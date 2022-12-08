@@ -23,6 +23,20 @@ const contentBox = {
   padding: { base: '24px 16px', md: '40px 20px' },
   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
 }
+const recordBox = {
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  border: '2px solid',
+  borderColor: Colour.grey,
+  borderRadius: '12px',
+  padding: { base: '20px 16px', md: '24px 20px' },
+  marginBottom: '12px',
+  cursor: 'pointer',
+  transition: 'all 0.1s ease-out',
+  _hover: {
+    borderColor: Colour.turquoise,
+  },
+}
 
 // icon
 const searchIconStyle = {
@@ -32,6 +46,11 @@ const searchIconStyle = {
 }
 const addIconStyle = {
   boxSize: { base: '12px', md: '14px' },
+}
+const iconInput = {
+  color: Colour.lightBlack,
+  cursor: 'pointer',
+  marginTop: '8px',
 }
 
 // input
@@ -171,6 +190,12 @@ const spanFlex = {
   flexDirection: { base: 'column', md: 'row' },
   columnGap: '8px',
 }
+const greyMediumText = {
+  color: Colour.darkGrey,
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: 'medium',
+  fontSize: { base: '16px', md: '18px' },
+}
 
 // hover
 const hoverStyle = {
@@ -211,6 +236,12 @@ const gridStyle = {
   gap: { base: '16px', md: '24px' },
   width: '100%',
 }
+const breadcrumbFlex = {
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
+  marginBottom: '16px',
+}
 
 // tab
 const tabBox = {
@@ -233,12 +264,21 @@ const tabSelected = {
   },
 }
 
+// divider
+const divider = {
+  width: '100%',
+  height: '1px',
+  backgroundColor: Colour.grey,
+}
+
 export {
   bgColor,
   layout,
   contentBox,
+  recordBox,
   searchIconStyle,
   addIconStyle,
+  iconInput,
   inputStyle,
   btnGroup,
   btnPosition,
@@ -254,12 +294,15 @@ export {
   mediumText,
   regularText,
   spanFlex,
+  greyMediumText,
   hoverStyle,
   hoverStyleSelected,
   profileImg,
   profileImgSmall,
   flexStyle,
   gridStyle,
+  breadcrumbFlex,
   tabBox,
   tabSelected,
+  divider,
 }

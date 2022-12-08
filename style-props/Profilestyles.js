@@ -3,9 +3,11 @@ import Colour from './SharedColour'
 const flexStyle = {
   gap: '24px',
   flexDirection: { base: 'column', md: 'row' },
+  width: '100%',
 }
 const flexStyle2 = {
   gap: { base: '16px', md: '24px' },
+  width: '100%',
 }
 const fileBtn = {
   boxSize: { base: '120px', sm: '150px', md: '180px' },

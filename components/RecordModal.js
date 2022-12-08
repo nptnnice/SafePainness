@@ -10,16 +10,41 @@ import {
   Button,
   SimpleGrid,
 } from '@chakra-ui/react'
+import {
+  bgColor,
+  layout,
+  inputStyle,
+  searchIconStyle,
+  btnGroup,
+  turquoiseBtn,
+  paginationBtn,
+  addIconStyle,
+  contentBox,
+  headingText,
+  boldText,
+  mediumText,
+  regularText,
+  greyMediumText,
+  gridStyle,
+  hoverStyle,
+  profileImgSmall,
+  flexStyle,
+} from '/style-props/Sharedstyles'
 import GlobalStyle from '../Style'
 import { useState, useEffect } from 'react'
 import ImageModal from './ImageModal'
 import { Image } from '@chakra-ui/react'
 
-export default function CreateAppointment({ isOpen, focuskey, rindex, index, onClose, record }) {
-
+export default function RecordModal({
+  isOpen,
+  rindex,
+  index,
+  onClose,
+  record,
+}) {
   // console.log("hehe")
   //  console.log(allrecord)
-  const [focuskey2 , setFocuskey2] = useState(0)
+  const [focuskey2, setFocuskey2] = useState(0)
 
   const [showImgModal, setShowImgModal] = useState(false)
   const onClickImgModal = () => setShowImgModal(!showImgModal)
@@ -71,12 +96,11 @@ export default function CreateAppointment({ isOpen, focuskey, rindex, index, onC
 
   // console.log(record.image)
   return (
-
     <>
-      {console.log("modal")}
-      {console.log(index, record.recordID)}
+      {/* {console.log('modal')}
+      {console.log(index, record.recordID)} */}
       <Modal
-        isOpen={isOpen && focuskey === index}
+        isOpen={isOpen}
         onClose={onClose}
         isCentered
         scrollBehavior="inside"
@@ -86,31 +110,38 @@ export default function CreateAppointment({ isOpen, focuskey, rindex, index, onC
           <ModalCloseButton sx={closeButtonStyle} size="lg" />
           <ModalBody>
             <VStack align="start" spacing={4}>
-
-              <Text sx={GlobalStyle.headingText}>Record #{rindex}</Text>
-              <Text sx={GlobalStyle.greyMediumText} textAlign="right">
+              <Text sx={headingText}>Record #{rindex}</Text>
+              <Text sx={greyMediumText} textAlign="right">
                 {new Date(record.datetime).toLocaleString()}
               </Text>
-              <Text sx={GlobalStyle.labelText}>Symptom</Text>
-              <Text sx={GlobalStyle.regularText}>{record.symptom}</Text>
-              <Text sx={GlobalStyle.labelText}>
+              <Text sx={mediumText}>Symptom</Text>
+              <Text sx={regularText}>{record.symptom}</Text>
+              <Text sx={mediumText}>
                 Pain severity:{' '}
-                <chakra.span sx={GlobalStyle.regularText}>{record.painScale}</chakra.span>
+                <chakra.span sx={regularText}>{record.painScale}</chakra.span>
               </Text>
-              <SimpleGrid
-                columns={{ base: 2, md: 4 }}
-                sx={GlobalStyle.gridStyle}
-              >
+              <SimpleGrid columns={{ base: 2, md: 4 }} sx={gridStyle}>
                 {/* Show all images in Record */}
                 {record.image.map((image, index) => (
                   <>
-                    <Image src={image} sx={imgStyle} onClick={()=>{onClickImgModal(); setFocuskey2(index)}} />
-                    <ImageModal isOpen={showImgModal} onClose={onClickImgModal} focuskey2={focuskey2} index={index} image={image} />
+                    <Image
+                      src={image}
+                      sx={imgStyle}
+                      onClick={() => {
+                        onClickImgModal()
+                      }}
+                    />
+                    <ImageModal
+                      isOpen={showImgModal}
+                      onClose={onClickImgModal}
+                      index={index}
+                      image={image}
+                    />
                   </>
                 ))}
               </SimpleGrid>
-              <Text sx={GlobalStyle.labelText}>Comment</Text>
-              <Text sx={GlobalStyle.regularText}>{record.comment}</Text>
+              <Text sx={mediumText}>Comment</Text>
+              <Text sx={regularText}>{record.comment}</Text>
               {/* <Button onClick={onClickImgModal}> test </Button> */}
             </VStack>
           </ModalBody>
