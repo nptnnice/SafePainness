@@ -10,6 +10,7 @@ export default async function handler(req, res) {
   if (result.rows.length != 1) {
     res.send('Email not found')
   } else {
+    res.send('Email already exist')
     res.json(result.rows)
   }
 }
