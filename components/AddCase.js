@@ -1,3 +1,19 @@
+import { SearchIcon } from '@chakra-ui/icons'
+import { useRouter } from 'next/router'
+import { useState, useEffect } from 'react'
+import ConfirmAddCase from '/components/ConfirmAddCase'
+import { modalStyle, tableBox } from '../style-props/Doctorpagestyles'
+import {
+  inputStyle,
+  boldText,
+  mediumText,
+  profileImgSmall,
+  hoverStyle,
+  hoverStyleSelected,
+  searchIconStyle,
+  submitBtnPosition,
+  yellowBtn,
+} from '../style-props/Sharedstyles'
 import {
   Modal,
   ModalOverlay,
@@ -20,62 +36,9 @@ import {
   Td,
   TableContainer,
 } from '@chakra-ui/react'
-import GlobalStyle from '/Style'
-import Colour from '/Colour'
-import { SearchIcon } from '@chakra-ui/icons'
-import { useRouter } from 'next/router'
-import { useState, useEffect } from 'react'
-import ConfirmAddCase from '/components/ConfirmAddCase'
 
 export default function CreateAppointment(props) {
   const { isOpen, onClose, allpatients } = props
-
-  let modalStyle = {
-    maxWidth: '900px',
-    maxHeight: '700px',
-    width: '90%',
-    borderRadius: '24px',
-    padding: { base: '24px 0px', md: '32px 16px' },
-    backgroundColor: Colour.lightGrey,
-  }
-  let flexStyle = {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    gap: { base: '8px', md: '16px' },
-    width: '100%',
-  }
-  let iconStyle = {
-    color: Colour.darkGrey,
-    marginTop: { base: '0px', md: '8px' },
-    boxSize: { base: '20px', md: '24px' },
-  }
-  let hoverStyle = {
-    cursor: 'pointer',
-    transition: 'all 0.1s ease-in-out',
-    _hover: {
-      backgroundColor: Colour.lightGrey,
-    },
-  }
-  let hoverStyleSelected = {
-    ...hoverStyle,
-    backgroundColor: Colour.turquoise,
-    _hover: {
-      backgroundColor: Colour.turquoise,
-    },
-  }
-  let boxStyle = {
-    justifyContent: 'flex-end',
-    padding: { base: '12px 0px', md: '20px 0px 0px 0px' },
-  }
-  let tableBox = {
-    width: '100%',
-    borderRadius: '12px',
-    backgroundColor: Colour.white,
-    padding: { base: '24px 16px', md: '40px 20px' },
-    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
-    overflowY: 'scroll',
-    height: { base: '320px', md: '400px' },
-  }
 
   // router
   const router = useRouter()
@@ -84,22 +47,22 @@ export default function CreateAppointment(props) {
   // choose patient
   const [selected, setSelected] = useState('')
   const [patientName, setPatientName] = useState('')
-  const choosePatient = (patientID, firstname, lastname) => {
-    if (selected === patientID) {
+  const choosePatient = (patient) => {
+    if (selected === patient.patientID) {
       setSelected('')
       setPatientName('')
     } else {
-      setSelected(patientID)
-      const patientName = `${firstname} ${lastname}`
+      setSelected(patient.patientID)
+      const patientName = `${patient.firstName} ${patient.lastName}`
       setPatientName(patientName)
     }
   }
 
   // set to show modal
   const [showModal, setShowModal] = useState(false)
-  const onCreateCase = () => setShowModal(!showModal)
+  const onClickCreateCase = () => setShowModal(!showModal)
 
-  // handle search
+  // set search and pagination
   const [search, setSearch] = useState('')
   const [searchResult, setSearchResult] = useState([])
   useEffect(() => {
@@ -126,11 +89,17 @@ export default function CreateAppointment(props) {
     }
   }, [search])
 
+  // customize onclose
+  const onCloseCustom = () => {
+    onClose()
+    setSearch('')
+  }
+
   return (
     <>
       <Modal
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={onCloseCustom}
         isCentered
         scrollBehavior="inside"
       >
@@ -139,19 +108,17 @@ export default function CreateAppointment(props) {
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={8}>
-              <Flex sx={flexStyle}>
-                {/* ==================== Search box ==================== */}
-                <InputGroup>
-                  <Input
-                    sx={GlobalStyle.inputStyle}
-                    placeholder="Search patient"
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                  <InputRightElement>
-                    <SearchIcon sx={iconStyle} />
-                  </InputRightElement>
-                </InputGroup>
-              </Flex>
+              {/* ==================== Search box ==================== */}
+              <InputGroup>
+                <Input
+                  sx={inputStyle}
+                  placeholder="Search patient"
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <InputRightElement>
+                  <SearchIcon sx={searchIconStyle} />
+                </InputRightElement>
+              </InputGroup>
 
               {/* ==================== Patient table ==================== */}
               <Box sx={tableBox}>
@@ -159,8 +126,8 @@ export default function CreateAppointment(props) {
                   <Table variant="simple">
                     <Thead>
                       <Tr>
-                        <Th sx={GlobalStyle.boldText}>Patient ID</Th>
-                        <Th sx={GlobalStyle.boldText}>Name</Th>
+                        <Th sx={boldText}>Patient ID</Th>
+                        <Th sx={boldText}>Name</Th>
                         <Th isNumeric></Th>
                       </Tr>
                     </Thead>
@@ -173,25 +140,14 @@ export default function CreateAppointment(props) {
                               ? hoverStyleSelected
                               : hoverStyle
                           }
-                          onClick={() =>
-                            choosePatient(
-                              patient.patientID,
-                              patient.firstName,
-                              patient.lastName
-                            )
-                          }
+                          onClick={() => choosePatient(patient)}
                         >
-                          <Td sx={GlobalStyle.labelText}>
-                            {patient.patientID}
-                          </Td>
-                          <Td sx={GlobalStyle.labelText}>
+                          <Td sx={mediumText}>{patient.patientID}</Td>
+                          <Td sx={mediumText}>
                             {patient.firstName}&nbsp;{patient.lastName}
                           </Td>
                           <Td isNumeric>
-                            <Avatar
-                              src={patient.image}
-                              sx={GlobalStyle.profileImgSmall}
-                            />
+                            <Avatar src={patient.image} sx={profileImgSmall} />
                           </Td>
                         </Tr>
                       ))}
@@ -202,18 +158,18 @@ export default function CreateAppointment(props) {
             </VStack>
 
             {/* ==================== Button ==================== */}
-            <Flex sx={boxStyle}>
+            <Flex sx={submitBtnPosition}>
               <Button
-                sx={GlobalStyle.yellowBtn}
+                sx={yellowBtn}
                 disabled={selected == ''}
-                onClick={onCreateCase}
+                onClick={() => onClickCreateCase()}
               >
                 Create case
               </Button>
             </Flex>
             <ConfirmAddCase
               isOpen={showModal}
-              onClose={onCreateCase}
+              onClose={onClickCreateCase}
               patientName={patientName}
               doctorID={doctorID}
               patientID={selected}

@@ -32,15 +32,12 @@ export default function Case(props) {
   const { user } = useAppContext()
   console.log('user test', user)
 
-<<<<<<< HEAD
-=======
   // console.log("this is getRecord")
   // console.log(getRecord)
 
   // console.log("This is getAllRecords  ")
   // console.log(getAllRecords)
 
->>>>>>> 36eee776183398e62f7f7ca1ffa4c5782e0b3ed5
   let section2 = {
     marginTop: { base: '24px', md: '16px' },
     position: 'relative',
@@ -87,7 +84,7 @@ export default function Case(props) {
         patientID={patientID}
         caseID={caseID}
         caseName="Grammar addict"
-        doctor={user.name}
+        // doctor={user.name}
       />
 
       <Box sx={GlobalStyle.layout}>

@@ -1,9 +1,42 @@
+import { useState, useEffect } from 'react'
+import HeadCenter from '/components/HeadCenter'
+import { useToast } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
+import axios from 'axios'
+import { useAppContext } from '/context/UserContext'
+import url from '../../../url'
+import jwt_decode from 'jwt-decode'
+import { storage } from '/firebaseConfig'
+import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
+import {
+  flexStyle,
+  flexStyle2,
+  fileBtn,
+  oldfileBtn,
+  upload,
+  removeBtn,
+} from '../../../style-props/Profilestyles'
+import {
+  contentBox,
+  profileImg,
+  bgColor,
+  layout,
+  headingText,
+  mediumText,
+  inputStyle,
+  gridStyle,
+  tabBox,
+  tabSelected,
+  btnPosition,
+  whiteBtn,
+  blueBtn,
+  editBtn,
+} from '../../../style-props/Sharedstyles'
 import {
   Text,
   Box,
   Flex,
   Input,
-  Textarea,
   Avatar,
   Tabs,
   TabList,
@@ -15,100 +48,76 @@ import {
   VStack,
   Button,
   ButtonGroup,
-  Grid,
-  GridItem,
+  Image,
   SimpleGrid,
+  Textarea,
 } from '@chakra-ui/react'
-import HeadCenter from '/components/HeadCenter'
-import GlobalStyle from '/Style'
-import Colour from '/Colour'
-import { useState, useEffect, useRef } from 'react'
-import { useToast } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
-import axios from 'axios'
-import url from '/url'
-import { storage } from '/firebaseConfig'
-import {
-  ref,
-  getDownloadURL,
-  uploadBytesResumable,
-  deleteObject,
-} from 'firebase/storage'
 
 export default function PatientProfile(props) {
-  let flexStyle = {
-    gap: '24px',
-    flexDirection: { base: 'column', md: 'row' },
-  }
-  let flexStyle2 = {
-    gap: '24px',
-    // flexDirection: { base: 'column', md: 'row' },
-  }
-  let oldfileBtn = {
-    opacity: '0',
-    position: 'absolute',
-    zIndex: '-1',
-  }
+  const { patientInfo } = props
 
-  const toast = useToast()
+  // router
   const router = useRouter()
-  const [show, setShow] = useState(false)
+  const patientID = router.query.patientID
+
+  // context
+  const { user, setUser } = useAppContext()
+
+  // check if user is logged in
+  useEffect(() => {
+    if (sessionStorage.getItem('token') == null) {
+      sessionStorage.clear()
+      setUser(null)
+      router.push('/')
+      setTimeout(() => {
+        alert('Please login first')
+      }, 500)
+    } else {
+      if (jwt_decode(sessionStorage.getItem('token')).role != 'patient') {
+        router.push('/')
+        setTimeout(() => {
+          alert('You cannot access this page')
+        }, 500)
+      }
+    }
+  }, [])
+
+  // toast
+  const toast = useToast()
+
+  // set form data
+  const [form, setForm] = useState(patientInfo)
+  const [previousForm, setPreviousForm] = useState(patientInfo)
+
+  // set edit mode
   const [isEdit, setIsEdit] = useState(false)
-  const [selectedFile, setSelectedFile] = useState()
-  const [preview, setPreview] = useState('')
-  const [form, setForm] = useState({
-    patientID: props.patientInfo[0].patientID,
-    roleID: props.patientInfo[0].roleID,
-    firstName: props.patientInfo[0].firstName,
-    lastName: props.patientInfo[0].lastName,
-    sex: props.patientInfo[0].sex,
-    birthDate: props.patientInfo[0].birthDate,
-    citizenID: props.patientInfo[0].citizenID,
-    phoneNumber: props.patientInfo[0].phoneNumber,
-    username: props.patientInfo[0].username,
-    password: props.patientInfo[0].password,
-    bloodGroup: props.patientInfo[0].bloodGroup,
-    medCondition: props.patientInfo[0].medCondition,
-    allergy: props.patientInfo[0].allergy,
-    email: props.patientInfo[0].email,
-    image: props.patientInfo[0].image,
-  })
-  const previousImg = useRef(form.image)
-  const previousForm = useRef(form)
-  const handleCancel = () => {
-    setIsEdit(!isEdit)
-    setShow(!show)
-    setPreview(previousImg.current)
-    setForm(previousForm.current)
+  const [isError, setIsError] = useState(false)
+
+  // handle image
+  const [preview, setPreview] = useState(form.image)
+
+  // preview image before save
+  const onSelectFile = (e) => {
+    if (form.image == '' || form.image == null) {
+      // upload to firebase if no image
+      uploadImage(e.target.files[0])
+    } else {
+      // preview with blob first if there is image
+      const objectUrl = URL.createObjectURL(e.target.files[0])
+      setPreview(objectUrl)
+    }
   }
 
-  // create a preview, whenever selected file is changed
-  useEffect(() => {
-    if (!selectedFile) {
-      setPreview(undefined)
-      return
-    }
-    const objectUrl = URL.createObjectURL(selectedFile)
-    setPreview(objectUrl)
-    // free memory when ever this component is unmounted
-    return () => URL.revokeObjectURL(objectUrl)
-  }, [selectedFile])
+  // remove image in edit mode
+  const removeImage = () => {
+    setPreview('')
+  }
 
-  //Upload image to firebase storage first time
-  const onSelectFile = (e) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined)
-      return
-    }
-    if (selectedFile) {
-      deleteImg()
-    }
-    setSelectedFile(e.target.files[0])
-    const patientID = router.query.patientID
-    const file = e.target.files[0]
+  // save image to firebase
+  const uploadImage = async (file) => {
     const storageRef = ref(storage, `/images/patient/${patientID}`)
     const uploadTask = uploadBytesResumable(storageRef, file)
-    uploadTask.on(
+    await uploadTask.on(
       'state_changed',
       (snapshot) => {
         const percent = Math.round(
@@ -128,136 +137,47 @@ export default function PatientProfile(props) {
       (err) => console.log(err),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          setForm({ ...form, image: url })
+          setPreview(url)
         })
       }
     )
   }
 
-  //Delete image from firebase storage
-  function deleteImg() {
-    const patientID = router.query.patientID
-    const deleteRef = ref(storage, `/images/patient/${patientID}`)
-    deleteObject(deleteRef)
-      .then(() => {
-        console.log('delete success')
-      })
-      .catch((error) => {
-        console.log('delete error', error)
-      })
-    setImg('')
-    setForm({ ...form, img: '' })
-  }
-
-  //Update patient profile
-  const handleSave = async () => {
-    if (selectedFile) {
-      const patientID = router.query.patientID
-      const file = selectedFile
-      const storageRef = ref(storage, `/images/patient/${patientID}`)
-      const uploadTask = uploadBytesResumable(storageRef, file)
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const percent = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          )
-          console.log('Upload progress is ' + percent)
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused')
-              break
-            case 'running':
-              console.log('Upload is running')
-              break
-          }
-        },
-        // Handle unsuccessful uploads
-        (err) => console.log(err)
-      )
-    }
-    if (
-      form.firstName &&
-      form.lastName &&
-      form.username &&
-      form.password &&
-      form.birthDate &&
-      form.sex &&
-      form.bloodGroup &&
-      form.medCondition &&
-      form.allergy &&
-      form.phoneNumber
-    ) {
-      try {
-        const res = await axios.post('/api/patientManager/updatePatient', form)
-        console.log('res', res)
-        console.log('form is valid')
-        console.log(form)
-        toast({
-          title: 'Update successfully',
-          description: 'Your account has been updated.',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        })
-      } catch (err) {
-        console.log('err', err)
-      }
-      //reload page
-      setTimeout(() => {
-        window.location.reload()
-      }, 4000)
-    } else {
-      console.log('form is invalid')
+  // save to database
+  const saveDatabase = async () => {
+    try {
+      const res = await axios.put('/api/patientManager/updatePatient', form)
+      console.log('res', res)
       toast({
-        title: 'An error occurred.',
-        description: 'Please try again',
-        status: 'error',
+        title: 'Update successfully',
+        description: 'Your account has been updated.',
+        status: 'success',
         duration: 3000,
         isClosable: true,
       })
+    } catch (err) {
+      console.log('err', err)
     }
   }
 
-  //Update patient info with first time image
-  const onSaveClick = async () => {
+  // save form
+  const onClickSave = async () => {
+    Object.assign(form, { image: preview })
     console.log('form', form)
     if (
       form.firstName &&
       form.lastName &&
       form.username &&
       form.password &&
-      form.birthDate &&
-      form.sex &&
-      form.bloodGroup &&
-      form.medCondition &&
-      form.allergy &&
       form.phoneNumber
     ) {
-      try {
-        const res = await axios.post('/api/patientManager/updatePatient', form)
-        console.log('res', res)
-        console.log('form is valid')
-        console.log(form)
-        toast({
-          title: 'Update successfully',
-          description: 'Your account has been updated.',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        })
-      } catch (err) {
-        console.log('err', err)
-      }
-      //reload page
-      setTimeout(() => {
-        window.location.reload()
-      }, 4000)
+      await saveDatabase()
+      setIsEdit(false)
     } else {
-      console.log('form is invalid')
+      setIsError(true)
       toast({
-        title: 'An error occurred.',
-        description: 'Please try again',
+        title: 'Error',
+        description: 'Please fill in all the required fields.',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -265,51 +185,59 @@ export default function PatientProfile(props) {
     }
   }
 
+  // cancel edit
+  const onClickCancel = () => {
+    setForm(previousForm)
+    setPreview(form.image)
+    setIsEdit(false)
+  }
+
   return (
-    <Box sx={GlobalStyle.bgColor}>
+    <Box sx={bgColor}>
       <HeadCenter topic="my profile" />
 
-      <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
-        <Text sx={GlobalStyle.headingText}>Patient ID: {form.patientID}</Text>
+      <VStack sx={layout} align="start" spacing={8}>
+        <Text sx={headingText}>Patient ID: {form.patientID}</Text>
         {/* ==================== Basic information ==================== */}
-        <Box sx={GlobalStyle.infoBox}>
+        <Box sx={contentBox}>
           <Flex sx={flexStyle}>
             <FormControl width="180px">
               {!isEdit ? (
                 <FormLabel>
-                  <Avatar sx={GlobalStyle.profileImg} src={form.image} />
+                  <Avatar sx={profileImg} src={form.image} />
                 </FormLabel>
               ) : (
                 <>
-                  <FormLabel cursor="pointer">
-                    <Avatar
-                      sx={GlobalStyle.profileImg}
-                      src={selectedFile ? preview : form.image}
-                    />
+                  <FormLabel>
+                    {preview != '' ? (
+                      <Avatar sx={profileImg} src={preview} />
+                    ) : (
+                      <Box sx={fileBtn}>
+                        <Text sx={upload}>Upload photo</Text>
+                      </Box>
+                    )}
                   </FormLabel>
                   <Input
                     type="file"
                     onChange={(e) => {
-                      if (form.image === null || form.image === '') {
-                        onSelectFile(e)
-                      } else {
-                        setSelectedFile(e.target.files[0])
-                      }
+                      onSelectFile(e)
                     }}
                     sx={oldfileBtn}
+                  />
+                  <Image
+                    sx={removeBtn}
+                    src="/images/remove.png"
+                    onClick={() => removeImage()}
                   />
                 </>
               )}
             </FormControl>
             <Box flex="1">
-              <SimpleGrid
-                columns={{ base: 1, sm: 2 }}
-                sx={GlobalStyle.gridStyle}
-              >
-                <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>First Name</FormLabel>
+              <SimpleGrid columns={{ base: 1, sm: 2 }} sx={gridStyle}>
+                <FormControl isInvalid={isError && !form.firstName}>
+                  <FormLabel sx={mediumText}>First Name</FormLabel>
                   <Input
-                    sx={GlobalStyle.inputStyle}
+                    sx={inputStyle}
                     value={form.firstName}
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
@@ -319,10 +247,10 @@ export default function PatientProfile(props) {
                   />
                 </FormControl>
 
-                <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>Last Name</FormLabel>
+                <FormControl isInvalid={isError && !form.lastName}>
+                  <FormLabel sx={mediumText}>Last Name</FormLabel>
                   <Input
-                    sx={GlobalStyle.inputStyle}
+                    sx={inputStyle}
                     value={form.lastName}
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
@@ -332,10 +260,10 @@ export default function PatientProfile(props) {
                   />
                 </FormControl>
 
-                <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>Username</FormLabel>
+                <FormControl isInvalid={isError && !form.username}>
+                  <FormLabel sx={mediumText}>Username</FormLabel>
                   <Input
-                    sx={GlobalStyle.inputStyle}
+                    sx={inputStyle}
                     value={form.username}
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
@@ -345,11 +273,11 @@ export default function PatientProfile(props) {
                   />
                 </FormControl>
 
-                <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>Password</FormLabel>
+                <FormControl isInvalid={isError && !form.password}>
+                  <FormLabel sx={mediumText}>Password</FormLabel>
                   <Input
-                    sx={GlobalStyle.inputStyle}
-                    type={show ? 'text' : 'password'}
+                    sx={inputStyle}
+                    type={isEdit ? 'text' : 'password'}
                     value={form.password}
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
@@ -360,11 +288,9 @@ export default function PatientProfile(props) {
                 </FormControl>
 
                 <FormControl isReadOnly>
-                  <FormLabel sx={GlobalStyle.labelText}>
-                    Date of birth
-                  </FormLabel>
+                  <FormLabel sx={mediumText}>Date of birth</FormLabel>
                   <Input
-                    sx={GlobalStyle.inputStyle}
+                    sx={inputStyle}
                     type="date"
                     value={form.birthDate.substring(0, 10)}
                     opacity="0.8"
@@ -373,30 +299,28 @@ export default function PatientProfile(props) {
 
                 <Flex sx={flexStyle2}>
                   <FormControl isReadOnly>
-                    <FormLabel sx={GlobalStyle.labelText}>Sex</FormLabel>
-                    <Input
-                      sx={GlobalStyle.inputStyle}
-                      value={form.sex}
-                      opacity="0.8"
-                    />
+                    <FormLabel sx={mediumText}>Sex</FormLabel>
+                    <Input sx={inputStyle} value={form.sex} opacity="0.8" />
                   </FormControl>
 
                   <FormControl isReadOnly>
-                    <FormLabel sx={GlobalStyle.labelText}>
+                    <FormLabel
+                      sx={Object.assign({ whiteSpace: 'nowrap' }, mediumText)}
+                    >
                       Blood group
                     </FormLabel>
                     <Input
-                      sx={GlobalStyle.inputStyle}
+                      sx={inputStyle}
                       value={form.bloodGroup}
                       opacity="0.8"
                     />
                   </FormControl>
                 </Flex>
 
-                <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>Phone number</FormLabel>
+                <FormControl isInvalid={isError && !form.phoneNumber}>
+                  <FormLabel sx={mediumText}>Phone number</FormLabel>
                   <Input
-                    sx={GlobalStyle.inputStyle}
+                    sx={inputStyle}
                     value={form.phoneNumber}
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
@@ -407,9 +331,9 @@ export default function PatientProfile(props) {
                 </FormControl>
 
                 <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>Email</FormLabel>
+                  <FormLabel sx={mediumText}>Email</FormLabel>
                   <Input
-                    sx={GlobalStyle.inputStyle}
+                    sx={inputStyle}
                     value={form.email}
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
@@ -426,17 +350,15 @@ export default function PatientProfile(props) {
         {/* ==================== Medical information ==================== */}
         <Tabs variant="enclosed" width="100%">
           <TabList>
-            <Tab sx={GlobalStyle.tabSelected}>Medical Information</Tab>
+            <Tab sx={tabSelected}>Medical Information</Tab>
           </TabList>
           <TabPanels>
-            <TabPanel sx={GlobalStyle.tabBox}>
+            <TabPanel sx={tabBox}>
               <VStack spacing="24px">
                 <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>
-                    Medical conditions
-                  </FormLabel>
+                  <FormLabel sx={mediumText}>Medical conditions</FormLabel>
                   <Textarea
-                    sx={GlobalStyle.inputStyle}
+                    sx={inputStyle}
                     value={form.medCondition}
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
@@ -446,9 +368,9 @@ export default function PatientProfile(props) {
                   />
                 </FormControl>
                 <FormControl>
-                  <FormLabel sx={GlobalStyle.labelText}>Allergy</FormLabel>
+                  <FormLabel sx={mediumText}>Allergy</FormLabel>
                   <Textarea
-                    sx={GlobalStyle.inputStyle}
+                    sx={inputStyle}
                     value={form.allergy}
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
@@ -463,31 +385,25 @@ export default function PatientProfile(props) {
         </Tabs>
 
         {/* ==================== Button ==================== */}
-        <Box sx={GlobalStyle.btnBox}>
+        <Box sx={btnPosition}>
           {!isEdit ? (
             <Button
-              sx={GlobalStyle.editBtn}
+              sx={editBtn}
               onClick={() => {
-                setIsEdit(!isEdit), setShow(!show)
+                setIsEdit(!isEdit)
               }}
             >
               Edit
             </Button>
           ) : (
             <ButtonGroup gap={4}>
-              <Button sx={GlobalStyle.whiteBtn} onClick={handleCancel}>
+              <Button sx={whiteBtn} onClick={() => onClickCancel()}>
                 Cancel
               </Button>
               <Button
-                sx={GlobalStyle.blueBtn}
+                sx={blueBtn}
                 onClick={() => {
-                  setIsEdit(!isEdit)
-                  setShow(!show)
-                  if (form.image === null || form.image === '') {
-                    onSaveClick()
-                  } else {
-                    handleSave()
-                  }
+                  onClickSave()
                 }}
               >
                 Save
@@ -500,12 +416,17 @@ export default function PatientProfile(props) {
   )
 }
 export async function getServerSideProps(context) {
-  const patientInfo = await axios.post(`${url}/api/patientManager/getPatient`, {
-    patientID: context.params.patientID,
-  })
+  const patientResult = await axios.get(
+    `${url}/api/patientManager/getPatient`,
+    {
+      headers: {
+        patientID: context.params.patientID,
+      },
+    }
+  )
   return {
     props: {
-      patientInfo: patientInfo.data,
+      patientInfo: patientResult.data,
     },
   }
 }

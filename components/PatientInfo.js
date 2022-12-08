@@ -1,5 +1,13 @@
 import { Box, Text, Flex, VStack, Avatar } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
+import {
+  contentBox,
+  headingText,
+  regularText,
+  spanFlex,
+  mediumText,
+  profileImgSmall,
+} from '../style-props/Sharedstyles'
 
 export default function PatientInfo(props) {
   let layout = {
@@ -12,7 +20,7 @@ export default function PatientInfo(props) {
   }
 
   // get patient info
-  const info = props.patientInfo[0]
+  const info = props.patientInfo
 
   // calcuate age from date of birth
   const age = Math.floor(

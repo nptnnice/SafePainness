@@ -32,6 +32,7 @@ import {
   AddIcon,
 } from '@chakra-ui/icons'
 import {
+  bgColor,
   layout,
   inputStyle,
   searchIconStyle,
@@ -55,7 +56,6 @@ export default function MyPatients(props) {
 
   // context
   const { user, setUser } = useAppContext()
-  // console.log('1', user.name)
 
   // check if user is logged in
   useEffect(() => {
@@ -63,7 +63,9 @@ export default function MyPatients(props) {
       sessionStorage.clear()
       setUser(null)
       router.push('/')
-      alert('Please login first')
+      setTimeout(() => {
+        alert('Please login first')
+      }, 500)
     } else {
       if (jwt_decode(sessionStorage.getItem('token')).role != 'doctor') {
         alert('You cannot access this page')
@@ -125,80 +127,82 @@ export default function MyPatients(props) {
   return (
     <>
       <HeadCenter topic="My Patients" />
-      <VStack sx={layout} spacing={8}>
-        <Flex sx={flexStyle}>
-          {/* ==================== Search box ==================== */}
-          <InputGroup>
-            <Input
-              sx={inputStyle}
-              placeholder="Search patient"
-              onChange={(e) => setSearch(e.target.value)}
+      <Box sx={bgColor}>
+        <VStack sx={layout} spacing={8}>
+          <Flex sx={flexStyle}>
+            {/* ==================== Search box ==================== */}
+            <InputGroup>
+              <Input
+                sx={inputStyle}
+                placeholder="Search patient"
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <InputRightElement>
+                <SearchIcon sx={searchIconStyle} />
+              </InputRightElement>
+            </InputGroup>
+            <Button
+              sx={turquoiseBtn}
+              leftIcon={<AddIcon sx={addIconStyle} />}
+              onClick={() => handleCreateCase()}
+            >
+              Add Case
+            </Button>
+            <AddCase
+              isOpen={createCase}
+              onClose={handleCreateCase}
+              allpatients={allpatients}
             />
-            <InputRightElement>
-              <SearchIcon sx={searchIconStyle} />
-            </InputRightElement>
-          </InputGroup>
-          <Button
-            sx={turquoiseBtn}
-            leftIcon={<AddIcon sx={addIconStyle} />}
-            onClick={() => handleCreateCase()}
-          >
-            Add Case
-          </Button>
-          <AddCase
-            isOpen={createCase}
-            onClose={handleCreateCase}
-            allpatients={allpatients}
-          />
-        </Flex>
+          </Flex>
 
-        {/* ==================== Patient table ==================== */}
-        <Box sx={contentBox}>
-          <TableContainer>
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  <Th sx={boldText}>Patient ID</Th>
-                  <Th sx={boldText}>Name</Th>
-                  <Th isNumeric></Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {mypatients.map((item, index) => (
-                  <Tr
-                    key={index}
-                    sx={hoverStyle}
-                    onClick={() => onClickPatient(item.patientID)}
-                  >
-                    <Td sx={mediumText}>{item.patientID}</Td>
-                    <Td sx={mediumText}>
-                      {item.firstName}&nbsp;{item.lastName}
-                    </Td>
-                    <Td isNumeric>
-                      <Avatar src={item.image} sx={profileImgSmall} />
-                    </Td>
+          {/* ==================== Patient table ==================== */}
+          <Box sx={contentBox}>
+            <TableContainer>
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th sx={boldText}>Patient ID</Th>
+                    <Th sx={boldText}>Name</Th>
+                    <Th isNumeric></Th>
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-        </Box>
+                </Thead>
+                <Tbody>
+                  {mypatients.map((item, index) => (
+                    <Tr
+                      key={index}
+                      sx={hoverStyle}
+                      onClick={() => onClickPatient(item.patientID)}
+                    >
+                      <Td sx={mediumText}>{item.patientID}</Td>
+                      <Td sx={mediumText}>
+                        {item.firstName}&nbsp;{item.lastName}
+                      </Td>
+                      <Td isNumeric>
+                        <Avatar src={item.image} sx={profileImgSmall} />
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </Box>
 
-        {/* ==================== Button ==================== */}
-        <Flex sx={btnGroup}>
-          <IconButton
-            icon={<ArrowLeftIcon sx={paginationBtn} />}
-            onClick={() => onClickPageButton('previous')}
-            isDisabled={page === 1}
-          />
-          <Text sx={mediumText}>{page}</Text>
-          <IconButton
-            icon={<ArrowRightIcon sx={paginationBtn} />}
-            onClick={() => onClickPageButton('next')}
-            isDisabled={page == pageAmount}
-          />
-        </Flex>
-      </VStack>
+          {/* ==================== Button ==================== */}
+          <Flex sx={btnGroup}>
+            <IconButton
+              icon={<ArrowLeftIcon sx={paginationBtn} />}
+              onClick={() => onClickPageButton('previous')}
+              isDisabled={page === 1}
+            />
+            <Text sx={mediumText}>{page}</Text>
+            <IconButton
+              icon={<ArrowRightIcon sx={paginationBtn} />}
+              onClick={() => onClickPageButton('next')}
+              isDisabled={page == pageAmount}
+            />
+          </Flex>
+        </VStack>
+      </Box>
     </>
   )
 }
