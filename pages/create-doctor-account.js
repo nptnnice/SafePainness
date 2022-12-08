@@ -15,7 +15,6 @@ import {
 } from '@chakra-ui/react'
 import HeadCenter from '../components/HeadCenter'
 import GlobalStyle from '../Style'
-import Colour from '../Colour'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/react'
@@ -30,6 +29,7 @@ export default function CreateDoctorAccount() {
   const [show, setShow] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isErrorUsername, setIsErrorUsername] = useState(false)
+  const [isErrorEmail, setIsErrorEmail] = useState(false)
   const [isErrorPhone, setIsErrorPhone] = useState(false)
   const toast = useToast()
   const router = useRouter()
@@ -75,6 +75,17 @@ export default function CreateDoctorAccount() {
     } else {
       setForm({ ...form, phoneNumber: '' })
       setIsErrorPhone(true)
+    }
+  }
+  //check email
+  const checkEmail = async (e) => {
+    let email = e.target.value
+    let res = await axios.post('/api/checkEmail', { email: email })
+    if (res.data === 'Email not found') {
+      setIsErrorEmail(false)
+      setForm({ ...form, email: email })
+    } else {
+      setIsErrorEmail(true)
     }
   }
 
@@ -165,7 +176,7 @@ export default function CreateDoctorAccount() {
               onChange={(e) => checkUsername(e)}
             />
             {isErrorUsername ? (
-              <FormErrorMessage>Username is already exist</FormErrorMessage>
+              <FormErrorMessage>Username already exists</FormErrorMessage>
             ) : null}
           </FormControl>
 
@@ -218,9 +229,6 @@ export default function CreateDoctorAccount() {
                 setForm({ ...form, licenseNO: e.target.value })
               }}
             />
-            <FormHelperText sx={GlobalStyle.greyMediumText}>
-              {/* Doctors must be verified by the medical license number */}
-            </FormHelperText>
           </FormControl>
 
           <FormControl isRequired isInvalid={isError && !form.department}>
@@ -258,7 +266,7 @@ export default function CreateDoctorAccount() {
             ) : null}
           </FormControl>
 
-          <FormControl>
+          <FormControl isInvalid={isErrorEmail}>
             <FormLabel sx={GlobalStyle.labelText}>
               Email{' '}
               <chakra.span sx={GlobalStyle.greyMediumText}>
@@ -269,9 +277,12 @@ export default function CreateDoctorAccount() {
               type="email"
               sx={GlobalStyle.inputStyle}
               onChange={(e) => {
-                setForm({ ...form, email: e.target.value })
+                checkEmail(e)
               }}
             />
+            {isErrorEmail ? (
+              <FormErrorMessage>Email already exists</FormErrorMessage>
+            ) : null}
           </FormControl>
         </Flex>
 
