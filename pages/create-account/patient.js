@@ -12,6 +12,7 @@ import {
   divider,
   iconInput,
   greyMediumText,
+  errorText,
 } from '/style-props/Sharedstyles'
 import {
   Text,
@@ -201,7 +202,9 @@ export default function CreatePatientAccount() {
             <FormLabel sx={mediumText}>Username</FormLabel>
             <Input sx={inputStyle} onChange={(e) => checkUsername(e)} />
             {isErrorUsername ? (
-              <FormErrorMessage>Username already exists</FormErrorMessage>
+              <FormErrorMessage sx={errorText}>
+                Username already exists
+              </FormErrorMessage>
             ) : null}
           </FormControl>
 
@@ -341,7 +344,9 @@ export default function CreatePatientAccount() {
               onChange={(e) => checkPhone(e)}
             />
             {isErrorPhone ? (
-              <FormErrorMessage>Please enter 10 digit numbers</FormErrorMessage>
+              <FormErrorMessage sx={errorText}>
+                Please enter 10 digit numbers
+              </FormErrorMessage>
             ) : null}
           </FormControl>
 
@@ -360,7 +365,9 @@ export default function CreatePatientAccount() {
               }}
             />
             {isErrorEmail ? (
-              <FormErrorMessage>Email already exists</FormErrorMessage>
+              <FormErrorMessage sx={errorText}>
+                Email already exists
+              </FormErrorMessage>
             ) : null}
           </FormControl>
         </Flex>

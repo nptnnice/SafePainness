@@ -1,6 +1,5 @@
 import {
   Box,
-  Flex,
   Input,
   VStack,
   FormControl,
@@ -15,22 +14,35 @@ import {
   SliderMark,
   Image,
   SimpleGrid,
-  Tooltip,
   Button,
   chakra,
 } from '@chakra-ui/react'
-import GlobalStyle from '/Style'
+import {
+  bgColor,
+  layout,
+  inputStyle,
+  btnPosition,
+  contentBox,
+  mediumText,
+  greyMediumText,
+  errorText,
+  autoGrid,
+  squareImg,
+  sliderBox,
+  blueBtn,
+  removeBtn,
+} from '/style-props/Sharedstyles'
 import Colour from '/Colour'
 import HeadBox from '/components/HeadCenter'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { CloseIcon } from '@chakra-ui/icons'
 import { useToast } from '@chakra-ui/react'
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 import { useAppContext } from '/context/UserContext'
 import { useRouter } from 'next/router'
 import ReactLoading from 'react-loading'
 import { storage } from '/firebaseConfig'
-import url from '/url'
 import {
   ref,
   getDownloadURL,
@@ -38,52 +50,54 @@ import {
   deleteObject,
 } from 'firebase/storage'
 
-export default function AddRecord(props) {
-
+export default function AddRecord() {
+  // router
   const router = useRouter()
   const caseID = router.query.caseID
   const patientID = router.query.patientID
 
-  const { user } = useAppContext()
+  // context
+  const { user, setUser } = useAppContext()
 
-  let profileImg = {
-    boxSize: { base: '120px', sm: '150px', md: '180px' },
-    //position: 'relative',
-    objectFit: 'cover',
-  }
+  // check if user is logged in
+  useEffect(() => {
+    if (sessionStorage.getItem('token') == null) {
+      sessionStorage.clear()
+      setUser(null)
+      router.push('/')
+      setTimeout(() => {
+        alert('Please login first')
+      }, 500)
+    } else {
+      if (jwt_decode(sessionStorage.getItem('token')).role != 'patient') {
+        alert('You cannot access this page')
+      }
+    }
+  }, [])
 
-  let img = {
-    boxSize: { base: '120px', sm: '150px', md: '180px' },
-    position: 'relative',
-    objectFit: 'cover',
-    borderRadius: '12px',
-  }
-
-  let imgBox = {
-    boxSize: { base: '120px', sm: '150px', md: '180px' },
-    position: 'relative',
-    objectFit: 'cover',
-  }
-  let close = {
-    position: 'absolute',
-    right: '8px',
-    top: '8px',
-    cursor: 'pointer',
-    color: Colour.lightBlack,
-    _hover: {
-      color: Colour.white,
-    },
-  }
-
-  console.log(caseID)
-
-  const [isExceed, setIsExceed] = useState(false)
-  const [isError, setIsError] = useState(false)
-  
+  // toast
   const toast = useToast()
-  
+
+  // check if image is exceed
+  const [isExceed, setIsExceed] = useState(false)
+
+  // check if form is valid
+  const [isError, setIsError] = useState(false)
+
+  // set when image is uploading
   const [loading, setLoading] = useState(false)
-  
+
+  // set form data
+  const [storeImg, setStoreImg] = useState([])
+  const [image, setImage] = useState([])
+  const [form, setForm] = useState({
+    caseID: caseID,
+    symptom: '',
+    painScale: '',
+    comment: '',
+  })
+
+  // get form data
   const getCurrentSymptom = (e) => {
     setForm({ ...form, symptom: e.target.value })
   }
@@ -93,151 +107,103 @@ export default function AddRecord(props) {
   const getPainSeverity = (e) => {
     setForm({ ...form, painScale: e })
   }
-  
-  const [error, setError] = useState(false)
-  
 
-  const [storeImg, setStoreImg] = useState([])
-
-  const [image, setImage] = useState([])
-  const [form, setForm] = useState({
-    symptom: '',
-    painScale: '',
-    comment: '',
-  })
-
-  console.log(form)
-
-
-//input image and collect url
-function uploadFile(e) {
-  setIsExceed(false)
-  if (e.target.files.length > 4 - image.length) {
-    setIsExceed(true)
-    return
-  }
-  setIsError(false)
-  if (e.target.files) {
-    const date = new Date().toISOString().slice(0, 10)
-    for (let i = 0; i < e.target.files.length; i++) {
-      const storageRef = ref(
-        storage,
-        `/images/records/${date}-${e.target.files[i].name}`
-      )
-      const uploadTask = uploadBytesResumable(storageRef, e.target.files[i])
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          // Observe state change events such as progress, pause, and resume
-          setLoading(true)
-          const percent = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          )
-          console.log('Upload progress is ' + percent)
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused')
-              break
-            case 'running':
-              console.log('Upload is running')
-              break
+  //input image and collect url
+  function uploadFile(e) {
+    setIsExceed(false)
+    if (e.target.files.length > 4 - image.length) {
+      setIsExceed(true)
+      return
+    }
+    setIsError(false)
+    if (e.target.files) {
+      const date = new Date().toISOString().slice(0, 10)
+      for (let i = 0; i < e.target.files.length; i++) {
+        const storageRef = ref(
+          storage,
+          `/images/records/${date}-${e.target.files[i].name}`
+        )
+        const uploadTask = uploadBytesResumable(storageRef, e.target.files[i])
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            setLoading(true)
+            const percent = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            )
+            console.log('Upload progress is ' + percent)
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused')
+                break
+              case 'running':
+                console.log('Upload is running')
+                break
+            }
+          },
+          // Handle unsuccessful uploads
+          (err) => console.log(err),
+          () => {
+            // Handle successful uploads on complete
+            setLoading(false)
+            // download firebase storage image url
+            getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+              let temp = image
+              temp.push(url)
+              setImage(temp)
+              setStoreImg((prevState) => [...prevState, e.target.files[i]])
+            })
           }
-        },
-        // Handle unsuccessful uploads
-        (err) => console.log(err),
-        () => {
-          // Handle successful uploads on complete
-          setLoading(false)
-          // download firebase storage image url
-          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            let temp = image
-            temp.push(url)
-            setImage(temp)
-            setStoreImg((prevState) => [...prevState, e.target.files[i]])
+        )
+      }
+    }
+  }
+
+  // delete preview image
+  function deleteFile(index) {
+    const remainImage = image.filter((item, i) => index !== i)
+    setImage(remainImage)
+    // delete image from firebase storage
+    const date = new Date().toISOString().slice(0, 10)
+    for (let i = 0; i < storeImg.length; i++) {
+      if (i === index) {
+        const deleteRef = ref(
+          storage,
+          `/images/records/${date}-${storeImg[i].name}`
+        )
+        deleteObject(deleteRef)
+          .then(() => {
+            console.log('delete success')
           })
-        }
-      )
+          .catch((error) => {
+            console.log('delete error', error)
+          })
+      }
     }
+    const temp = storeImg.filter((item, i) => index !== i)
+    setStoreImg(temp)
   }
-}
 
-//delete preview image
-function deleteFile(index) {
-  // console.log(index)
-  // console.log(tempImg[index])
-  // console.log(form.img[index])
-  const remainImage = image.filter((item, i) => index !== i)
-  setImage(remainImage)
-  // delete image from firebase storage
-  const date = new Date().toISOString().slice(0, 10)
-  for (let i = 0; i < storeImg.length; i++) {
-    if (i === index) {
-      const deleteRef = ref(
-        storage,
-        `/images/records/${date}-${storeImg[i].name}`
-      )
-      deleteObject(deleteRef)
-        .then(() => {
-          console.log('delete success')
-        })
-        .catch((error) => {
-          console.log('delete error', error)
-        })
-    }
-  }
-  const temp = storeImg.filter((item, i) => index !== i)
-  setStoreImg(temp)
-} 
-
-  console.log(storeImg)
-
-  for (let i = 0; i < storeImg.length; i++) {
-    console.log(storeImg[i].name)
-  }
-  
-  const onSend = async () => {
+  // send form data
+  const onClickSend = async () => {
+    Object.assign(form, { image: image })
     setIsExceed(false)
     if (!form.symptom || !form.painScale) {
       setIsError(true)
-      console.log('form is invalid')
       toast({
         title: 'An error occurred.',
-        description: 'Please fill in all required fields.',
+        description: 'Please fill in all the required fields.',
         status: 'error',
         duration: 3000,
         isClosable: true,
       })
     } else {
-      if (image.length > 4) {
-        setIsExceed(true)
-        console.log('Too many files')
-        toast({
-          title: 'An error occurred.',
-          description: 'Too many files uploaded. Max 4 files.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        })
-
-      } else {
-        setIsError(false)
-        console.log('form is valid')
-        var now = new Date().toLocaleString()
-        setForm({ ...form, datetime: now })
-        console.log(form)
-        try {
-          const result = await axios.post('/api/recordManager/addRecord', {
-            caseID: caseID,
-            symptom: form.symptom,
-            painScale: form.painScale,
-            comment: form.comment,
-            datetime: form.datetime,
-            image: image,
-          })
-          console.log(result)
-        } catch (err) {
-          console.log(err)
-        }
+      setIsError(false)
+      console.log(form)
+      try {
+        const res = await axios.post('/api/recordManager/addRecord', form)
+        console.log(res)
         toast({
           title: 'Submit successfully',
           description: 'Your record has been submitted.',
@@ -245,53 +211,52 @@ function deleteFile(index) {
           duration: 3000,
           isClosable: true,
         })
-        // reload page
+        // redirect to record list
         setTimeout(() => {
-          window.location.reload()
-        }, 4000)
+          router.push(`/patient/${patientID}/case/${caseID}/record`)
+        }, 3000)
+      } catch (err) {
+        console.log(err)
+        toast({
+          title: 'Error',
+          description: 'Please try again.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        })
       }
     }
   }
 
-  console.log(storeImg)
-  // console.log(typeof (storeImg))
-
-  // console.log('form', form)
-  // console.log('This is image ')
-  console.log(image)
-  console.log(typeof(image))
-
-  // console.log("This is "+files)
-  // console.log(files)
   return (
-    <Box sx={GlobalStyle.bgColor}>
+    <Box sx={bgColor}>
       <HeadBox topic="symptom tracking" />
-      <Box sx={GlobalStyle.layout}>
-        <VStack sx={GlobalStyle.infoBox} align="left" spacing={16}>
+      <Box sx={layout}>
+        <VStack sx={contentBox} align="left" spacing={16}>
           {/* ==================== Symptom ==================== */}
           <FormControl isRequired isInvalid={isError && !form.symptom}>
-            <FormLabel sx={GlobalStyle.labelText}>Symptom</FormLabel>
+            <FormLabel sx={mediumText}>Symptom</FormLabel>
             <Textarea
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               placeholder="Fill in your current symptom"
               onChange={getCurrentSymptom}
             />
             {console.log(form.symptom)}
-            <FormErrorMessage sx={GlobalStyle.errorText}>
+            <FormErrorMessage sx={errorText}>
               Please fill in your current symptom
             </FormErrorMessage>
           </FormControl>
 
           {/* ==================== Pain scale ==================== */}
           <FormControl isRequired isInvalid={isError && !form.painScale}>
-            <FormLabel sx={GlobalStyle.labelText}>Pain severity</FormLabel>
-            <Box sx={GlobalStyle.sliderBox}>
+            <FormLabel sx={mediumText}>Pain severity</FormLabel>
+            <Box sx={sliderBox}>
               <Slider
                 defaultValue={4.5}
                 min={0}
                 max={10}
                 step={1}
-                sx={GlobalStyle.labelText}
+                sx={mediumText}
                 onChange={getPainSeverity}
               >
                 {console.log(form.painScale)}
@@ -312,25 +277,23 @@ function deleteFile(index) {
                 <SliderThumb boxSize={6} />
               </Slider>
             </Box>
-            <FormErrorMessage marginTop="16px" sx={GlobalStyle.errorText}>
+            <FormErrorMessage sx={errorText} marginTop="16px">
               Please select pain severity
             </FormErrorMessage>
           </FormControl>
 
           {/* ==================== Upload picture ==================== */}
           <FormControl isInvalid={isExceed}>
-            <FormLabel sx={GlobalStyle.labelText}>
+            <FormLabel sx={mediumText}>
               Upload picture of your symptom{' '}
-              <chakra.span sx={GlobalStyle.greyMediumText}>
-                (Optional)
-              </chakra.span>
+              <chakra.span sx={greyMediumText}>(Optional)</chakra.span>
             </FormLabel>
             <Input
               type="file"
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={uploadFile}
               multiple
-            // isDisabled={form.image.length > 4}
+              isDisabled={image.length >= 4}
             />
             {/* show uploading progress */}
             {loading && (
@@ -341,62 +304,45 @@ function deleteFile(index) {
                 width={'20px'}
               />
             )}
-
+            {/* check error */}
             {!isExceed ? (
-              <FormHelperText sx={GlobalStyle.greyMediumText}>
+              <FormHelperText sx={greyMediumText}>
                 You can upload up to 4 pictures.
               </FormHelperText>
             ) : (
-              <FormErrorMessage sx={GlobalStyle.errorText}>
+              <FormErrorMessage sx={errorText}>
                 Too many files selected. Please select up to 4 files.
               </FormErrorMessage>
             )}
+
             {/* show image preview */}
-          <Flex direction='row' gap={4}>
-            {image.map((item, index) => (
-              <Box sx={imgBox} >
-                <Flex align="center" key={index} >
-                  <Image src={item} sx={img} />
-                  <CloseIcon onClick={() => deleteFile(index)} sx={close} />
-                  {/* <Button onClick={rmImage}>cancel</Button> */}
-                </Flex>
-              </Box>
-            ))}
-          </Flex>
+            <SimpleGrid sx={autoGrid} marginTop="12px">
+              {image.map((image, index) => (
+                <Box key={index} sx={{ position: 'relative' }}>
+                  <Image src={image} sx={squareImg} />
+                  <CloseIcon onClick={() => deleteFile(index)} sx={removeBtn} />
+                </Box>
+              ))}
+            </SimpleGrid>
           </FormControl>
 
           {/* ==================== Comment ==================== */}
           <FormControl>
-            <FormLabel sx={GlobalStyle.labelText}>
+            <FormLabel sx={mediumText}>
               Comment to your doctor{' '}
-              <chakra.span sx={GlobalStyle.greyMediumText}>
-                (Optional)
-              </chakra.span>
+              <chakra.span sx={greyMediumText}>(Optional)</chakra.span>
             </FormLabel>
-            <Textarea sx={GlobalStyle.inputStyle} onChange={getComment} />
+            <Textarea sx={inputStyle} onChange={getComment} />
           </FormControl>
         </VStack>
 
         {/* ==================== Submit button ==================== */}
-        <Box sx={GlobalStyle.btnBox}>
-          <Button sx={GlobalStyle.blueBtn} onClick={onSend}>
+        <Box sx={btnPosition}>
+          <Button sx={blueBtn} onClick={() => onClickSend()}>
             Send
           </Button>
         </Box>
       </Box>
     </Box>
   )
-}
-
-
-export async function getServerSideProps(context) {
-
-  const caseList = await axios.post(`${url}/api/caseManager/getMyCases`, {
-    patientID: context.params.patientID,
-  })
-  return {
-    props: {
-      caseList: caseList.data,
-    },
-  }
 }

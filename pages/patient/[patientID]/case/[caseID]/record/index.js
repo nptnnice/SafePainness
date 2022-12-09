@@ -1,14 +1,10 @@
 import { Text, Flex, Box, Button } from '@chakra-ui/react'
-import GlobalStyle from '/Style'
-import Colour from '/Colour'
 import HeadInfo from '/components/HeadInfo'
 import { useRouter } from 'next/router'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
-import RecordModal from '/components/RecordModal'
 import Record from '/components/Record'
 import { useAppContext } from '/context/UserContext'
 import axios from 'axios'
-import url from '/url'
 import jwt_decode from 'jwt-decode'
 import { useState, useEffect } from 'react'
 import {
@@ -24,8 +20,6 @@ import {
 
 export default function Case(props) {
   const { allRecords } = props
-
-  let total = allRecords.length + 1
 
   // router
   const router = useRouter()
@@ -53,11 +47,17 @@ export default function Case(props) {
   // count records
   const [recordAmount, setRecordAmount] = useState(allRecords.length)
 
+  // set record data for modal
+  const [recordData, setRecordData] = useState(null)
+  const [recordIndex, setRecordIndex] = useState(0)
+
   // set record modal
   const [showRecordModal, setShowRecordModal] = useState(false)
-  const onClickRecord = () => setShowRecordModal(!showRecordModal)
-
-  // const [focuskey, setFocuskey] = useState(0)
+  const onClickRecord = (record, index) => {
+    setRecordData(record)
+    setRecordIndex(index)
+    setShowRecordModal(!showRecordModal)
+  }
 
   // redirect to add record page
   const onClickAddRecord = () => {
@@ -66,7 +66,7 @@ export default function Case(props) {
 
   return (
     <Box sx={bgColor}>
-      {/* <HeadInfo
+      <HeadInfo
         name="Patient ID"
         patientID={patientID}
         caseID={caseID}
@@ -87,19 +87,28 @@ export default function Case(props) {
         <Box sx={contentBox}>
           {allRecords.map((record, index) => {
             return (
-              <Flex key={index} sx={recordBox} onClick={() => onClickRecord()}>
+              <Flex
+                key={index}
+                sx={recordBox}
+                onClick={() => onClickRecord(record, recordAmount - index)}
+              >
                 <Text sx={boldText}>Record #{recordAmount - index}</Text>
                 <Text sx={greyMediumText}>
                   {new Date(record.datetime).toLocaleString()}
                 </Text>
-                <Record isOpen={showRecordModal} onClose={onClickRecord} />
-
-                
               </Flex>
             )
           })}
+          {recordData ? (
+            <Record
+              isOpen={showRecordModal}
+              onClose={() => setShowRecordModal(false)}
+              record={recordData}
+              recordIndex={recordIndex}
+            /> // record modal
+          ) : null}
         </Box>
-      </Box> */}
+      </Box>
     </Box>
   )
 }
@@ -114,18 +123,9 @@ export async function getServerSideProps(context) {
     }
   )
 
-  // const recordResult = await axios.get(
-  //   'http://localhost:3000/api/recordManager/getRecord',
-  //   {
-  //     headers: {
-  //       recordid: context.params.recordID,
-  //     },
-  //   }
-  // )
   return {
     props: {
       allRecords: allrecordResult.data,
-      // getRecord: recordResult.data,
     },
   }
 }

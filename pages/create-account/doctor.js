@@ -33,6 +33,7 @@ import {
   blueBtn,
   divider,
   iconInput,
+  errorText,
 } from '/style-props/Sharedstyles'
 
 export default function CreateDoctorAccount() {
@@ -200,7 +201,9 @@ export default function CreateDoctorAccount() {
             <FormLabel sx={mediumText}>Username</FormLabel>
             <Input sx={inputStyle} onChange={(e) => checkUsername(e)} />
             {isErrorUsername ? (
-              <FormErrorMessage>Username already exists</FormErrorMessage>
+              <FormErrorMessage sx={errorText}>
+                Username already exists
+              </FormErrorMessage>
             ) : null}
           </FormControl>
 
@@ -298,7 +301,9 @@ export default function CreateDoctorAccount() {
               onChange={(e) => checkPhone(e)}
             />
             {isErrorPhone ? (
-              <FormErrorMessage>Please enter 10 digit numbers</FormErrorMessage>
+              <FormErrorMessage sx={errorText}>
+                Please enter 10 digit numbers
+              </FormErrorMessage>
             ) : null}
           </FormControl>
 
@@ -318,7 +323,9 @@ export default function CreateDoctorAccount() {
               }}
             />
             {isErrorEmail ? (
-              <FormErrorMessage>Email already exists</FormErrorMessage>
+              <FormErrorMessage sx={errorText}>
+                Email already exists
+              </FormErrorMessage>
             ) : null}
           </FormControl>
         </Flex>
