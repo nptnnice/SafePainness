@@ -5,12 +5,13 @@ export default async function handler(req, res) {
   const {
     senderID,
     message,
-    datetime,
     feedbackID,
     senderName,
     receiverID,
+    patientID,
     caseID,
   } = req.body
+  const datetime = new Date()
 
   let result = await db.query(
     `INSERT INTO "public"."Response"
@@ -25,6 +26,7 @@ export default async function handler(req, res) {
     receiverID,
     datetime,
     `You have a new response from ${senderName}`,
+    patientID,
     caseID,
     feedbackID,
     'response'

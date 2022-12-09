@@ -48,6 +48,13 @@ const other = {
   alignItems: 'center',
   gap: '8px',
 }
+const modalStyle = {
+  maxWidth: '800px',
+  height: '600px',
+  width: '90%',
+  borderRadius: '24px',
+  padding: { base: '16px', md: '24px' },
+}
 
 export {
   bottomLine,
@@ -58,4 +65,5 @@ export {
   imgSize,
   gridBox,
   other,
+  modalStyle,
 }
