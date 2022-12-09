@@ -11,8 +11,12 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import GlobalStyle from '../Style'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import axios from 'axios'
+import url from '/url'
 
-export default function DoctorInfo({ isOpen, onClose }) {
+export default function DoctorInfo({ isOpen, onClose, doctorInfo }) {
   let layout = {
     gap: '32px',
     flexDirection: { base: 'column', md: 'row' },
@@ -24,6 +28,32 @@ export default function DoctorInfo({ isOpen, onClose }) {
     borderRadius: '24px',
     padding: { base: '16px', md: '24px' },
   }
+
+  const router = useRouter()
+  // const { getDoctor } = props
+  // console.log('props', getDoctor)
+
+  // const [doctorInfo, setDoctorInfo] = useState({})
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await axios.get(`${url}/api/doctorManager/getDoctor`, {
+  //         headers: {
+  //           doctorid: doctorID,
+  //         },
+  //       })
+  //       console.log('test', res.data)
+  //       setDoctorInfo(res.data[0])
+  //     } catch (err) {
+  //       console.log('err', err)
+  //     }
+  //   }
+  //   fetchData()
+  // }, [])
+
+  // console.log('doctorInfo', doctorInfo)
+
   return (
     <>
       <Modal
@@ -40,35 +70,45 @@ export default function DoctorInfo({ isOpen, onClose }) {
           <ModalCloseButton />
           <ModalBody>
             <Flex sx={layout}>
-              <Avatar sx={GlobalStyle.profileImg} src="/images/petch.JPG" />
+              <Avatar sx={GlobalStyle.profileImg} src={doctorInfo.image} />
               <VStack spacing={4} align="left">
                 <Flex sx={GlobalStyle.spanFlex}>
                   <Text sx={GlobalStyle.labelText}>First Name: </Text>
-                  <Text sx={GlobalStyle.regularText}>Pakamon</Text>
+                  <Text sx={GlobalStyle.regularText}>
+                    {doctorInfo.firstName}
+                  </Text>
                 </Flex>
                 <Flex sx={GlobalStyle.spanFlex}>
                   <Text sx={GlobalStyle.labelText}>Last Name: </Text>
-                  <Text sx={GlobalStyle.regularText}>Mumu</Text>
+                  <Text sx={GlobalStyle.regularText}>
+                    {doctorInfo.lastName}
+                  </Text>
                 </Flex>
 
                 <Flex sx={GlobalStyle.spanFlex}>
                   <Text sx={GlobalStyle.labelText}>
                     Medical License Number:{' '}
                   </Text>
-                  <Text sx={GlobalStyle.regularText}>XX-XXXXXX-XX</Text>
+                  <Text sx={GlobalStyle.regularText}>
+                    {doctorInfo.licenseNO}
+                  </Text>
                 </Flex>
                 <Flex sx={GlobalStyle.spanFlex}>
                   <Text sx={GlobalStyle.labelText}>Department: </Text>
-                  <Text sx={GlobalStyle.regularText}>Cardio</Text>
+                  <Text sx={GlobalStyle.regularText}>
+                    {doctorInfo.department}
+                  </Text>
                 </Flex>
 
                 <Flex sx={GlobalStyle.spanFlex}>
-                  <Text sx={GlobalStyle.labelText}>Contact: </Text>
-                  <Text sx={GlobalStyle.regularText}>099-XXX-XXXX</Text>
+                  <Text sx={GlobalStyle.labelText}>Phone number: </Text>
+                  <Text sx={GlobalStyle.regularText}>
+                    {doctorInfo.phoneNumber}
+                  </Text>
                 </Flex>
                 <Flex sx={GlobalStyle.spanFlex}>
                   <Text sx={GlobalStyle.labelText}>Email: </Text>
-                  <Text sx={GlobalStyle.regularText}>Pokemon@gmail.com</Text>
+                  <Text sx={GlobalStyle.regularText}>{doctorInfo.email}</Text>
                 </Flex>
               </VStack>
             </Flex>

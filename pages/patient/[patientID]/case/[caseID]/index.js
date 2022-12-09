@@ -7,6 +7,11 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  VStack,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
 } from '@chakra-ui/react'
 import GlobalStyle from '/Style'
 import Colour from '/Colour'
@@ -14,9 +19,10 @@ import SummaryBox from '/components/SummaryBox'
 import Dashboard from '/components/Dashboard'
 import HeadInfo from '/components/HeadInfo'
 import ConfirmModal from '/components/ConfirmModal'
+import QRgenerator from '/components/QRgenerator'
+import StopTrackModal from '/components/StopTrackModal'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useAppContext } from '/context/UserContext'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import axios from 'axios'
 import url from '/url'
@@ -42,8 +48,15 @@ export default function Case(props) {
     padding: { base: '48px 0 160px', md: '56px 0 240px' },
     position: 'relative',
   }
+  let layout2 = {
+    width: '90%',
+    margin: '0 auto',
+    maxWidth: '900px',
+    padding: { base: '120px 0 160px', md: '200px 0 240px' },
+    position: 'relative',
+  }
   let diagnosisFlex = {
-    alignItems: { base: 'flex-start', md: 'center' },
+    alignItems: { base: 'flex-start', md: 'flex-start' },
     gap: '16px',
     width: '100%',
     flexDirection: { base: 'column', md: 'row' },
@@ -86,67 +99,99 @@ export default function Case(props) {
     fontWeight: 'bold',
     fontSize: { base: '16px', md: '18px' },
   }
-
+  // For Confirm Diagnosis Modal
+  const [diseaseName, setDiseaseName] = useState('')
+  const [isError, setIsError] = useState(false)
   const [showModal, setShowModal] = useState(false)
-  const [isconfirm, setConfirm] = useState(false)
-  const onConfirmDiagnosis = () => setShowModal(!showModal)
-  const router = useRouter()
-  const patientID = router.query.patientID
-  const caseID = router.query.caseID
+  const [isConfirm, setConfirm] = useState(false)
+  const onConfirmDiagnosis = () => {
+    if (diseaseName == '') {
+      setIsError(true)
+    } else {
+      setIsError(false)
+      setShowModal(!showModal)
+    }
+  }
+  // For Stop Tracking Modal
+  const [showStopModal, setShowStopModal] = useState(false)
+  const onStopTracking = () => setShowStopModal(!showStopModal)
 
-  // useEffect(() => {
-  //     if (isconfirm) {
+  const router = useRouter()
+  const caseID = router.query.caseID
+  console.log('props', caseInfo)
 
   return (
     <Box sx={GlobalStyle.bgColor}>
-      <HeadInfo
-        name="Patient ID"
-        patientID={patientID}
-        caseID={caseID}
-        caseName="Grammar addict"
-        doctor="name"
-      />
-
-      <Box sx={layout}>
-        {/* ==================== Confirm diagnosis ==================== */}
-        {!isconfirm ? (
-          <Flex sx={diagnosisFlex}>
-            <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
-              Case {caseID}:
-            </Text>
-            <Input placeholder="Disease name" sx={GlobalStyle.inputStyle} />
-            <Button sx={GlobalStyle.yellowBtn} onClick={onConfirmDiagnosis}>
-              Confirm diagnosis
-            </Button>
-          </Flex>
-        ) : (
-          <Box sx={btnPosition}>
-            <Button sx={btnStyle}>Stop Tracking</Button>
-          </Box>
-        )}
-        <ConfirmModal
-          isOpen={showModal}
-          onClose={onConfirmDiagnosis}
-          setConfirm={setConfirm}
-        />
-
-        {/* ==================== Breadcrumb ==================== */}
-        <BreadcrumbMenu />
-
-        <Box sx={section}>
-          <SummaryBox />
-          <Dashboard />
+      <HeadInfo />
+      {/* ==================== No pain experience ==================== */}
+      {caseInfo.painFrequency == null ? (
+        <Box sx={layout2}>
+          <QRgenerator caseInfo={caseInfo} />
         </Box>
-      </Box>
+      ) : (
+        <Box sx={layout}>
+          {/* ==================== Confirm diagnosis ==================== */}
+          {!isConfirm && caseInfo.caseName == null ? (
+            <>
+              <Flex sx={diagnosisFlex}>
+                <FormControl id="disease" isInvalid={isError}>
+                  <Input
+                    placeholder="Disease name"
+                    onChange={(e) => setDiseaseName(e.target.value)}
+                    sx={GlobalStyle.inputStyle}
+                  />
+                  <FormErrorMessage>
+                    Please fill in the disease name
+                  </FormErrorMessage>
+                </FormControl>
+                <Button
+                  sx={GlobalStyle.yellowBtn}
+                  onClick={() => onConfirmDiagnosis()}
+                >
+                  Confirm diagnosis
+                </Button>
+              </Flex>
+              <ConfirmModal
+                isOpen={showModal}
+                onClose={onConfirmDiagnosis}
+                setConfirm={setConfirm}
+                caseInfo={caseInfo}
+                diseaseName={diseaseName}
+              />
+            </>
+          ) : (
+            <>
+              <Box sx={btnPosition}>
+                <Button sx={btnStyle} onClick={() => onStopTracking()}>
+                  Stop Tracking
+                </Button>
+              </Box>
+              <StopTrackModal
+                isOpen={showStopModal}
+                onClose={onStopTracking}
+                setConfirm={setConfirm}
+                caseInfo={caseInfo}
+              />
+            </>
+          )}
+
+          {/* ==================== Breadcrumb ==================== */}
+          <BreadcrumbMenu />
+
+          <Box sx={section}>
+            <SummaryBox caseInfo={caseInfo} />
+            <Dashboard />
+          </Box>
+        </Box>
+      )}
     </Box>
   )
 }
 
 export async function getServerSideProps(context) {
-  const caseID = context.params.caseID
   const result = await axios.get(`${url}/api/caseManager/getCase`, {
     headers: {
-      caseid: caseID,
+      caseID: context.params.caseID,
     },
   })
   return {
