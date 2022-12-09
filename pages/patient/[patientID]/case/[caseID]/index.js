@@ -29,18 +29,17 @@ import url from '/url'
 import { useAppContext } from '/context/UserContext'
 
 export default function Case(props) {
-  const { caseInfo } = props
+  const { caseInfo, painGraph } = props
 
   useEffect(() => {
     sessionStorage.setItem('caseDoctor', caseInfo.doctorID)
     console.log(sessionStorage.getItem('caseDoctor'))
   }, [])
 
-  console.log('this is props')
-  console.log(props)
+  console.log('prop:', props)
 
-  const { user } = useAppContext()
-  console.log(user)
+  // const { user } = useAppContext()
+  // console.log(user)
 
   let layout = {
     width: '90%',
@@ -181,7 +180,7 @@ export default function Case(props) {
 
           <Box sx={section}>
             <SummaryBox caseInfo={caseInfo} />
-            <Dashboard />
+            <Dashboard painGraph={painGraph} />
           </Box>
         </Box>
       )}
@@ -192,12 +191,18 @@ export default function Case(props) {
 export async function getServerSideProps(context) {
   const result = await axios.get(`${url}/api/caseManager/getCase`, {
     headers: {
-      caseID: context.params.caseID,
+      caseid: context.params.caseID,
+    },
+  })
+  const result2 = await axios.get(`${url}/api/caseManager/getChart`, {
+    headers: {
+      caseid: context.params.caseID,
     },
   })
   return {
     props: {
       caseInfo: result.data,
+      painGraph: result2.data,
     },
   }
 }
