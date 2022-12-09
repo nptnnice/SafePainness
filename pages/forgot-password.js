@@ -17,6 +17,7 @@ import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/react'
 import emailjs from 'emailjs-com'
 import axios from 'axios'
+import url from '../url'
 
 export default function ForgotPassword() {
   let Discription = {
@@ -50,34 +51,48 @@ export default function ForgotPassword() {
     router.push('./')
   }
   const toast = useToast()
-  const [userLink, setUserLink] = useState(
-    'http://localhost:3000/reset-password'
-  )
+  const [userLink, setUserLink] = useState(`${url}/reset-password`)
   const checkEmail = async (e) => {
     let email = e.target.value
-    let res = await axios.post('/api/checkEmail', { email: email })
+    let res = await axios.get('/api/checkEmail', { headers: { email: email } })
     if (res.data === 'Email not found') {
       setIsError(true)
+      console.log('isError')
     } else {
       setIsError(false)
-      console.log('data', res)
-      if (res.data[0].roleID == 1) {
-        setUserLink(
-          'http://localhost:3000/doctor/' +
-            res.data[0].userID +
-            '/reset-password'
-        )
-        console.log('userLink', userLink)
-      } else if (res.data[0].roleID == 2) {
-        setUserLink(
-          'http://localhost:3000/patient/' +
-            res.data[0].userID +
-            '/reset-password'
-        )
-        console.log('userLink', userLink)
-      }
+      console.log('data', res.data)
+      // if (res.data[0].roleID == 1) {
+      //   setUserLink(`${url}/doctor/res.data.userID/reset-password`)
+      //   console.log('userLink', userLink)
+      // } else if (res.data[0].roleID == 2) {
+      //   setUserLink(`${url}/patient/` + res.data[0].userID + '/reset-password')
+      //   console.log('userLink', userLink)
+      // }
     }
   }
+  // let email = e.target.value
+  // let res = await axios.get('/api/checkEmail', { headers: { email: email } })
+  // if (res.data === 'Email already exist') {
+  //   setIsError(true)
+  // } else {
+  //   setIsError(false)
+  //   console.log('data', res)
+  //   if (res.data[0].roleID == 1) {
+  //     setUserLink(
+  //       '${url}/doctor/' +
+  //         res.data[0].userID +
+  //         '/reset-password'
+  //     )
+  //     console.log('userLink', userLink)
+  //   } else if (res.data[0].roleID == 2) {
+  //     setUserLink(
+  //       '${url}/patient/' +
+  //         res.data[0].userID +
+  //         '/reset-password'
+  //     )
+  //     console.log('userLink', userLink)
+  //   }
+
   function sendEmail(e) {
     e.preventDefault()
 
@@ -140,7 +155,7 @@ export default function ForgotPassword() {
               <Button sx={GlobalStyle.blueBtn} type="submit">
                 Reset Password
               </Button>
-              <Text sx={cancelBtn} onClick={onClickCancel}>
+              <Text sx={cancelBtn} onClick={() => onClickCancel()}>
                 Cancel
               </Text>
             </VStack>
