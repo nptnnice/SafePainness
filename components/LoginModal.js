@@ -19,6 +19,7 @@ import {
   Alert,
   AlertIcon,
 } from '@chakra-ui/react'
+import { iconInput } from '../style-props/Sharedstyles'
 import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import { useState } from 'react'
@@ -40,11 +41,6 @@ export default function LoginModal({ isOpen, onClose }) {
   }
   let footModal = {
     justifyContent: 'center',
-  }
-  let iconInput = {
-    color: Colour.lightBlack,
-    cursor: 'pointer',
-    marginTop: '8px',
   }
 
   // set router

@@ -1,16 +1,17 @@
+import { Text, Box, Flex, Button } from '@chakra-ui/react'
 import {
-  Text,
-  Box,
-  Flex,
-  Button,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-} from '@chakra-ui/react'
-import GlobalStyle from '/Style'
-import Colour from '/Colour'
+  bgColor,
+  layout,
+  turquoiseBtn,
+  recordBox,
+  boldText,
+  greyMediumText,
+  breadcrumbFlex,
+  contentBox,
+} from '/style-props/Sharedstyles'
 import HeadInfo from '/components/HeadInfo'
-import { useState } from 'react'
+import jwt_decode from 'jwt-decode'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import AddFeedback from '/components/AddFeedback'
@@ -21,35 +22,30 @@ import url from '/url'
 export default function Case(props) {
   const { feedbackList } = props
 
-  let section2 = {
-    marginTop: { base: '24px', md: '16px' },
-    position: 'relative',
-    width: '100%',
-    borderRadius: '12px',
-    backgroundColor: Colour.white,
-    padding: { base: '24px 16px', md: '40px 20px' },
-    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
-  }
-  let btnPosition = {
-    position: 'absolute',
-    right: '0',
-    top: { base: '-64px', md: '-72px' },
-  }
-
   // router
-  const { user } = useAppContext()
-  console.log('This is user')
-  console.log(user)
-
   const router = useRouter()
-  console.log('This is router' + router)
-  console.log(router)
-  const { caseID, name } = router.query
   const patientID = router.query.patientID
-  console.log('This is patientID: ' + patientID)
-  console.log('This is caseID: ' + caseID)
-  console.log('This is name: ' + name)
+  const caseID = router.query.caseID
 
+  // context
+  const { user, setUser } = useAppContext()
+  const [userRole, setUserRole] = useState('')
+
+  // check if user is logged in
+  useEffect(() => {
+    if (sessionStorage.getItem('token') == null) {
+      sessionStorage.clear()
+      setUser(null)
+      router.push('/')
+      setTimeout(() => {
+        alert('Please login first')
+      }, 500)
+    } else {
+      setUserRole(jwt_decode(sessionStorage.getItem('token')).role)
+    }
+  }, [])
+
+  // count feedback
   const [feedbackAmount, setFeedbackAmount] = useState(feedbackList.length)
 
   // add feedback
@@ -62,30 +58,30 @@ export default function Case(props) {
   }
 
   return (
-    <Box sx={GlobalStyle.bgColor}>
+    <Box sx={bgColor}>
       <HeadInfo />
 
-      <Box sx={GlobalStyle.layout}>
-        <BreadcrumbMenu />
-
-        <Box sx={section2}>
-          <Box sx={btnPosition}>
-            <Button sx={GlobalStyle.turquoiseBtn} onClick={onClickAddFeedback}>
+      <Box sx={layout}>
+        <Flex sx={breadcrumbFlex}>
+          <BreadcrumbMenu />
+          {userRole == 'doctor' ? (
+            <Button sx={turquoiseBtn} onClick={() => onClickAddFeedback()}>
               + Feedback
             </Button>
-          </Box>
+          ) : null}
+        </Flex>
+
+        <Box sx={contentBox}>
           <AddFeedback isOpen={showAddFeedback} onClose={onClickAddFeedback} />
           {feedbackList.map((feedback, index) => {
             return (
               <Flex
                 key={index}
-                sx={GlobalStyle.recordBox}
+                sx={recordBox}
                 onClick={() => onClickFeedback(feedback.feedbackID)}
               >
-                <Text sx={GlobalStyle.boldText}>
-                  Feedback #{feedbackAmount - index}
-                </Text>
-                <Text sx={GlobalStyle.greyMediumText}>
+                <Text sx={boldText}>Feedback #{feedbackAmount - index}</Text>
+                <Text sx={greyMediumText}>
                   {new Date(feedback.datetime).toLocaleString()}
                 </Text>
               </Flex>
@@ -95,4 +91,17 @@ export default function Case(props) {
       </Box>
     </Box>
   )
+}
+
+export async function getServerSideProps(context) {
+  const result = await axios.get(`${url}/api/feedbackManager/getAllFeedback`, {
+    headers: {
+      caseid: context.params.caseID,
+    },
+  })
+  return {
+    props: {
+      feedbackList: result.data,
+    },
+  }
 }

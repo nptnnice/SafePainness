@@ -1,12 +1,9 @@
 import {
   Box,
   Text,
-  Flex,
   VStack,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
   Radio,
   RadioGroup,
@@ -14,19 +11,26 @@ import {
   Button,
   ButtonGroup,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../../../../Style'
-import Colour from '../../../../../../Colour'
+import { borderStyle } from '/style-props/Historytakingstyles'
 import FormProgress from '/components/FormProgress'
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useToast } from '@chakra-ui/react'
+import {
+  bgColor,
+  layout,
+  formBox,
+  inputStyle,
+  boldText,
+  mediumText,
+  description,
+  blueBtn,
+  whiteBtn,
+  btnGroup,
+} from '/style-props/Sharedstyles'
 
 export default function History2() {
-  let borderStyle = {
-    borderColor: Colour.grey,
-  }
-
   // router
   const router = useRouter()
   const patientID = router.query.patientID
@@ -69,11 +73,13 @@ export default function History2() {
     localStorage.setItem('historytaking-2', JSON.stringify(form))
   }
 
+  // click back button
   const onClickBack = () => {
     saveLocalStorage()
     router.push(`/patient/${patientID}/case/${caseID}/historytaking/part1`)
   }
 
+  // click next button
   const onClickNext = () => {
     if (
       form.painPeriod &&
@@ -103,19 +109,19 @@ export default function History2() {
   }, [])
 
   return (
-    <Box sx={GlobalStyle.bgColor}>
+    <Box sx={bgColor}>
       <FormProgress progress={40} />
-      <Box sx={GlobalStyle.layout}>
-        <Text sx={GlobalStyle.boldText}>Part 2: Time</Text>
+      <Box sx={layout}>
+        <Text sx={boldText}>Part 2: Time</Text>
         <VStack spacing={16}>
-          <VStack spacing={16} align="start" sx={GlobalStyle.formBox}>
+          <VStack spacing={16} align="start" sx={formBox}>
             {/* ==================== Question 8 ==================== */}
             <FormControl isRequired isInvalid={error && !form.painPeriod}>
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 8. How long have you have this pain?
               </FormLabel>
               <Input
-                sx={GlobalStyle.inputStyle}
+                sx={inputStyle}
                 onChange={getPainPeriod}
                 value={form.painPeriod}
               />
@@ -123,7 +129,7 @@ export default function History2() {
 
             {/* ==================== Question 9 ==================== */}
             <FormControl isRequired isInvalid={error && !form.painFrequency}>
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 9. Is the pain constant or intermittent?
               </FormLabel>
               <RadioGroup
@@ -132,10 +138,10 @@ export default function History2() {
               >
                 <Stack direction="row" gap={16}>
                   <Radio sx={borderStyle} value="Constant">
-                    <Text sx={GlobalStyle.labelText}>Constant</Text>
+                    <Text sx={mediumText}>Constant</Text>
                   </Radio>
                   <Radio sx={borderStyle} value="Intermittent">
-                    <Text sx={GlobalStyle.labelText}>Intermittent</Text>
+                    <Text sx={mediumText}>Intermittent</Text>
                   </Radio>
                 </Stack>
               </RadioGroup>
@@ -143,51 +149,51 @@ export default function History2() {
 
             {/* ==================== Question 10 ==================== */}
             <FormControl isRequired isInvalid={error && !form.worseTime}>
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 10. What time of the day that the pain is worse?
               </FormLabel>
+              <Text sx={description}>
+                e.g. in the morning, afternoon, after work, at night, during
+                work, etc
+              </Text>
               <Input
-                sx={GlobalStyle.inputStyle}
+                sx={inputStyle}
                 onChange={getWorseTime}
                 value={form.worseTime}
               />
-              <FormHelperText sx={GlobalStyle.greyMediumText}>
-                e.g. in the morning, afternoon, after work, at night, during
-                work, etc
-              </FormHelperText>
             </FormControl>
 
             {/* ==================== Question 11 ==================== */}
             <FormControl isRequired isInvalid={error && !form.experience}>
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 11. Have you ever had this pain before?
               </FormLabel>
               <RadioGroup onChange={getExperience} value={form.experience}>
                 <Stack direction="row" gap={16}>
                   <Radio sx={borderStyle} value="Yes">
-                    <Text sx={GlobalStyle.labelText}>Yes</Text>
+                    <Text sx={mediumText}>Yes</Text>
                   </Radio>
                   <Radio sx={borderStyle} value="No">
-                    <Text sx={GlobalStyle.labelText}>No</Text>
+                    <Text sx={mediumText}>No</Text>
                   </Radio>
                 </Stack>
               </RadioGroup>
             </FormControl>
           </VStack>
 
-          <ButtonGroup sx={GlobalStyle.btnGroup}>
+          <ButtonGroup sx={btnGroup}>
             <Button
               leftIcon={<ArrowBackIcon />}
-              sx={GlobalStyle.whiteBtn}
-              onClick={onClickBack}
+              sx={whiteBtn}
+              onClick={() => onClickBack()}
             >
               Back
             </Button>
 
             <Button
               rightIcon={<ArrowForwardIcon />}
-              sx={GlobalStyle.blueBtn}
-              onClick={onClickNext}
+              sx={blueBtn}
+              onClick={() => onClickNext()}
             >
               Next
             </Button>

@@ -65,7 +65,7 @@ export default function Case(props) {
   }
 
   return (
-    <Box sx={GlobalStyle.bgColor}>
+    <Box sx={bgColor}>
       <HeadInfo />
 
       <Box sx={layout}>
