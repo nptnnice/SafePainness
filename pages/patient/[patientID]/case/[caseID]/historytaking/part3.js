@@ -10,9 +10,19 @@ import {
   Button,
   ButtonGroup,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../../../../Style'
+import {
+  bgColor,
+  layout,
+  formBox,
+  inputStyle,
+  boldText,
+  mediumText,
+  blueBtn,
+  whiteBtn,
+  btnGroup,
+} from '/style-props/Sharedstyles'
 import FormProgress from '/components/FormProgress'
-import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons'
+import { ArrowBackIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useToast } from '@chakra-ui/react'
@@ -58,11 +68,13 @@ export default function History3() {
     }
   }, [])
 
+  // click back
   const onClickBack = () => {
     saveLocalStorage()
     router.push(`/patient/${patientID}/case/${caseID}/historytaking/part2`)
   }
 
+  // remove other and merge with array
   const removeOther = (part1) => {
     if (part1.otherCharacteristic) {
       part1.characteristic.push(part1.otherCharacteristic)
@@ -75,6 +87,7 @@ export default function History3() {
     delete part1.otherSymptom
   }
 
+  // send to db
   const sendToDB = async (data) => {
     try {
       const res = await axios.post(`/api/caseManager/updateHistoryTaking`, data)
@@ -94,7 +107,8 @@ export default function History3() {
     localStorage.removeItem('historytaking-3')
   }
 
-  const onClickNext = () => {
+  // click submit
+  const onClickSubmit = () => {
     if (form.exacerbate && form.relieve) {
       setError(false)
       saveLocalStorage()
@@ -128,19 +142,19 @@ export default function History3() {
   }
 
   return (
-    <Box sx={GlobalStyle.bgColor}>
+    <Box sx={bgColor}>
       <FormProgress progress={60} />
-      <Box sx={GlobalStyle.layout}>
-        <Text sx={GlobalStyle.boldText}>Part 3: Exacerbating Factors</Text>
+      <Box sx={layout}>
+        <Text sx={boldText}>Part 3: Exacerbating Factors</Text>
         <VStack spacing={16}>
-          <VStack spacing={16} align="start" sx={GlobalStyle.formBox}>
+          <VStack spacing={16} align="start" sx={formBox}>
             {/* ==================== Question 12 ==================== */}
             <FormControl isRequired isInvalid={error && !form.exacerbate}>
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 12. What makes the pain worse?
               </FormLabel>
               <Input
-                sx={GlobalStyle.inputStyle}
+                sx={inputStyle}
                 onChange={getExacerbate}
                 value={form.exacerbate}
               />
@@ -148,26 +162,26 @@ export default function History3() {
 
             {/* ==================== Question 13 ==================== */}
             <FormControl isRequired isInvalid={error && !form.relieve}>
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 13. How did you relieve your pain?
               </FormLabel>
               <Input
-                sx={GlobalStyle.inputStyle}
+                sx={inputStyle}
                 onChange={getRelieve}
                 value={form.relieve}
               />
             </FormControl>
           </VStack>
 
-          <ButtonGroup sx={GlobalStyle.btnGroup}>
+          <ButtonGroup sx={btnGroup}>
             <Button
               leftIcon={<ArrowBackIcon />}
-              sx={GlobalStyle.whiteBtn}
-              onClick={onClickBack}
+              sx={whiteBtn}
+              onClick={() => onClickBack()}
             >
               Back
             </Button>
-            <Button sx={GlobalStyle.blueBtn} onClick={onClickNext}>
+            <Button sx={blueBtn} onClick={() => onClickSubmit()}>
               Submit
             </Button>
           </ButtonGroup>

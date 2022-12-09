@@ -8,54 +8,72 @@ import {
   FormControl,
   VStack,
   useToast,
-  flattenTokens,
+  Flex,
 } from '@chakra-ui/react'
+import {
+  bgColor,
+  layout,
+  inputStyle,
+  btnPosition,
+  contentBox,
+  headingText,
+  mediumText,
+  regularText,
+  greyMediumText,
+  errorText,
+  blueBtn,
+} from '/style-props/Sharedstyles'
+import { flexStyle, boxStyle } from '/style-props/Feedbackstyles'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
-import GlobalStyle from '/Style'
 import HeadInfo from '/components/HeadInfo'
-import Responses from '/components/Responses'
 import { useRouter } from 'next/router'
 import { useAppContext } from '/context/UserContext'
 import url from '/url'
+import jwt_decode from 'jwt-decode'
 
 export default function Feedback(props) {
   const { feedback, allResponses, feedbacklist } = props
 
-  console.log(feedbacklist)
-
+  // router
   const router = useRouter()
-  console.log(router)
   const { caseID, patientID } = router.query
 
   // find the index of the feedback
   const [feedbackIndex, setFeedbackIndex] = useState(0)
   useEffect(() => {
     for (let i = 0; i < feedbacklist.length; i++) {
-      console.log(i, feedbacklist[i])
-      console.log(feedback.feedbackID)
       if (feedbacklist[i].feedbackID === feedback.feedbackID) {
         setFeedbackIndex(feedbacklist.length - i)
       }
     }
   }, [])
 
-  // check role
-  const { user } = useAppContext()
-  const [roleID, setRoleID] = useState(0)
+  // context
+  const { user, setUser } = useAppContext()
+  const [userRole, setUserRole] = useState('')
+
+  // check if user is logged in
   useEffect(() => {
-    if (user) {
-      setRoleID(user.userID)
+    if (sessionStorage.getItem('token') == null) {
+      sessionStorage.clear()
+      setUser(null)
+      router.push('/')
+      setTimeout(() => {
+        alert('Please login first')
+      }, 500)
+    } else {
+      setUserRole(jwt_decode(sessionStorage.getItem('token')).role)
     }
-  }, [user])
+  }, [])
 
   // toast
   const toast = useToast()
 
-  // handle error
+  // check error
   const [error, setError] = useState(false)
 
-  // handle response
+  // set response
   const [form, setForm] = useState({
     message: '',
   })
@@ -64,7 +82,7 @@ export default function Feedback(props) {
   }
 
   // handle submit
-  const submitResponse = async () => {
+  const onClickSubmit = async () => {
     if (form.message) {
       setError(false)
       try {
@@ -88,20 +106,17 @@ export default function Feedback(props) {
         duration: 3000,
         isClosable: true,
       })
-      setForm({ message: '' })
       setTimeout(() => {
         window.location.reload()
-      }, 4000)
+      }, 3000)
     } else {
       setError(true)
     }
   }
 
-  console.log(feedbackIndex)
-
   return (
     <>
-      <Box sx={GlobalStyle.bgColor}>
+      <Box sx={bgColor}>
         <HeadInfo
           name="Patient ID"
           patientID={patientID}
@@ -109,32 +124,59 @@ export default function Feedback(props) {
           caseName="Grammar addict"
           // doctor={user.name}
         />
-        <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
-          <Text sx={GlobalStyle.headingText}>Feedback #{feedbackIndex}</Text>
-          <Box sx={GlobalStyle.infoBox}>
-            <Responses
-              feedback={feedback}
-              allResponses={allResponses}
-              roleID={roleID}
-            />
+
+        <VStack sx={layout} align="start" spacing={8}>
+          <Text sx={headingText}>Feedback #{feedbackIndex}</Text>
+          <Box sx={contentBox}>
+            {/* ==================== Feedback ==================== */}
+            <Box sx={boxStyle}>
+              <Flex sx={flexStyle}>
+                <Text sx={mediumText}>
+                  Feedback from Dr. {feedback.firstName} {feedback.lastName}
+                </Text>
+                <Text sx={greyMediumText} textAlign="right">
+                  {new Date(feedback.datetime).toLocaleString()}
+                </Text>
+              </Flex>
+              <Text sx={regularText}>{feedback.message}</Text>
+            </Box>
+
+            {/* ==================== Response ==================== */}
+            {allResponses.map((item, index) => {
+              return (
+                <Box sx={boxStyle} key={index}>
+                  <Flex sx={flexStyle}>
+                    <Text sx={mediumText}>
+                      Response from {item.firstName} {item.lastName}
+                    </Text>
+                    <Text sx={greyMediumText} textAlign="right">
+                      {new Date(item.datetime).toLocaleString()}
+                    </Text>
+                  </Flex>
+                  <Text sx={regularText}>{item.message}</Text>
+                </Box>
+              )
+            })}
           </Box>
-          <Box sx={GlobalStyle.infoBox}>
+
+          {/* ==================== Input ==================== */}
+          <Box sx={contentBox}>
             <FormControl isInvalid={error && !form.message}>
-              <FormLabel sx={GlobalStyle.labelText}>
-                {roleID == 1
+              <FormLabel sx={mediumText}>
+                {userRole === 'doctor'
                   ? 'Response to your patient'
                   : 'Response to your doctor'}
               </FormLabel>
-              <Textarea sx={GlobalStyle.inputStyle} onChange={getResponses} />
-              <FormErrorMessage marginTop="16px" sx={GlobalStyle.errorText}>
+              <Textarea sx={inputStyle} onChange={getResponses} />
+              <FormErrorMessage marginTop="16px" sx={errorText}>
                 Please fill in your response
               </FormErrorMessage>
             </FormControl>
           </Box>
 
-          {/* ==== Button ==== */}
-          <Box sx={GlobalStyle.btnBox}>
-            <Button sx={GlobalStyle.blueBtn} onClick={submitResponse}>
+          {/* ==================== Submit button ==================== */}
+          <Box sx={btnPosition}>
+            <Button sx={blueBtn} onClick={() => onClickSubmit()}>
               Submit
             </Button>
           </Box>

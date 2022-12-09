@@ -37,6 +37,13 @@ const recordBox = {
     borderColor: Colour.turquoise,
   },
 }
+const formBox = {
+  backgroundColor: Colour.white,
+  width: '100%',
+  padding: { base: '32px 16px 56px', md: '40px 80px 80px' },
+  borderRadius: '12px',
+  marginTop: '16px',
+}
 
 // icon
 const searchIconStyle = {
@@ -63,6 +70,10 @@ const inputStyle = {
   border: '1px solid',
   borderColor: Colour.grey,
   height: { base: '40px', md: '48px' },
+}
+const bigInput = {
+  ...inputStyle,
+  height: '160px',
 }
 
 // button
@@ -207,6 +218,10 @@ const greyMediumText = {
   fontWeight: 'medium',
   fontSize: { base: '16px', md: '18px' },
 }
+const description = {
+  ...greyMediumText,
+  marginBottom: '8px',
+}
 const errorText = {
   color: Colour.red,
   fontFamily: 'IBM Plex Sans',
@@ -324,10 +339,12 @@ export {
   layout,
   contentBox,
   recordBox,
+  formBox,
   searchIconStyle,
   addIconStyle,
   iconInput,
   inputStyle,
+  bigInput,
   btnGroup,
   btnPosition,
   submitBtnPosition,
@@ -345,6 +362,7 @@ export {
   spanFlex,
   spanFlex2,
   greyMediumText,
+  description,
   errorText,
   hoverStyle,
   hoverStyleSelected,
