@@ -8,6 +8,10 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   VStack,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
 } from '@chakra-ui/react'
 import GlobalStyle from '/Style'
 import Colour from '/Colour'
@@ -15,9 +19,10 @@ import SummaryBox from '/components/SummaryBox'
 import Dashboard from '/components/Dashboard'
 import HeadInfo from '/components/HeadInfo'
 import ConfirmModal from '/components/ConfirmModal'
+import QRgenerator from '/components/QRgenerator'
+import StopTrackModal from '/components/StopTrackModal'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useAppContext } from '/context/UserContext'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import axios from 'axios'
 import url from '/url'
@@ -30,8 +35,15 @@ export default function Case(props) {
     padding: { base: '48px 0 160px', md: '56px 0 240px' },
     position: 'relative',
   }
+  let layout2 = {
+    width: '90%',
+    margin: '0 auto',
+    maxWidth: '900px',
+    padding: { base: '120px 0 160px', md: '200px 0 240px' },
+    position: 'relative',
+  }
   let diagnosisFlex = {
-    alignItems: { base: 'flex-start', md: 'center' },
+    alignItems: { base: 'flex-start', md: 'flex-start' },
     gap: '16px',
     width: '100%',
     flexDirection: { base: 'column', md: 'row' },
@@ -68,34 +80,29 @@ export default function Case(props) {
       color: Colour.red,
     },
   }
-  let takeHistoryBtn = {
-    backgroundColor: Colour.lightBlue,
-    color: Colour.white,
-    padding: { base: '16px 24px', md: '24px 40px' },
-    fontFamily: 'Lato',
-    fontSize: { base: '16px', md: '18px' },
-    fontWeight: 'bold',
-    borderRadius: '12px',
-    border: '3px solid',
-    borderColor: Colour.lightBlue,
-    transition: 'all 0.2s ease',
-    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
-    _hover: {
-      backgroundColor: Colour.darkBlue,
-      borderColor: Colour.darkBlue,
-    },
-  }
   const currentPage = {
     color: Colour.darkBlue,
     fontFamily: 'IBM Plex Sans',
     fontWeight: 'bold',
     fontSize: { base: '16px', md: '18px' },
   }
-
-  const [noHistory, setHistory] = useState(false)
+  // For Confirm Diagnosis Modal
+  const [diseaseName, setDiseaseName] = useState('')
+  const [isError, setIsError] = useState(false)
   const [showModal, setShowModal] = useState(false)
-  const [isconfirm, setConfirm] = useState(false)
-  const onConfirmDiagnosis = () => setShowModal(!showModal)
+  const [isConfirm, setConfirm] = useState(false)
+  const onConfirmDiagnosis = () => {
+    if (diseaseName == '') {
+      setIsError(true)
+    } else {
+      setIsError(false)
+      setShowModal(!showModal)
+    }
+  }
+  // For Stop Tracking Modal
+  const [showStopModal, setShowStopModal] = useState(false)
+  const onStopTracking = () => setShowStopModal(!showStopModal)
+
   const router = useRouter()
   const caseID = router.query.caseID
   const { caseInfo } = props
@@ -105,45 +112,66 @@ export default function Case(props) {
     <Box sx={GlobalStyle.bgColor}>
       <HeadInfo />
       {/* ==================== No pain experience ==================== */}
-      <VStack>
-        <Text sx={GlobalStyle.greyMediumText}>
-          No record of pain experience
-        </Text>
-        <Button sx={takeHistoryBtn} onClick={() => setHistory(!noHistory)}>
-          Take history
-        </Button>
-      </VStack>
-      <Box sx={layout}>
-        {/* ==================== Confirm diagnosis ==================== */}
-        {!isconfirm ? (
-          <Flex sx={diagnosisFlex}>
-            <Text sx={GlobalStyle.boldText} whiteSpace="nowrap">
-              Case {caseID}:
-            </Text>
-            <Input placeholder="Disease name" sx={GlobalStyle.inputStyle} />
-            <Button sx={GlobalStyle.yellowBtn} onClick={onConfirmDiagnosis}>
-              Confirm diagnosis
-            </Button>
-          </Flex>
-        ) : (
-          <Box sx={btnPosition}>
-            <Button sx={btnStyle}>Stop Tracking</Button>
-          </Box>
-        )}
-        <ConfirmModal
-          isOpen={showModal}
-          onClose={onConfirmDiagnosis}
-          setConfirm={setConfirm}
-        />
-
-        {/* ==================== Breadcrumb ==================== */}
-        <BreadcrumbMenu />
-
-        <Box sx={section}>
-          <SummaryBox caseInfo={caseInfo} />
-          <Dashboard />
+      {caseInfo.painFrequency == null ? (
+        <Box sx={layout2}>
+          <QRgenerator caseInfo={caseInfo} />
         </Box>
-      </Box>
+      ) : (
+        <Box sx={layout}>
+          {/* ==================== Confirm diagnosis ==================== */}
+          {!isConfirm && caseInfo.caseName == null ? (
+            <>
+              <Flex sx={diagnosisFlex}>
+                <FormControl id="disease" isInvalid={isError}>
+                  <Input
+                    placeholder="Disease name"
+                    onChange={(e) => setDiseaseName(e.target.value)}
+                    sx={GlobalStyle.inputStyle}
+                  />
+                  <FormErrorMessage>
+                    Please fill in the disease name
+                  </FormErrorMessage>
+                </FormControl>
+                <Button
+                  sx={GlobalStyle.yellowBtn}
+                  onClick={() => onConfirmDiagnosis()}
+                >
+                  Confirm diagnosis
+                </Button>
+              </Flex>
+              <ConfirmModal
+                isOpen={showModal}
+                onClose={onConfirmDiagnosis}
+                setConfirm={setConfirm}
+                caseInfo={caseInfo}
+                diseaseName={diseaseName}
+              />
+            </>
+          ) : (
+            <>
+              <Box sx={btnPosition}>
+                <Button sx={btnStyle} onClick={() => onStopTracking()}>
+                  Stop Tracking
+                </Button>
+              </Box>
+              <StopTrackModal
+                isOpen={showStopModal}
+                onClose={onStopTracking}
+                setConfirm={setConfirm}
+                caseInfo={caseInfo}
+              />
+            </>
+          )}
+
+          {/* ==================== Breadcrumb ==================== */}
+          <BreadcrumbMenu />
+
+          <Box sx={section}>
+            <SummaryBox caseInfo={caseInfo} />
+            <Dashboard />
+          </Box>
+        </Box>
+      )}
     </Box>
   )
 }

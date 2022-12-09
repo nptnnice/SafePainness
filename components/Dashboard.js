@@ -5,14 +5,26 @@ import Colour from '../Colour'
 import Chart from 'chart.js/auto'
 import { Line } from 'react-chartjs-2'
 import axios from 'axios'
+import { async } from '@firebase/util'
+import url from '/url'
 
-export default function Dashboard() {
-  const [painGraph, setPainGraph] = useState({
-    dataset: [{}],
-  })
+export default function Dashboard(props) {
+  // const { painGraph } = props
+  // const [painGraph, setPainGraph] = useState({
+  //   dataset: [{}],
+  // })
+  const painGraphValue = [
+    { datetime: '2022-11-01', painScale: 1 },
+    { datetime: '2022-11-02', painScale: 2 },
+    { datetime: '2022-11-03', painScale: 3 },
+    { datetime: '2022-11-04', painScale: 4 },
+    { datetime: '2022-11-05', painScale: 5 },
+    { datetime: '2022-11-06', painScale: 6 },
+    { datetime: '2022-11-07', painScale: 7 },
+  ]
 
   const data = {
-    // labels: array(date),
+    // labels: ['1', '2', '3', '4', '5', '6', '7'],
     datasets: [
       {
         label: 'Pain Severity',
@@ -20,11 +32,15 @@ export default function Dashboard() {
         lineTension: 0.1,
         backgroundColor: Colour.turquoise,
         borderColor: Colour.turquoise,
-        // data: array(painScale),
+        data: painGraphValue,
+        parsing: {
+          xAxisKey: 'datetime',
+          yAxisKey: 'painScale',
+        },
       },
     ],
   }
-
+  console.log('painGraph: ', props)
   return (
     <>
       <Text sx={GlobalStyle.boldText} marginBottom="16px">
@@ -35,4 +51,17 @@ export default function Dashboard() {
       </Box>
     </>
   )
+}
+
+export async function getServerSideProps(context) {
+  const result = await axios.get(`${url}/api/caseManager/getChart`, {
+    headers: {
+      caseid: context.params.caseID,
+    },
+  })
+  return {
+    props: {
+      painGraph: result.data,
+    },
+  }
 }
