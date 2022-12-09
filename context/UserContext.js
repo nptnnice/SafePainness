@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import jwt_decode from 'jwt-decode'
+import axios from 'axios'
 
 const AppContext = createContext()
 
@@ -7,17 +8,22 @@ export function AppWrapper({ children }) {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    if (sessionStorage.getItem('token')) {
-      setUser({
-        userID: jwt_decode(sessionStorage.getItem('token')).userID,
-        role: jwt_decode(sessionStorage.getItem('token')).role,
-        image: jwt_decode(sessionStorage.getItem('token')).image,
-        name: jwt_decode(sessionStorage.getItem('token')).name,
-        // userID: sessionStorage.getItem('userID'),
-        // role: sessionStorage.getItem('role'),
-        // image: sessionStorage.getItem('image'),
-        // name: sessionStorage.getItem('name'),
+    const getUser = async () => {
+      let userData = await axios.get('/api/getUser', {
+        headers: {
+          userid: jwt_decode(sessionStorage.getItem('token')).userID,
+        },
       })
+      setUser({
+        userID: userData.data.userID,
+        role: userData.data.role,
+        image: userData.data.image,
+        name: userData.data.firstName + ' ' + userData.data.lastName,
+      })
+    }
+
+    if (sessionStorage.getItem('token')) {
+      getUser()
     }
   }, [])
   console.log('user', user)

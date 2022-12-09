@@ -94,6 +94,7 @@ export default function Feedback(props) {
           receiverID: user.role === 'doctor' ? patientID : feedback.doctorID,
           patientID: patientID,
           caseID: caseID,
+          time: new Date().toISOString(),
         })
         console.log(res)
       } catch (err) {

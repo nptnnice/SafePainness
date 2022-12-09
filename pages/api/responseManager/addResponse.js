@@ -10,8 +10,9 @@ export default async function handler(req, res) {
     receiverID,
     patientID,
     caseID,
+    time,
   } = req.body
-  const datetime = new Date()
+  const datetime = new Date(time)
 
   let result = await db.query(
     `INSERT INTO "public"."Response"

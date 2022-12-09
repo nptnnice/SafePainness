@@ -17,6 +17,7 @@ import {
   notificationWidth,
   iconButton,
   notificationBox,
+  notificationBox2,
   statusBox,
   dateText,
 } from '/style-props/Notificationstyles'
@@ -94,6 +95,11 @@ export default function Notification() {
       <PopoverContent sx={notificationWidth}>
         <PopoverArrow />
         <PopoverBody>
+          {notifications.length === 0 && (
+            <Flex sx={notificationBox2}>
+              <Text sx={regularText}>No notifications</Text>
+            </Flex>
+          )}
           {notifications.map((item, index) => (
             <Flex
               sx={notificationBox}

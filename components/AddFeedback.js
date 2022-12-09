@@ -66,6 +66,7 @@ export default function AddFeedbackModal(props) {
           receiverID: patientID,
           senderName: `Dr. ${user.name}`,
           patientID: patientID,
+          time: new Date().toISOString(),
         })
         console.log(res)
         onClose()

@@ -21,7 +21,6 @@ export default async function handler(req, res) {
       const token = jwt.sign(
         {
           userID: user.rows[0].userID,
-          // username: user.rows[0].username,
           role: user.rows[0].role,
           image: user.rows[0].image,
           name: user.rows[0].firstName + ' ' + user.rows[0].lastName,
