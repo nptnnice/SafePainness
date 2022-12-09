@@ -57,7 +57,7 @@ const addIconStyle = {
 const iconInput = {
   color: Colour.lightBlack,
   cursor: 'pointer',
-  marginTop: '8px',
+  marginTop: { base: '2px', md: '8px' },
 }
 
 // input
@@ -227,6 +227,16 @@ const errorText = {
   fontFamily: 'IBM Plex Sans',
   fontSize: { base: '14px', md: '16px' },
 }
+const clickText = {
+  color: Colour.lightBlue,
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: '500',
+  fontSize: { base: '16px', md: '18px' },
+  cursor: 'pointer',
+  _hover: {
+    textDecoration: 'underline',
+  },
+}
 
 // hover
 const hoverStyle = {
@@ -364,6 +374,7 @@ export {
   greyMediumText,
   description,
   errorText,
+  clickText,
   hoverStyle,
   hoverStyleSelected,
   profileImg,

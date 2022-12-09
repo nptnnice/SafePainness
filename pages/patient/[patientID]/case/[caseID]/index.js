@@ -26,6 +26,7 @@ import { useRouter } from 'next/router'
 import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import axios from 'axios'
 import url from '/url'
+import { useAppContext } from '/context/UserContext'
 
 export default function Case(props) {
   const { caseInfo } = props

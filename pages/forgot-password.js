@@ -9,9 +9,17 @@ import {
   Center,
   FormErrorMessage,
 } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
+import {
+  clickText,
+  bgColor,
+  layout,
+  profileImg,
+  inputStyle,
+  blueBtn,
+  contentBox,
+  regularText,
+} from '/style-props/Sharedstyles'
 import HeadCenter from '../components/HeadCenter'
-import Colour from '../Colour'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/react'
@@ -20,38 +28,22 @@ import axios from 'axios'
 import url from '../url'
 
 export default function ForgotPassword() {
-  let Discription = {
-    textAlign: 'center',
-    color: Colour.lightBlack,
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: '400',
-    fontSize: { base: '16px', md: '18px' },
-  }
-  let boxStyle = {
-    width: '100%',
-    borderRadius: '12px',
-    backgroundColor: Colour.white,
-    padding: { base: '24px 16px', md: '60px 40px' },
-    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
-  }
-  let cancelBtn = {
-    color: Colour.lightBlue,
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: '500',
-    fontSize: { base: '16px', md: '18px' },
-    cursor: 'pointer',
-    _hover: {
-      textDecoration: 'underline',
-    },
-  }
-  const [show, setShow] = useState(false)
-  const [isError, setIsError] = useState(false)
+  // router
   const router = useRouter()
+
+  // toast
+  const toast = useToast()
+
+  // check error
+  const [isError, setIsError] = useState(false)
+
+  // click cancel
   const onClickCancel = () => {
     router.push('./')
   }
-  const toast = useToast()
-  const [userLink, setUserLink] = useState(`${url}/reset-password`)
+
+  // set link to send email
+  const [userLink, setUserLink] = useState(`${url}/forgot-password`)
   const checkEmail = async (e) => {
     let email = e.target.value
     let res = await axios.get('/api/checkEmail', { headers: { email: email } })
@@ -61,38 +53,15 @@ export default function ForgotPassword() {
     } else {
       setIsError(false)
       console.log('data', res.data)
-      // if (res.data[0].roleID == 1) {
-      //   setUserLink(`${url}/doctor/res.data.userID/reset-password`)
-      //   console.log('userLink', userLink)
-      // } else if (res.data[0].roleID == 2) {
-      //   setUserLink(`${url}/patient/` + res.data[0].userID + '/reset-password')
-      //   console.log('userLink', userLink)
-      // }
+      if (res.data.role == 'doctor') {
+        setUserLink(`${url}/doctor/${res.data.userID}/reset-password`)
+      } else if (res.data.role == 'patient') {
+        setUserLink(`${url}/patient/${res.data.userID}/reset-password`)
+      }
     }
   }
-  // let email = e.target.value
-  // let res = await axios.get('/api/checkEmail', { headers: { email: email } })
-  // if (res.data === 'Email already exist') {
-  //   setIsError(true)
-  // } else {
-  //   setIsError(false)
-  //   console.log('data', res)
-  //   if (res.data[0].roleID == 1) {
-  //     setUserLink(
-  //       '${url}/doctor/' +
-  //         res.data[0].userID +
-  //         '/reset-password'
-  //     )
-  //     console.log('userLink', userLink)
-  //   } else if (res.data[0].roleID == 2) {
-  //     setUserLink(
-  //       '${url}/patient/' +
-  //         res.data[0].userID +
-  //         '/reset-password'
-  //     )
-  //     console.log('userLink', userLink)
-  //   }
 
+  // send email
   function sendEmail(e) {
     e.preventDefault()
 
@@ -115,7 +84,7 @@ export default function ForgotPassword() {
           })
           setTimeout(() => {
             window.location.reload()
-          }, 4000) //This is if you still want the page to reload (since e.preventDefault() cancelled that behavior)
+          }, 3000) //This is if you still want the page to reload (since e.preventDefault() cancelled that behavior)
         },
         (error) => {
           console.log(error.text)
@@ -125,22 +94,24 @@ export default function ForgotPassword() {
 
   return (
     <>
-      <Box sx={GlobalStyle.bgColor}>
+      <Box sx={bgColor}>
         <HeadCenter topic="Forgot Password" />
-        <Box sx={GlobalStyle.layout}>
+        <Box sx={layout}>
           <form onSubmit={sendEmail}>
-            <VStack sx={boxStyle} gap="16px">
+            <VStack sx={contentBox} gap="16px">
               <Center>
-                <Avatar sx={GlobalStyle.profileImg} src="/images/key.png" />
+                <Avatar sx={profileImg} src="/images/key.png" />
               </Center>
-              <Text sx={Discription}>
+              <Text sx={Object.assign(regularText, { textAlign: 'center' })}>
                 Enter your email address and we’ll send you a link to reset your
                 password
               </Text>
+
+              {/* email input */}
               <FormControl padding="10px 40px" isInvalid={isError}>
                 <Input type="hidden" name="user_link" value={userLink} />
                 <Input
-                  sx={GlobalStyle.inputStyle}
+                  sx={inputStyle}
                   placeholder="Enter your email"
                   type="email"
                   name="to_email"
@@ -148,14 +119,18 @@ export default function ForgotPassword() {
                     checkEmail(e)
                   }}
                 />
+
+                {/* check error */}
                 {isError ? (
                   <FormErrorMessage>Email not found</FormErrorMessage>
                 ) : null}
               </FormControl>
-              <Button sx={GlobalStyle.blueBtn} type="submit">
+
+              {/* button */}
+              <Button sx={blueBtn} type="submit">
                 Reset Password
               </Button>
-              <Text sx={cancelBtn} onClick={() => onClickCancel()}>
+              <Text sx={clickText} onClick={() => onClickCancel()}>
                 Cancel
               </Text>
             </VStack>
