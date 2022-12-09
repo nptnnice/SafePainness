@@ -2,8 +2,8 @@ import db from '/db'
 import addNotification from '/functions/addNotification'
 
 export default async function handler(req, res) {
-  const { doctorID, patientID } = req.body
-  const date = new Date()
+  const { doctorID, patientID, time } = req.body
+  const date = new Date(time)
 
   let result = await db.query(
     `INSERT INTO "public"."Case" ("doctorID", "patientID", "date") VALUES ($1, $2, $3)`,

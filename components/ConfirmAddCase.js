@@ -30,6 +30,7 @@ export default function QR(props) {
     const caseData = {
       doctorID: doctorID,
       patientID: patientID,
+      time: new Date().toISOString(),
     }
     try {
       const res = await axios.post('/api/caseManager/addCase', caseData)

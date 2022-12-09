@@ -192,6 +192,7 @@ export default function AddRecord() {
       senderID: user.userID,
       senderName: user.name,
       patientID: patientID,
+      time: new Date().toISOString(),
     })
     console.log(form)
     setIsExceed(false)

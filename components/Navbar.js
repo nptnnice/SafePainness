@@ -1,4 +1,13 @@
 import {
+  navbar,
+  logo,
+  menuFlex,
+  signup,
+  login,
+  menuBox,
+} from '/style-props/Navbarstyles'
+import { regularText } from '/style-props/Sharedstyles'
+import {
   Text,
   Flex,
   Image,
@@ -9,22 +18,12 @@ import {
   PopoverContent,
   PopoverBody,
 } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
 import LoginModal from './LoginModal'
 import { useState, useEffect } from 'react'
 import Notification from './Notification'
 import { useRouter } from 'next/router'
 import jwt_decode from 'jwt-decode'
 import { useAppContext } from '../context/UserContext'
-import {
-  navbar,
-  logo,
-  menuFlex,
-  signup,
-  login,
-  menuBox,
-} from '/style-props/Navbarstyles'
 
 export default function Navbar() {
   // set login modal
@@ -76,10 +75,10 @@ export default function Navbar() {
     return (
       <>
         <Box sx={menuBox} onClick={() => onClickProfile()}>
-          <Text sx={GlobalStyle.regularText}>Profile</Text>
+          <Text sx={regularText}>Profile</Text>
         </Box>
         <Box sx={menuBox} onClick={() => onLogout()}>
-          <Text sx={GlobalStyle.regularText}>Log out</Text>
+          <Text sx={regularText}>Log out</Text>
         </Box>
       </>
     )

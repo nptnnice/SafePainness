@@ -1,8 +1,7 @@
 import Colour from './SharedColour'
 
 const notificationWidth = {
-  width: '100%',
-  maxWidth: '400px',
+  width: '400px',
 }
 const iconButton = {
   color: Colour.white,
@@ -28,6 +27,14 @@ const notificationBox = {
     borderColor: Colour.turquoise,
   },
 }
+const notificationBox2 = {
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderBottom: '2px solid',
+  borderColor: Colour.grey,
+  padding: { base: '8px 16px', md: '8px 20px' },
+  width: '100%',
+}
 const statusBox = {
   backgroundColor: Colour.green,
   padding: '4px 8px',
@@ -44,4 +51,11 @@ const dateText = {
   textAlign: 'right',
 }
 
-export { notificationWidth, iconButton, notificationBox, statusBox, dateText }
+export {
+  notificationWidth,
+  iconButton,
+  notificationBox,
+  notificationBox2,
+  statusBox,
+  dateText,
+}

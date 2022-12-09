@@ -11,7 +11,9 @@ export default async function handler(req, res) {
     senderID,
     senderName,
     patientID,
+    time,
   } = req.body
+
   const datetime = new Date()
 
   let result = await db.query(
