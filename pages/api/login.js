@@ -4,11 +4,11 @@ import jwt from 'jsonwebtoken'
 export default async function handler(req, res) {
   const { username, password } = req.body
   let user = await db.query(
-    `SELECT "doctorID" AS "userID", "username", "password", "firstName", "lastName", "roleID", "image"
+    `SELECT "doctorID" AS "userID", "username", "password", "firstName", "lastName", "role", "image"
     FROM "public"."Doctor"
     WHERE "username"=$1
     UNION
-    SELECT "patientID" AS "userID", "username", "password", "firstName", "lastName", "roleID", "image"
+    SELECT "patientID" AS "userID", "username", "password", "firstName", "lastName", "role", "image"
     FROM "public"."Patient"
     WHERE "username"=$1`,
     [username]
@@ -21,8 +21,10 @@ export default async function handler(req, res) {
       const token = jwt.sign(
         {
           userID: user.rows[0].userID,
-          username: user.rows[0].username,
-          roleID: user.rows[0].roleID,
+          // username: user.rows[0].username,
+          role: user.rows[0].role,
+          image: user.rows[0].image,
+          name: user.rows[0].firstName + ' ' + user.rows[0].lastName,
         },
         'secret',
         { expiresIn: '6h' }

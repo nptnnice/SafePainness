@@ -6,5 +6,5 @@ export default async function handler(req, res) {
     `SELECT * FROM "public"."Doctor" WHERE "doctorID"=$1`,
     [doctorID]
   )
-  res.json(result.rows)
+  res.json(result.rows[0])
 }

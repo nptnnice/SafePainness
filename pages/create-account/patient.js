@@ -1,6 +1,24 @@
+import { flexStyle } from '/style-props/Profilestyles'
+import {
+  layout,
+  headingText,
+  mediumText,
+  inputStyle,
+  gridStyle,
+  btnPosition,
+  btnGroup,
+  whiteBtn,
+  blueBtn,
+  divider,
+  iconInput,
+  greyMediumText,
+  errorText,
+} from '/style-props/Sharedstyles'
 import {
   Text,
   Input,
+  InputGroup,
+  InputRightElement,
   Button,
   ButtonGroup,
   SimpleGrid,
@@ -11,33 +29,38 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
-  chakra,
   VStack,
-  Wrap,
 } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import HeadCenter from '../components/HeadCenter'
-import Colour from '../Colour'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import HeadCenter from '/components/HeadCenter'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/react'
 import axios from 'axios'
 
 export default function CreatePatientAccount() {
-  let flexStyle = {
-    gap: '24px',
-    width: '100%',
-  }
+  // router
+  const router = useRouter()
 
+  // toast
+  const toast = useToast()
+
+  // set show password
   const [show, setShow] = useState(false)
+  const handlePassword = () => setShow(!show)
+
+  // check error
   const [isError, setIsError] = useState(false)
   const [isErrorUsername, setIsErrorUsername] = useState(false)
+  const [isErrorEmail, setIsErrorEmail] = useState(false)
   const [isErrorPhone, setIsErrorPhone] = useState(false)
-  const router = useRouter()
-  const toast = useToast()
+
+  // click cancel
   const onClickCancel = () => {
     router.push('/')
   }
+
+  // set form
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -57,7 +80,9 @@ export default function CreatePatientAccount() {
   //check username is already in database
   const checkUsername = async (e) => {
     let username = e.target.value
-    let res = await axios.post('/api/checkUsername', { username: username })
+    let res = await axios.get('/api/checkUsername', {
+      headers: { username: username },
+    })
     if (res.data === 'User already exist') {
       setIsErrorUsername(true)
       setForm({ ...form, username: '' })
@@ -80,6 +105,18 @@ export default function CreatePatientAccount() {
       setIsErrorPhone(true)
     }
   }
+  //check email
+  const checkEmail = async (e) => {
+    let email = e.target.value
+    let res = await axios.get('/api/checkEmail', { headers: { email: email } })
+    if (res.data === 'Email already exist') {
+      setIsErrorEmail(true)
+      setForm({ ...form, email: '' })
+    } else {
+      setIsErrorEmail(false)
+      setForm({ ...form, email: email })
+    }
+  }
 
   //Create Patient Account
   const onCreatePatient = async () => {
@@ -95,14 +132,13 @@ export default function CreatePatientAccount() {
       form.citizenID &&
       form.medCondition &&
       form.allergy &&
-      form.phoneNumber
+      form.phoneNumber &&
+      form.email
     ) {
       setIsError(false)
       try {
         const res = await axios.post('/api/patientManager/addPatient', form)
         console.log('res', res)
-        console.log('form is valid')
-        console.log(form)
         toast({
           title: 'Submit successfully',
           description: 'Your account has been created.',
@@ -115,14 +151,13 @@ export default function CreatePatientAccount() {
       }
       //reload page
       setTimeout(() => {
-        router.push('./')
-      }, 4000)
+        router.push('/')
+      }, 3000)
     } else {
       setIsError(true)
-      console.log('form is invalid')
       toast({
-        title: 'An error occurred.',
-        description: 'Please fill in all required fields.',
+        title: 'Error',
+        description: 'Please fill in all the required fields.',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -134,14 +169,14 @@ export default function CreatePatientAccount() {
     <>
       <HeadCenter topic="Create Patient Account" />
 
-      <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
+      <VStack sx={layout} align="start" spacing={8}>
         {/* ==================== Basic information ==================== */}
-        <Text sx={GlobalStyle.headingText}>Basic Information</Text>
-        <SimpleGrid columns={{ base: 1, sm: 2 }} sx={GlobalStyle.gridStyle}>
+        <Text sx={headingText}>Basic Information</Text>
+        <SimpleGrid columns={{ base: 1, sm: 2 }} sx={gridStyle}>
           <FormControl isRequired isInvalid={isError && !form.firstName}>
-            <FormLabel sx={GlobalStyle.labelText}>First Name</FormLabel>
+            <FormLabel sx={mediumText}>First Name</FormLabel>
             <Input
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 setForm({ ...form, firstName: e.target.value })
               }}
@@ -149,9 +184,9 @@ export default function CreatePatientAccount() {
           </FormControl>
 
           <FormControl isRequired isInvalid={isError && !form.lastName}>
-            <FormLabel sx={GlobalStyle.labelText}>Last Name</FormLabel>
+            <FormLabel sx={mediumText}>Last Name</FormLabel>
             <Input
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 setForm({ ...form, lastName: e.target.value })
               }}
@@ -164,32 +199,41 @@ export default function CreatePatientAccount() {
               (isErrorUsername && !form.username) || (isError && !form.username)
             }
           >
-            <FormLabel sx={GlobalStyle.labelText}>Username</FormLabel>
-            <Input
-              sx={GlobalStyle.inputStyle}
-              onChange={(e) => checkUsername(e)}
-            />
+            <FormLabel sx={mediumText}>Username</FormLabel>
+            <Input sx={inputStyle} onChange={(e) => checkUsername(e)} />
             {isErrorUsername ? (
-              <FormErrorMessage>Username is already exist</FormErrorMessage>
+              <FormErrorMessage sx={errorText}>
+                Username already exists
+              </FormErrorMessage>
             ) : null}
           </FormControl>
 
+          {/* ==================== password ==================== */}
           <FormControl isRequired isInvalid={isError && !form.password}>
-            <FormLabel sx={GlobalStyle.labelText}>Password</FormLabel>
-            <Input
-              sx={GlobalStyle.inputStyle}
-              type={show ? 'text' : 'password'}
-              onChange={(e) => {
-                setForm({ ...form, password: e.target.value })
-              }}
-            />
+            <FormLabel sx={mediumText}>Password</FormLabel>
+            <InputGroup>
+              <Input
+                sx={inputStyle}
+                type={show ? 'text' : 'password'}
+                onChange={(e) => {
+                  setForm({ ...form, password: e.target.value })
+                }}
+              />
+              <InputRightElement>
+                {show ? (
+                  <ViewIcon sx={iconInput} onClick={handlePassword} />
+                ) : (
+                  <ViewOffIcon sx={iconInput} onClick={handlePassword} />
+                )}
+              </InputRightElement>
+            </InputGroup>
           </FormControl>
 
           <FormControl isRequired isInvalid={isError && !form.birthDate}>
-            <FormLabel sx={GlobalStyle.labelText}>Date of birth</FormLabel>
+            <FormLabel sx={mediumText}>Date of birth</FormLabel>
             <Input
               type="date"
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 setForm({ ...form, birthDate: e.target.value })
               }}
@@ -198,10 +242,10 @@ export default function CreatePatientAccount() {
 
           <Flex sx={flexStyle}>
             <FormControl isRequired isInvalid={isError && !form.sex}>
-              <FormLabel sx={GlobalStyle.labelText}>Sex</FormLabel>
+              <FormLabel sx={mediumText}>Sex</FormLabel>
               <Select
                 placeholder="Choose"
-                sx={GlobalStyle.inputStyle}
+                sx={inputStyle}
                 onChange={(e) => {
                   setForm({ ...form, sex: e.target.value })
                 }}
@@ -213,12 +257,12 @@ export default function CreatePatientAccount() {
             </FormControl>
 
             <FormControl isRequired isInvalid={isError && !form.bloodGroup}>
-              <FormLabel sx={GlobalStyle.labelText} whiteSpace="nowrap">
+              <FormLabel sx={mediumText} whiteSpace="nowrap">
                 Blood group
               </FormLabel>
               <Select
                 placeholder="Choose"
-                sx={GlobalStyle.inputStyle}
+                sx={inputStyle}
                 onChange={(e) => {
                   setForm({ ...form, bloodGroup: e.target.value })
                 }}
@@ -240,10 +284,10 @@ export default function CreatePatientAccount() {
           width={{ base: '100%', md: '75%' }}
         >
           <FormControl isRequired isInvalid={isError && !form.citizenID}>
-            <FormLabel sx={GlobalStyle.labelText}>Citizen ID</FormLabel>
+            <FormLabel sx={mediumText}>Citizen ID</FormLabel>
             <Input
               type="number"
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 setForm({ ...form, citizenID: e.target.value })
               }}
@@ -251,14 +295,14 @@ export default function CreatePatientAccount() {
           </FormControl>
 
           <FormControl isRequired isInvalid={isError && !form.medCondition}>
-            <FormLabel sx={GlobalStyle.labelText} marginBottom="0">
+            <FormLabel sx={mediumText} marginBottom="0">
               Medical conditions{' '}
             </FormLabel>
-            <Text sx={GlobalStyle.greyMediumText} marginBottom="5px">
+            <Text sx={greyMediumText} marginBottom="5px">
               (Fill the blank with dash (-), if the answer is no.)
             </Text>
             <Textarea
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 setForm({ ...form, medCondition: e.target.value })
               }}
@@ -266,14 +310,14 @@ export default function CreatePatientAccount() {
           </FormControl>
 
           <FormControl isRequired isInvalid={isError && !form.allergy}>
-            <FormLabel sx={GlobalStyle.labelText} marginBottom="0">
+            <FormLabel sx={mediumText} marginBottom="0">
               Allergy
             </FormLabel>
-            <Text sx={GlobalStyle.greyMediumText} marginBottom="5px">
+            <Text sx={greyMediumText} marginBottom="5px">
               (Fill the blank with dash (-), if the answer is no.)
             </Text>
             <Textarea
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 setForm({ ...form, allergy: e.target.value })
               }}
@@ -281,10 +325,10 @@ export default function CreatePatientAccount() {
           </FormControl>
         </SimpleGrid>
 
-        <Box sx={GlobalStyle.divider}></Box>
+        <Box sx={divider}></Box>
 
         {/* ==================== Contact information ==================== */}
-        <Text sx={GlobalStyle.headingText}>Contact Information</Text>
+        <Text sx={headingText}>Contact Information</Text>
         <Flex sx={flexStyle}>
           <FormControl
             isRequired
@@ -293,42 +337,49 @@ export default function CreatePatientAccount() {
               (isError && !form.phoneNumber)
             }
           >
-            <FormLabel sx={GlobalStyle.labelText}>Phone Number</FormLabel>
+            <FormLabel sx={mediumText}>Phone Number</FormLabel>
             <Input
               type="number"
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => checkPhone(e)}
             />
             {isErrorPhone ? (
-              <FormErrorMessage>Please enter 10 digit numbers</FormErrorMessage>
+              <FormErrorMessage sx={errorText}>
+                Please enter 10 digit numbers
+              </FormErrorMessage>
             ) : null}
           </FormControl>
 
-          <FormControl>
-            <FormLabel sx={GlobalStyle.labelText}>
-              Email{' '}
-              <chakra.span sx={GlobalStyle.greyMediumText}>
-                (Optional)
-              </chakra.span>
-            </FormLabel>
+          <FormControl
+            isRequired
+            isInvalid={
+              (isErrorEmail && !form.email) || (isError && !form.email)
+            }
+          >
+            <FormLabel sx={mediumText}>Email</FormLabel>
             <Input
               type="email"
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
-                setForm({ ...form, email: e.target.value })
+                checkEmail(e)
               }}
             />
+            {isErrorEmail ? (
+              <FormErrorMessage sx={errorText}>
+                Email already exists
+              </FormErrorMessage>
+            ) : null}
           </FormControl>
         </Flex>
 
         {/* ==================== Button ==================== */}
-        <Box sx={GlobalStyle.btnBox}>
-          <ButtonGroup sx={GlobalStyle.btnGroup}>
-            <Button sx={GlobalStyle.whiteBtn} onClick={onClickCancel}>
+        <Box sx={btnPosition}>
+          <ButtonGroup sx={btnGroup}>
+            <Button sx={whiteBtn} onClick={() => onClickCancel()}>
               Cancel
             </Button>
 
-            <Button sx={GlobalStyle.blueBtn} onClick={onCreatePatient}>
+            <Button sx={blueBtn} onClick={() => onCreatePatient()}>
               Create
             </Button>
           </ButtonGroup>

@@ -101,25 +101,25 @@ export default function LoginModal({ isOpen, onClose }) {
         } else {
           // if login success, set token and user context
           sessionStorage.setItem('token', res.data.token)
-          sessionStorage.setItem('userID', res.data.userID)
-          sessionStorage.setItem('roleID', res.data.roleID)
-          sessionStorage.setItem('image', res.data.image)
-          sessionStorage.setItem(
-            'name',
-            res.data.firstName + ' ' + res.data.lastName
-          )
+          // sessionStorage.setItem('userID', res.data.userID)
+          // sessionStorage.setItem('role', res.data.role)
+          // sessionStorage.setItem('image', res.data.image)
+          // sessionStorage.setItem(
+          //   'name',
+          //   res.data.firstName + ' ' + res.data.lastName
+          // )
           setUser({
-            token: res.data.token,
+            // token: res.data.token,
             userID: res.data.userID,
-            roleID: res.data.roleID,
+            role: res.data.role,
             image: res.data.image,
             name: res.data.firstName + ' ' + res.data.lastName,
           })
 
           // redirect to home page
-          if (res.data.roleID == 1) {
+          if (res.data.role == 'doctor') {
             router.push(`/doctor/${res.data.userID}`)
-          } else if (res.data.roleID == 2) {
+          } else if (res.data.role == 'patient') {
             router.push(`/patient/${res.data.userID}`)
           }
           onClose()

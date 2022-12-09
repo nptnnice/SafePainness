@@ -28,6 +28,19 @@ import axios from 'axios'
 import url from '/url'
 
 export default function Case(props) {
+  const { caseInfo } = props
+
+  useEffect(() => {
+    sessionStorage.setItem('caseDoctor', caseInfo.doctorID)
+    console.log(sessionStorage.getItem('caseDoctor'))
+  }, [])
+
+  console.log('this is props')
+  console.log(props)
+
+  const { user } = useAppContext()
+  console.log(user)
+
   let layout = {
     width: '90%',
     margin: '0 auto',
@@ -105,7 +118,6 @@ export default function Case(props) {
 
   const router = useRouter()
   const caseID = router.query.caseID
-  const { caseInfo } = props
   console.log('props', caseInfo)
 
   return (
