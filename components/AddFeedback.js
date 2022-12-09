@@ -1,6 +1,4 @@
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 import {
   Modal,
@@ -8,7 +6,6 @@ import {
   ModalContent,
   ButtonGroup,
   ModalBody,
-  ModalCloseButton,
   Button,
   FormControl,
   FormLabel,
@@ -19,14 +16,18 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useAppContext } from '../context/UserContext'
+import {
+  commonModal,
+  mediumText,
+  errorText,
+  btnGroup,
+  whiteBtn,
+  blueBtn,
+  bigInput,
+} from '../style-props/Sharedstyles'
 
 export default function AddFeedbackModal(props) {
   const { isOpen, onClose } = props
-
-  let inputBox = {
-    ...GlobalStyle.inputStyle,
-    height: '160px',
-  }
 
   // user
   const { user } = useAppContext()
@@ -47,14 +48,15 @@ export default function AddFeedbackModal(props) {
     setFeedback(e.target.value)
   }
 
-  // handle button
   // cancel
-  const onCancel = () => {
+  const onClickCancel = () => {
     setError(false)
+    setFeedback('')
     onClose()
   }
+
   // submit
-  const submitFeedback = async () => {
+  const onClickSubmit = async () => {
     if (feedback) {
       try {
         const res = await axios.post('/api/feedbackManager/addFeedback', {
@@ -66,17 +68,17 @@ export default function AddFeedbackModal(props) {
           senderName: `Dr. ${user.name}`,
         })
         console.log(res)
+        onClose()
+        toast({
+          title: 'Feedback submitted',
+          description: 'Your feedback has been submitted',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        })
       } catch (err) {
         console.log(err)
       }
-      onClose()
-      toast({
-        title: 'Feedback submitted',
-        description: 'Your feedback has been submitted',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
     } else {
       setError(true)
     }
@@ -86,24 +88,23 @@ export default function AddFeedbackModal(props) {
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-
-        <ModalContent sx={GlobalStyle.modalStyle}>
+        <ModalContent sx={commonModal}>
           <ModalBody>
             <FormControl isInvalid={error}>
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 Send feedback to your patient
               </FormLabel>
-              <Textarea sx={inputBox} onChange={getFeedback} />
-              <FormErrorMessage marginTop="16px" sx={GlobalStyle.errorText}>
+              <Textarea sx={bigInput} onChange={getFeedback} />
+              <FormErrorMessage marginTop="16px" sx={errorText}>
                 Please fill in your feedback
               </FormErrorMessage>
             </FormControl>
             <Center>
-              <ButtonGroup sx={GlobalStyle.btnGroup} marginTop="24px">
-                <Button sx={GlobalStyle.whiteBtn} onClick={onCancel}>
+              <ButtonGroup sx={btnGroup} marginTop="24px">
+                <Button sx={whiteBtn} onClick={() => onClickCancel()}>
                   Cancel
                 </Button>
-                <Button sx={GlobalStyle.blueBtn} onClick={submitFeedback}>
+                <Button sx={blueBtn} onClick={() => onClickSubmit()}>
                   Submit
                 </Button>
               </ButtonGroup>

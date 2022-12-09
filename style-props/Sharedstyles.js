@@ -37,6 +37,13 @@ const recordBox = {
     borderColor: Colour.turquoise,
   },
 }
+const formBox = {
+  backgroundColor: Colour.white,
+  width: '100%',
+  padding: { base: '32px 16px 56px', md: '40px 80px 80px' },
+  borderRadius: '12px',
+  marginTop: '16px',
+}
 
 // icon
 const searchIconStyle = {
@@ -50,7 +57,7 @@ const addIconStyle = {
 const iconInput = {
   color: Colour.lightBlack,
   cursor: 'pointer',
-  marginTop: '8px',
+  marginTop: { base: '2px', md: '8px' },
 }
 
 // input
@@ -63,6 +70,10 @@ const inputStyle = {
   border: '1px solid',
   borderColor: Colour.grey,
   height: { base: '40px', md: '48px' },
+}
+const bigInput = {
+  ...inputStyle,
+  height: '160px',
 }
 
 // button
@@ -207,10 +218,24 @@ const greyMediumText = {
   fontWeight: 'medium',
   fontSize: { base: '16px', md: '18px' },
 }
+const description = {
+  ...greyMediumText,
+  marginBottom: '8px',
+}
 const errorText = {
   color: Colour.red,
   fontFamily: 'IBM Plex Sans',
   fontSize: { base: '14px', md: '16px' },
+}
+const clickText = {
+  color: Colour.lightBlue,
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: '500',
+  fontSize: { base: '16px', md: '18px' },
+  cursor: 'pointer',
+  _hover: {
+    textDecoration: 'underline',
+  },
 }
 
 // hover
@@ -324,10 +349,12 @@ export {
   layout,
   contentBox,
   recordBox,
+  formBox,
   searchIconStyle,
   addIconStyle,
   iconInput,
   inputStyle,
+  bigInput,
   btnGroup,
   btnPosition,
   submitBtnPosition,
@@ -345,7 +372,9 @@ export {
   spanFlex,
   spanFlex2,
   greyMediumText,
+  description,
   errorText,
+  clickText,
   hoverStyle,
   hoverStyleSelected,
   profileImg,

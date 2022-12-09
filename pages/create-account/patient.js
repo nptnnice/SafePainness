@@ -109,12 +109,12 @@ export default function CreatePatientAccount() {
   const checkEmail = async (e) => {
     let email = e.target.value
     let res = await axios.get('/api/checkEmail', { headers: { email: email } })
-    if (res.data === 'Email already exist') {
-      setIsErrorEmail(true)
-      setForm({ ...form, email: '' })
-    } else {
+    if (res.data === 'Email not found') {
       setIsErrorEmail(false)
       setForm({ ...form, email: email })
+    } else {
+      setIsErrorEmail(true)
+      setForm({ ...form, email: '' })
     }
   }
 

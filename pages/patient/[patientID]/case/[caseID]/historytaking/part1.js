@@ -21,10 +21,33 @@ import {
   Flex,
   Image,
 } from '@chakra-ui/react'
-import GlobalStyle from '../../../../../../Style'
-import Colour from '../../../../../../Colour'
+import {
+  bottomLine,
+  borderStyle,
+  checkboxStyle,
+  painBox,
+  painBoxSelected,
+  imgSize,
+  gridBox,
+  other,
+} from '/style-props/Historytakingstyles'
+import {
+  bgColor,
+  layout,
+  formBox,
+  inputStyle,
+  boldText,
+  mediumText,
+  regularText,
+  errorText,
+  description,
+  gridStyle,
+  iconStyle,
+  sliderBox,
+  blueBtn,
+} from '/style-props/Sharedstyles'
+import Colour from '/style-props/SharedColour'
 import FormProgress from '/components/FormProgress'
-import BodySelector from '/components/BodySelector'
 import { PainTypes } from '/PainTypes'
 import { ArrowForwardIcon, InfoOutlineIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
@@ -34,55 +57,6 @@ import { BodyComponent } from 'reactjs-human-body'
 import { useToast } from '@chakra-ui/react'
 
 export default function History1() {
-  let bottomLine = {
-    borderBottom: '2px solid',
-    borderBlockColor: Colour.grey,
-    width: '100%',
-  }
-  let borderStyle = {
-    borderColor: Colour.grey,
-  }
-  let checkboxStyle = {
-    borderColor: Colour.grey,
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: '500',
-    fontSize: '18px',
-    color: Colour.black,
-  }
-  let painBox = {
-    border: '2px solid',
-    borderColor: Colour.grey,
-    borderRadius: '16px',
-    padding: '8px 16px',
-    alignItems: 'center',
-    gap: { base: '8px', md: '16px' },
-    cursor: 'pointer',
-    boxSizing: 'border-box',
-    transition: 'all 0.1s ease',
-    _hover: {
-      backgroundColor: Colour.turquoise,
-      borderColor: Colour.turquoise,
-    },
-  }
-  let painBoxSelected = {
-    ...painBox,
-    backgroundColor: Colour.turquoise,
-    borderColor: Colour.turquoise,
-  }
-  let imgSize = {
-    width: { base: '64px', sm: '72px', md: '80px' },
-  }
-  let gridBox = {
-    overflowY: 'scroll',
-    height: { base: '240px', md: '280px' },
-    padding: '8px',
-  }
-  let other = {
-    marginTop: '24px',
-    alignItems: 'center',
-    gap: '8px',
-  }
-
   // router
   const router = useRouter()
   const patientID = router.query.patientID
@@ -275,64 +249,63 @@ export default function History1() {
   })
 
   return (
-    <Box sx={GlobalStyle.bgColor}>
+    <Box sx={bgColor}>
       <FormProgress progress={0} />
-      <Box sx={GlobalStyle.layout}>
-        <Text sx={GlobalStyle.labelText}>
+      <Box sx={layout}>
+        <Text sx={mediumText}>
           This is a history taking questionnaire based on SOCRATES pain
           assessment tool. You need to fill the answer according to your pain
           experience.
         </Text>
-        <Text sx={GlobalStyle.boldText} marginTop="24px">
+        <Text sx={boldText} marginTop="24px">
           Part 1: Symptoms and Associated Symptoms
         </Text>
         <VStack spacing={16}>
-          <VStack spacing={16} align="start" sx={GlobalStyle.formBox}>
+          <VStack spacing={16} align="start" sx={formBox}>
             {/* =================== Question 1 =================== */}
             <FormControl
               sx={bottomLine}
               isRequired
               isInvalid={error && form.site.length == 0}
             >
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 1. Where is the pain? (The maximal site of the pain)
               </FormLabel>
-              <FormErrorMessage sx={GlobalStyle.errorText}>
+              <FormErrorMessage sx={errorText}>
                 Please select site of the pain.
               </FormErrorMessage>
-              {/* <BodySelector /> */}
-              {/* {console.log('test', form.site.includes('head'))} */}
-
-              <BodyComponent onClick={getSite} partsInput={bodyState} />
+              <BodyComponent
+                onClick={(e) => getSite(e)}
+                partsInput={bodyState}
+              />
+              {form.site.map((item) => (
+                <Text key={item} sx={regularText}>
+                  {item}
+                </Text>
+              ))}
             </FormControl>
 
             {/* =================== Question 2 =================== */}
             <FormControl isRequired isInvalid={error && !form.onset}>
-              <FormLabel sx={GlobalStyle.labelText}>
-                2. When did the pain start?
-              </FormLabel>
-              <Input
-                sx={GlobalStyle.inputStyle}
-                onChange={getOnset}
-                value={form.onset}
-              />
-              <FormHelperText sx={GlobalStyle.greyMediumText}>
+              <FormLabel sx={mediumText}>2. When did the pain start?</FormLabel>
+              <Text sx={description}>
                 e.g. after an accident, disease, treatment, etc.
-              </FormHelperText>
+              </Text>
+              <Input sx={inputStyle} onChange={getOnset} value={form.onset} />
             </FormControl>
 
             {/*  ===================Question 3  ===================*/}
             <FormControl isRequired isInvalid={error && !form.onsetType}>
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 3. Was the pain sudden or gradual?
               </FormLabel>
               <RadioGroup onChange={getOnsetType} value={form.onsetType}>
                 <Stack direction="row" gap={16}>
                   <Radio value="Sudden" sx={borderStyle}>
-                    <Text sx={GlobalStyle.labelText}>Sudden</Text>
+                    <Text sx={mediumText}>Sudden</Text>
                   </Radio>
                   <Radio value="Gradual" sx={borderStyle}>
-                    <Text sx={GlobalStyle.labelText}>Gradual</Text>
+                    <Text sx={mediumText}>Gradual</Text>
                   </Radio>
                 </Stack>
               </RadioGroup>
@@ -347,16 +320,16 @@ export default function History1() {
                 !form.otherCharacteristic
               }
             >
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 4. How does the pain feel like?
               </FormLabel>
-              <FormErrorMessage sx={GlobalStyle.errorText}>
+              <FormErrorMessage sx={errorText}>
                 Please select your pain characteristic.
               </FormErrorMessage>
               <Box sx={gridBox}>
                 <SimpleGrid
                   templateColumns="repeat(auto-fill, minmax(180px, 1fr))"
-                  sx={GlobalStyle.gridStyle}
+                  sx={gridStyle}
                 >
                   {PainTypes.map((item, index) => {
                     return (
@@ -370,16 +343,16 @@ export default function History1() {
                         onClick={() => getCharacteristic(item.name)}
                       >
                         <Image sx={imgSize} src={item.image} />
-                        <Text sx={GlobalStyle.labelText}>{item.name}</Text>
+                        <Text sx={mediumText}>{item.name}</Text>
                       </Flex>
                     )
                   })}
                 </SimpleGrid>
               </Box>
               <Flex sx={other}>
-                <Text sx={GlobalStyle.labelText}>Other:</Text>
+                <Text sx={mediumText}>Other:</Text>
                 <Input
-                  sx={GlobalStyle.inputStyle}
+                  sx={inputStyle}
                   onChange={getOtherCharacteristic}
                   value={form.otherCharacteristic}
                 />
@@ -388,20 +361,17 @@ export default function History1() {
 
             {/* =================== Question 5 =================== */}
             <FormControl isRequired isInvalid={error && !form.radiation}>
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 5. Does the pain radiate anywhere else?
               </FormLabel>
-              <Text sx={GlobalStyle.greyMediumText} marginBottom="8px">
+              <Text sx={description} marginBottom="8px">
                 (Fill the blank with dash (-), if the answer is no.)
               </Text>
               <Input
-                sx={GlobalStyle.inputStyle}
+                sx={inputStyle}
                 onChange={getRadiation}
                 value={form.radiation}
               />
-              {/* <FormHelperText sx={GlobalStyle.greyMediumText}>
-                (Fill the blank with dash (-), if the answer is no.)
-              </FormHelperText> */}
             </FormControl>
 
             {/* =================== Question 6 =================== */}
@@ -411,7 +381,7 @@ export default function History1() {
                 error && form.associatedSymp.length == 0 && !form.otherSymptom
               }
             >
-              <FormLabel sx={GlobalStyle.labelText}>
+              <FormLabel sx={mediumText}>
                 6. Is there any other symptoms associated with the pain?
               </FormLabel>
 
@@ -495,9 +465,9 @@ export default function History1() {
               </SimpleGrid>
 
               <Flex sx={other}>
-                <Text sx={GlobalStyle.labelText}>Other:</Text>
+                <Text sx={mediumText}>Other:</Text>
                 <Input
-                  sx={GlobalStyle.inputStyle}
+                  sx={inputStyle}
                   onChange={getOtherSymptom}
                   value={form.otherSymptom}
                 />
@@ -506,28 +476,28 @@ export default function History1() {
 
             <VStack align="left" spacing={10} width="100%">
               <Flex>
-                <Text sx={GlobalStyle.labelText}>
+                <Text sx={mediumText}>
                   7. What is the pain severity? {''}
                   <InfoOutlineIcon
-                    onClick={handleClickModal}
-                    sx={GlobalStyle.iconStyle}
+                    onClick={() => handleClickModal()}
+                    sx={iconStyle}
                   />
                 </Text>
                 <PainScaleModal isOpen={showModal} onClose={handleClickModal} />
               </Flex>
               {/* =================== Question 7.1 =================== */}
               <FormControl isRequired isInvalid={error && !form.painScaleNow}>
-                <FormLabel sx={GlobalStyle.labelText}>Right now</FormLabel>
-                <FormErrorMessage sx={GlobalStyle.errorText}>
+                <FormLabel sx={mediumText}>Right now</FormLabel>
+                <FormErrorMessage sx={errorText}>
                   Please select.
                 </FormErrorMessage>
-                <Box sx={GlobalStyle.sliderBox}>
+                <Box sx={sliderBox}>
                   <Slider
                     value={form.painScaleNow == '' ? 0.5 : form.painScaleNow}
                     min={0}
                     max={10}
                     step={1}
-                    sx={GlobalStyle.labelText}
+                    sx={mediumText}
                     onChange={getPainScaleNow}
                   >
                     <SliderMark value={0}>0</SliderMark>
@@ -551,19 +521,19 @@ export default function History1() {
 
               {/* =================== Question 7.2 =================== */}
               <FormControl isRequired isInvalid={error && !form.painScalePast}>
-                <FormLabel sx={GlobalStyle.labelText}>
+                <FormLabel sx={mediumText}>
                   Average in the past 7 days
                 </FormLabel>
-                <FormErrorMessage sx={GlobalStyle.errorText}>
+                <FormErrorMessage sx={errorText}>
                   Please select.
                 </FormErrorMessage>
-                <Box sx={GlobalStyle.sliderBox}>
+                <Box sx={sliderBox}>
                   <Slider
                     value={form.painScalePast == '' ? 0.5 : form.painScalePast}
                     min={0}
                     max={10}
                     step={1}
-                    sx={GlobalStyle.labelText}
+                    sx={mediumText}
                     onChange={getPainScalePast}
                   >
                     <SliderMark value={0}>0</SliderMark>
@@ -589,8 +559,8 @@ export default function History1() {
 
           <Button
             rightIcon={<ArrowForwardIcon />}
-            sx={GlobalStyle.blueBtn}
-            onClick={onClickNext}
+            sx={blueBtn}
+            onClick={() => onClickNext()}
           >
             Next
           </Button>

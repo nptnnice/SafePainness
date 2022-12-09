@@ -8,7 +8,7 @@ const navbar = {
   alignItems: 'center',
   padding: { base: '0 24px', md: '0 40px' },
   position: 'fixed',
-  zIndex: '1000',
+  zIndex: '100000',
   top: 0,
 }
 const logo = {
