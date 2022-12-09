@@ -40,5 +40,21 @@ const doctornameText = {
   fontSize: { base: '14px', md: '16px' },
   display: { base: 'none', md: 'block' },
 }
+const patientInfoLayout = {
+  gap: '32px',
+  flexDirection: { base: 'column', sm: 'column', md: 'row' },
+}
+const patientInfoFlex = {
+  justifyContent: 'start',
+  gap: { base: '24px', sm: '32px', md: '40px' },
+}
 
-export { section, onTrack, stopTrack, caseBox, doctornameText }
+export {
+  section,
+  onTrack,
+  stopTrack,
+  caseBox,
+  doctornameText,
+  patientInfoLayout,
+  patientInfoFlex,
+}

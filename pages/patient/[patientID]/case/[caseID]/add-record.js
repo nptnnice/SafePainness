@@ -187,7 +187,13 @@ export default function AddRecord() {
 
   // send form data
   const onClickSend = async () => {
-    Object.assign(form, { image: image })
+    Object.assign(form, {
+      image: image,
+      senderID: user.userID,
+      senderName: user.name,
+      patientID: patientID,
+    })
+    console.log(form)
     setIsExceed(false)
     if (!form.symptom || !form.painScale) {
       setIsError(true)

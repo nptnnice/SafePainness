@@ -2,8 +2,9 @@ import db from '../../../db'
 import addNotification from '/functions/addNotification'
 
 export default async function handler(req, res) {
-  const { caseID, message, datetime, senderID, receiverID, senderName } =
+  const { caseID, message, senderID, receiverID, senderName, patientID } =
     req.body
+  const datetime = new Date()
 
   let result = await db.query(
     `INSERT INTO "public"."Feedback"
@@ -24,6 +25,7 @@ export default async function handler(req, res) {
     receiverID,
     datetime,
     `You have received a new feedback from ${senderName}`,
+    patientID,
     caseID,
     feedbackID,
     'feedback'

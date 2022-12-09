@@ -1,10 +1,10 @@
 import { Text, Box } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
+import { headBox, headText } from '../style-props/Sharedstyles'
 
 export default function HeadCenter({ topic }) {
   return (
-    <Box sx={GlobalStyle.headBox}>
-      <Text sx={GlobalStyle.headText}>{topic}</Text>
+    <Box sx={headBox}>
+      <Text sx={headText}>{topic}</Text>
     </Box>
   )
 }
