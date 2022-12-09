@@ -13,6 +13,7 @@ import {
   searchIconStyle,
   submitBtnPosition,
   yellowBtn,
+  bigModal,
 } from '../style-props/Sharedstyles'
 import {
   Modal,
@@ -104,7 +105,7 @@ export default function CreateAppointment(props) {
         scrollBehavior="inside"
       >
         <ModalOverlay />
-        <ModalContent sx={modalStyle}>
+        <ModalContent sx={bigModal}>
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={8}>

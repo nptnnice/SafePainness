@@ -23,6 +23,20 @@ const contentBox = {
   padding: { base: '24px 16px', md: '40px 20px' },
   filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
 }
+const recordBox = {
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  border: '2px solid',
+  borderColor: Colour.grey,
+  borderRadius: '12px',
+  padding: { base: '20px 16px', md: '24px 20px' },
+  marginBottom: '12px',
+  cursor: 'pointer',
+  transition: 'all 0.1s ease-out',
+  _hover: {
+    borderColor: Colour.turquoise,
+  },
+}
 
 // icon
 const searchIconStyle = {
@@ -32,6 +46,11 @@ const searchIconStyle = {
 }
 const addIconStyle = {
   boxSize: { base: '12px', md: '14px' },
+}
+const iconInput = {
+  color: Colour.lightBlack,
+  cursor: 'pointer',
+  marginTop: '8px',
 }
 
 // input
@@ -141,6 +160,14 @@ const paginationBtn = {
   color: Colour.lightBlack,
   boxSize: { base: '12px', md: '14px' },
 }
+const removeBtn = {
+  boxSize: '12px',
+  position: 'absolute',
+  right: '-8px',
+  top: '-8px',
+  cursor: 'pointer',
+  color: Colour.lightBlack,
+}
 
 // text
 const headingText = {
@@ -171,6 +198,20 @@ const spanFlex = {
   flexDirection: { base: 'column', md: 'row' },
   columnGap: '8px',
 }
+const spanFlex2 = {
+  columnGap: '8px',
+}
+const greyMediumText = {
+  color: Colour.darkGrey,
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: 'medium',
+  fontSize: { base: '16px', md: '18px' },
+}
+const errorText = {
+  color: Colour.red,
+  fontFamily: 'IBM Plex Sans',
+  fontSize: { base: '14px', md: '16px' },
+}
 
 // hover
 const hoverStyle = {
@@ -199,6 +240,11 @@ const profileImgSmall = {
   borderRadius: '50%',
   objectFit: 'scale-down',
 }
+const squareImg = {
+  borderRadius: '12px',
+  boxSize: '190px',
+  objectFit: 'cover',
+}
 
 // flex and grid
 const flexStyle = {
@@ -210,6 +256,17 @@ const flexStyle = {
 const gridStyle = {
   gap: { base: '16px', md: '24px' },
   width: '100%',
+}
+const autoGrid = {
+  gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 190px))',
+  gap: '16px',
+  width: '100%',
+}
+const breadcrumbFlex = {
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
+  marginBottom: '16px',
 }
 
 // tab
@@ -233,12 +290,43 @@ const tabSelected = {
   },
 }
 
+// divider
+const divider = {
+  width: '100%',
+  height: '1px',
+  backgroundColor: Colour.grey,
+}
+
+// modal
+const commonModal = {
+  width: '90%',
+  borderRadius: '24px',
+  padding: { base: '24px 0', md: '40px 20px' },
+}
+const bigModal = {
+  maxWidth: '900px',
+  maxHeight: '700px',
+  width: '90%',
+  borderRadius: '24px',
+  padding: { base: '24px 0px', md: '32px 16px' },
+  backgroundColor: Colour.lightGrey,
+}
+
+// slider
+const sliderBox = {
+  width: '96%',
+  margin: '0 auto',
+  marginTop: '16px',
+}
+
 export {
   bgColor,
   layout,
   contentBox,
+  recordBox,
   searchIconStyle,
   addIconStyle,
+  iconInput,
   inputStyle,
   btnGroup,
   btnPosition,
@@ -249,17 +337,28 @@ export {
   editBtn,
   yellowBtn,
   paginationBtn,
+  removeBtn,
   headingText,
   boldText,
   mediumText,
   regularText,
   spanFlex,
+  spanFlex2,
+  greyMediumText,
+  errorText,
   hoverStyle,
   hoverStyleSelected,
   profileImg,
   profileImgSmall,
+  squareImg,
   flexStyle,
   gridStyle,
+  autoGrid,
+  breadcrumbFlex,
   tabBox,
   tabSelected,
+  divider,
+  commonModal,
+  bigModal,
+  sliderBox,
 }

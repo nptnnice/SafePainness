@@ -45,6 +45,7 @@ export default function Navbar() {
         router.push(`/patient/${user.userID}`)
       }
     } else {
+      router.push('/')
       window.scrollTo({
         top: 0,
       })
@@ -67,7 +68,7 @@ export default function Navbar() {
     router.push('/')
   }
   const onClickSignUp = () => {
-    router.push('../select-role')
+    router.push('/create-account/select-role')
   }
   // set menu in popover
   const MenuAccount = () => {

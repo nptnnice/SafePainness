@@ -14,6 +14,7 @@ export default async function handler(req, res) {
     email,
     image,
   } = req.body
+
   let result = await db.query(
     `INSERT INTO "public"."Doctor"
         ("department", "firstName", "lastName", "birthDate", "citizenID", "licenseNO", "phoneNumber", "username", "password", "email", "image")

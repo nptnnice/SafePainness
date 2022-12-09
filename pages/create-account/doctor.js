@@ -1,6 +1,14 @@
+import HeadCenter from '/components/HeadCenter'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useToast } from '@chakra-ui/react'
+import axios from 'axios'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import {
   Text,
   Input,
+  InputGroup,
+  InputRightElement,
   Button,
   ButtonGroup,
   SimpleGrid,
@@ -10,33 +18,47 @@ import {
   FormLabel,
   FormHelperText,
   FormErrorMessage,
-  chakra,
   VStack,
 } from '@chakra-ui/react'
-import HeadCenter from '../components/HeadCenter'
-import GlobalStyle from '../Style'
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { useToast } from '@chakra-ui/react'
-import axios from 'axios'
+import { flexStyle } from '/style-props/Profilestyles'
+import {
+  layout,
+  headingText,
+  mediumText,
+  inputStyle,
+  gridStyle,
+  btnPosition,
+  btnGroup,
+  whiteBtn,
+  blueBtn,
+  divider,
+  iconInput,
+  errorText,
+} from '/style-props/Sharedstyles'
 
 export default function CreateDoctorAccount() {
-  let flexStyle = {
-    gap: '24px',
-    width: '100%',
-  }
+  // router
+  const router = useRouter()
 
+  // toast
+  const toast = useToast()
+
+  // set show password
   const [show, setShow] = useState(false)
+  const handlePassword = () => setShow(!show)
+
+  // check error
   const [isError, setIsError] = useState(false)
   const [isErrorUsername, setIsErrorUsername] = useState(false)
   const [isErrorEmail, setIsErrorEmail] = useState(false)
   const [isErrorPhone, setIsErrorPhone] = useState(false)
-  const toast = useToast()
-  const router = useRouter()
+
+  // click cancel
   const onClickCancel = () => {
     router.push('/')
   }
 
+  // set form
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -51,10 +73,12 @@ export default function CreateDoctorAccount() {
     image: '',
   })
 
-  //check username is already in database
+  // check username is already in database
   const checkUsername = async (e) => {
     let username = e.target.value
-    let res = await axios.post('/api/checkUsername', { username: username })
+    let res = await axios.get('/api/checkUsername', {
+      headers: { username: username },
+    })
     if (res.data === 'User already exist') {
       setIsErrorUsername(true)
       setForm({ ...form, username: '' })
@@ -63,6 +87,7 @@ export default function CreateDoctorAccount() {
       setForm({ ...form, username: username })
     }
   }
+
   // check phone number format
   const checkPhone = (e) => {
     let regExp = /^[0-9]+$/g
@@ -77,19 +102,21 @@ export default function CreateDoctorAccount() {
       setIsErrorPhone(true)
     }
   }
-  //check email
+
+  // check email
   const checkEmail = async (e) => {
     let email = e.target.value
-    let res = await axios.post('/api/checkEmail', { email: email })
-    if (res.data === 'Email not found') {
+    let res = await axios.get('/api/checkEmail', { headers: { email: email } })
+    if (res.data === 'Email already exist') {
+      setIsErrorEmail(true)
+      setForm({ ...form, email: '' })
+    } else {
       setIsErrorEmail(false)
       setForm({ ...form, email: email })
-    } else {
-      setIsErrorEmail(true)
     }
   }
 
-  //Create Doctor Account
+  // Create Doctor Account
   const onCreateDoctor = async () => {
     console.log('form', form)
     if (
@@ -101,14 +128,13 @@ export default function CreateDoctorAccount() {
       form.citizenID &&
       form.licenseNO &&
       form.department &&
-      form.phoneNumber
+      form.phoneNumber &&
+      form.email
     ) {
       setIsError(false)
       try {
         const res = await axios.post('/api/doctorManager/addDoctor', form)
         console.log('res', res)
-        console.log('form is valid')
-        console.log(form)
         toast({
           title: 'Submit successfully',
           description: 'Your account has been created.',
@@ -116,19 +142,19 @@ export default function CreateDoctorAccount() {
           duration: 3000,
           isClosable: true,
         })
+        //reload page
+        setTimeout(() => {
+          router.push('/')
+        }, 3000)
       } catch (err) {
         console.log('err', err)
       }
-      //reload page
-      setTimeout(() => {
-        router.push('./')
-      }, 4000)
     } else {
       setIsError(true)
       console.log('form is invalid')
       toast({
-        title: 'An error occurred.',
-        description: 'Please fill in all required fields.',
+        title: 'Error',
+        description: 'Please fill in all the required fields.',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -140,73 +166,86 @@ export default function CreateDoctorAccount() {
     <>
       <HeadCenter topic="Create Doctor Account" />
 
-      <VStack sx={GlobalStyle.layout} align="start" spacing={8}>
-        {/* ==================== Basic information ==================== */}
-        <Text sx={GlobalStyle.headingText}>Basic Information</Text>
-        <SimpleGrid columns={{ base: 1, sm: 2 }} sx={GlobalStyle.gridStyle}>
+      <VStack sx={layout} align="start" spacing={8}>
+        <Text sx={headingText}>Basic Information</Text>
+        <SimpleGrid columns={{ base: 1, sm: 2 }} sx={gridStyle}>
+          {/* ==================== First name ==================== */}
           <FormControl isRequired isInvalid={isError && !form.firstName}>
-            <FormLabel sx={GlobalStyle.labelText}>First Name</FormLabel>
+            <FormLabel sx={mediumText}>First Name</FormLabel>
             <Input
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 setForm({ ...form, firstName: e.target.value })
               }}
             />
           </FormControl>
 
+          {/* ==================== Last name ==================== */}
           <FormControl isRequired isInvalid={isError && !form.lastName}>
-            <FormLabel sx={GlobalStyle.labelText}>Last Name</FormLabel>
+            <FormLabel sx={mediumText}>Last Name</FormLabel>
             <Input
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 setForm({ ...form, lastName: e.target.value })
               }}
             />
           </FormControl>
 
+          {/* ==================== username ==================== */}
           <FormControl
             isRequired
             isInvalid={
               (isErrorUsername && !form.username) || (isError && !form.username)
             }
           >
-            <FormLabel sx={GlobalStyle.labelText}>Username</FormLabel>
-            <Input
-              sx={GlobalStyle.inputStyle}
-              onChange={(e) => checkUsername(e)}
-            />
+            <FormLabel sx={mediumText}>Username</FormLabel>
+            <Input sx={inputStyle} onChange={(e) => checkUsername(e)} />
             {isErrorUsername ? (
-              <FormErrorMessage>Username already exists</FormErrorMessage>
+              <FormErrorMessage sx={errorText}>
+                Username already exists
+              </FormErrorMessage>
             ) : null}
           </FormControl>
 
+          {/* ==================== password ==================== */}
           <FormControl isRequired isInvalid={isError && !form.password}>
-            <FormLabel sx={GlobalStyle.labelText}>Password</FormLabel>
-            <Input
-              sx={GlobalStyle.inputStyle}
-              type={show ? 'text' : 'password'}
-              onChange={(e) => {
-                setForm({ ...form, password: e.target.value })
-              }}
-            />
+            <FormLabel sx={mediumText}>Password</FormLabel>
+            <InputGroup>
+              <Input
+                sx={inputStyle}
+                type={show ? 'text' : 'password'}
+                onChange={(e) => {
+                  setForm({ ...form, password: e.target.value })
+                }}
+              />
+              <InputRightElement>
+                {show ? (
+                  <ViewIcon sx={iconInput} onClick={handlePassword} />
+                ) : (
+                  <ViewOffIcon sx={iconInput} onClick={handlePassword} />
+                )}
+              </InputRightElement>
+            </InputGroup>
           </FormControl>
 
+          {/* ==================== birthdate ==================== */}
           <FormControl isRequired isInvalid={isError && !form.birthDate}>
-            <FormLabel sx={GlobalStyle.labelText}>Date of birth</FormLabel>
+            <FormLabel sx={mediumText}>Date of birth</FormLabel>
             <Input
               type="date"
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 setForm({ ...form, birthDate: e.target.value })
               }}
             />
           </FormControl>
 
+          {/* ==================== citizen id ==================== */}
           <FormControl isRequired isInvalid={isError && !form.citizenID}>
-            <FormLabel sx={GlobalStyle.labelText}>Citizen ID</FormLabel>
+            <FormLabel sx={mediumText}>Citizen ID</FormLabel>
             <Input
               type="number"
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 setForm({ ...form, citizenID: e.target.value })
               }}
@@ -218,12 +257,11 @@ export default function CreateDoctorAccount() {
           gap={{ base: '16px', md: '24px' }}
           width={{ base: '100%', md: '60%' }}
         >
+          {/* ==================== license number ==================== */}
           <FormControl isRequired isInvalid={isError && !form.licenseNO}>
-            <FormLabel sx={GlobalStyle.labelText}>
-              Medical License Number
-            </FormLabel>
+            <FormLabel sx={mediumText}>Medical License Number</FormLabel>
             <Input
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               width="100%"
               onChange={(e) => {
                 setForm({ ...form, licenseNO: e.target.value })
@@ -231,11 +269,12 @@ export default function CreateDoctorAccount() {
             />
           </FormControl>
 
+          {/* ==================== department ==================== */}
           <FormControl isRequired isInvalid={isError && !form.department}>
-            <FormLabel sx={GlobalStyle.labelText}>Department</FormLabel>
+            <FormLabel sx={mediumText}>Department</FormLabel>
             <Input
               type="text"
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 setForm({ ...form, department: e.target.value })
               }}
@@ -243,11 +282,11 @@ export default function CreateDoctorAccount() {
           </FormControl>
         </SimpleGrid>
 
-        <Box sx={GlobalStyle.divider}></Box>
+        <Box sx={divider}></Box>
 
-        {/* ==================== Contact information ==================== */}
-        <Text sx={GlobalStyle.headingText}>Contact Information</Text>
+        <Text sx={headingText}>Contact Information</Text>
         <Flex sx={flexStyle}>
+          {/* ==================== phone number ==================== */}
           <FormControl
             isRequired
             isInvalid={
@@ -255,45 +294,50 @@ export default function CreateDoctorAccount() {
               (isError && !form.phoneNumber)
             }
           >
-            <FormLabel sx={GlobalStyle.labelText}>Phone Number</FormLabel>
+            <FormLabel sx={mediumText}>Phone Number</FormLabel>
             <Input
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               type="number"
               onChange={(e) => checkPhone(e)}
             />
             {isErrorPhone ? (
-              <FormErrorMessage>Please enter 10 digit numbers</FormErrorMessage>
+              <FormErrorMessage sx={errorText}>
+                Please enter 10 digit numbers
+              </FormErrorMessage>
             ) : null}
           </FormControl>
 
-          <FormControl isInvalid={isErrorEmail}>
-            <FormLabel sx={GlobalStyle.labelText}>
-              Email{' '}
-              <chakra.span sx={GlobalStyle.greyMediumText}>
-                (Optional)
-              </chakra.span>
-            </FormLabel>
+          {/* ==================== email ==================== */}
+          <FormControl
+            isRequired
+            isInvalid={
+              (isErrorEmail && !form.email) || (isError && !form.email)
+            }
+          >
+            <FormLabel sx={mediumText}>Email</FormLabel>
             <Input
               type="email"
-              sx={GlobalStyle.inputStyle}
+              sx={inputStyle}
               onChange={(e) => {
                 checkEmail(e)
               }}
             />
             {isErrorEmail ? (
-              <FormErrorMessage>Email already exists</FormErrorMessage>
+              <FormErrorMessage sx={errorText}>
+                Email already exists
+              </FormErrorMessage>
             ) : null}
           </FormControl>
         </Flex>
 
         {/* ==================== Button ==================== */}
-        <Box sx={GlobalStyle.btnBox}>
-          <ButtonGroup sx={GlobalStyle.btnGroup}>
-            <Button sx={GlobalStyle.whiteBtn} onClick={onClickCancel}>
+        <Box sx={btnPosition}>
+          <ButtonGroup sx={btnGroup}>
+            <Button sx={whiteBtn} onClick={() => onClickCancel()}>
               Cancel
             </Button>
 
-            <Button sx={GlobalStyle.blueBtn} onClick={onCreateDoctor}>
+            <Button sx={blueBtn} onClick={() => onCreateDoctor()}>
               Create
             </Button>
           </ButtonGroup>
