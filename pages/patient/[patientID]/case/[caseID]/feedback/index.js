@@ -63,13 +63,7 @@ export default function Case(props) {
 
   return (
     <Box sx={GlobalStyle.bgColor}>
-      <HeadInfo
-        name="Patient ID"
-        patientID={patientID}
-        caseID={caseID}
-        caseName="Grammar addict"
-        // doctor={user.name}
-      />
+      <HeadInfo />
 
       <Box sx={GlobalStyle.layout}>
         <BreadcrumbMenu />
@@ -101,23 +95,4 @@ export default function Case(props) {
       </Box>
     </Box>
   )
-}
-
-export async function getServerSideProps(context) {
-  const caseID = context.params.caseID
-  const result = await axios.get(`${url}/api/feedbackManager/getAllFeedback`, {
-    headers: {
-      caseid: caseID,
-    },
-  })
-  const result3 = await axios.get(`${url}/api/feedbackManager/getAllFeedback`, {
-    headers: {
-      caseid: caseID,
-    },
-  })
-  return {
-    props: {
-      feedbackList: result.data,
-    },
-  }
 }

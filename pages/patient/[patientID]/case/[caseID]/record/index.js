@@ -65,14 +65,8 @@ export default function Case(props) {
   }
 
   return (
-    <Box sx={bgColor}>
-      <HeadInfo
-        name="Patient ID"
-        patientID={patientID}
-        caseID={caseID}
-        caseName="Grammar addict"
-        // doctor={user.name}
-      />
+    <Box sx={GlobalStyle.bgColor}>
+      <HeadInfo />
 
       <Box sx={layout}>
         <Flex sx={breadcrumbFlex}>

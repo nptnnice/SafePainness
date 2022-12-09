@@ -16,20 +16,20 @@ import GlobalStyle from '../Style'
 import Colour from '../Colour'
 import { useState } from 'react'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 
-export default function ConfirmModal({
+export default function StopTrackModal({
   isOpen,
   onClose,
   setConfirm,
   caseInfo,
-  diseaseName,
 }) {
-  const [showModal, setShowModal] = useState(false)
-  const handleClick = () => setShowModal(!showModal)
-  const onConfirm = async () => {
+  const [showStopModal, setShowStopModal] = useState(false)
+  const handleClick = () => setShowStopModal(!showStopModal)
+  const router = useRouter()
+  const onStop = async () => {
     try {
-      const res = await axios.post('/api/caseManager/confirmDiagnosis', {
-        caseName: diseaseName,
+      const res = await axios.post('/api/caseManager/stopTracking', {
         caseID: caseInfo.caseID,
       })
       console.log(res)
@@ -37,7 +37,7 @@ export default function ConfirmModal({
       console.log(err)
     }
     setTimeout(() => {
-      window.location.reload()
+      router.push(`/patient/${caseInfo.patientID}`)
     }, 4000)
   }
 
@@ -46,15 +46,13 @@ export default function ConfirmModal({
     margin: '24px auto 0',
   }
 
-  console.log('diseaseName: ', diseaseName)
-
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent sx={GlobalStyle.modalStyle}>
           <ModalHeader sx={GlobalStyle.headingText}>
-            Confirm Diagnosis
+            Confirm Stop Tracking
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -62,18 +60,6 @@ export default function ConfirmModal({
               Case:{' '}
               <chakra.span sx={GlobalStyle.labelText}>
                 {caseInfo.caseID}
-              </chakra.span>
-            </Text>
-            <Text sx={GlobalStyle.greyMediumText}>
-              Patient ID:{' '}
-              <chakra.span sx={GlobalStyle.labelText}>
-                {caseInfo.patientID}
-              </chakra.span>
-            </Text>
-            <Text sx={GlobalStyle.greyMediumText}>
-              Disease name:{' '}
-              <chakra.span sx={GlobalStyle.labelText}>
-                {diseaseName}
               </chakra.span>
             </Text>
           </ModalBody>
@@ -88,7 +74,7 @@ export default function ConfirmModal({
                 onClick={() => {
                   onClose()
                   setConfirm(true)
-                  onConfirm()
+                  onStop()
                 }}
               >
                 Confirm
