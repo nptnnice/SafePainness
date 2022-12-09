@@ -13,56 +13,30 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import {
+  notificationWidth,
+  iconButton,
+  notificationBox,
+  statusBox,
+  dateText,
+} from '/style-props/Notificationstyles'
 import { BellIcon } from '@chakra-ui/icons'
 import GlobalStyle from '../Style'
-import Colour from '../Colour'
 import { useState, useEffect } from 'react'
 import { useAppContext } from '../context/UserContext'
 import url from '../url'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { regularText } from '../style-props/Sharedstyles'
 
 export default function Notification() {
-  let iconButton = {
-    color: Colour.white,
-    boxSize: '32px',
-    cursor: 'pointer',
-    transition: 'all 0.1s ease-out',
-    _hover: {
-      color: Colour.lightYellow,
-    },
-  }
-  let notificationBox = {
-    justifyContent: 'space-between',
-    alignItems: 'start',
-    borderBottom: '2px solid',
-    borderColor: Colour.grey,
-    padding: { base: '8px 16px', md: '8px 20px' },
-    cursor: 'pointer',
-    transition: 'all 0.1s ease-out',
-    width: '100%',
-    _hover: {
-      backgroundColor: Colour.lightGrey,
-      borderColor: Colour.turquoise,
-    },
-  }
-  let statusBox = {
-    backgroundColor: Colour.green,
-    padding: '4px 8px',
-    borderRadius: '4px',
-    color: Colour.white,
-    textAlign: 'center',
-    fontFamily: 'Lato',
-    fontWeight: 'bold',
-    fontSize: '14px',
-  }
-  let dateText = {
-    color: Colour.darkGrey,
-    fontFamily: 'IBM Plex Sans',
-    textAlign: 'right',
-  }
+  // router
+  const router = useRouter()
 
+  // context
   const { user } = useAppContext()
+
+  // get notifications
   const [notifications, setNotifications] = useState([])
   useEffect(() => {
     const fetchNotification = async () => {
@@ -83,8 +57,6 @@ export default function Notification() {
     fetchNotification()
   }, [user])
 
-  const router = useRouter()
-
   // click notification to mark as read
   const onClickNotification = async (notification) => {
     try {
@@ -92,13 +64,21 @@ export default function Notification() {
         notificationid: notification.notificationID,
       })
       console.log(res)
-      // if notification type is response
+      // check type of notification to redirect to correct page
       if (
         notification.type === 'feedback' ||
         notification.type === 'response'
       ) {
         router.push(
-          `/patient/${notification.receiverID}/case/${notification.caseID}/feedback/${notification.pageID}`
+          `/patient/${notification.patientID}/case/${notification.caseID}/feedback/${notification.pageID}`
+        )
+      } else if (notification.type === 'case') {
+        router.push(
+          `/patient/${notification.patientID}/case/${notification.caseID}`
+        )
+      } else if (notification.type === 'record') {
+        router.push(
+          `/patient/${notification.patientID}/case/${notification.caseID}/record`
         )
       }
     } catch (err) {
@@ -111,7 +91,7 @@ export default function Notification() {
       <PopoverTrigger>
         <BellIcon tabIndex="0" sx={iconButton} />
       </PopoverTrigger>
-      <PopoverContent width="480px">
+      <PopoverContent sx={notificationWidth}>
         <PopoverArrow />
         <PopoverBody>
           {notifications.map((item, index) => (
@@ -121,7 +101,7 @@ export default function Notification() {
               onClick={() => onClickNotification(item)}
             >
               <VStack alignItems="start">
-                <Text sx={GlobalStyle.regularText}>{item.description}</Text>
+                <Text sx={regularText}>{item.description}</Text>
                 <Text sx={dateText}>
                   {new Date(item.datetime).toLocaleString()}
                 </Text>

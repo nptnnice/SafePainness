@@ -90,9 +90,9 @@ export default function Feedback(props) {
           feedbackID: feedback.feedbackID,
           senderID: user.userID,
           message: form.message,
-          datetime: new Date(),
           senderName: user.name,
-          receiverID: patientID,
+          receiverID: user.role === 'doctor' ? patientID : feedback.doctorID,
+          patientID: patientID,
           caseID: caseID,
         })
         console.log(res)

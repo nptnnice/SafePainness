@@ -62,10 +62,10 @@ export default function AddFeedbackModal(props) {
         const res = await axios.post('/api/feedbackManager/addFeedback', {
           caseID: caseID,
           message: feedback,
-          datetime: new Date(),
           senderID: user.userID,
           receiverID: patientID,
           senderName: `Dr. ${user.name}`,
+          patientID: patientID,
         })
         console.log(res)
         onClose()

@@ -32,6 +32,7 @@ export default function Navbar() {
 
   // router
   const router = useRouter()
+  const isHistoryTaking = router.pathname.search('/historytaking')
 
   // context
   const { user, setUser } = useAppContext()
@@ -89,14 +90,16 @@ export default function Navbar() {
       <Flex sx={navbar}>
         <Image sx={logo} src="/images/Logo.png" onClick={() => onClickLogo()} />
 
-        <Flex sx={menuFlex}>
-          <Text sx={signup} onClick={() => onClickSignUp()}>
-            Sign Up
-          </Text>
-          <Text sx={login} onClick={() => setOpen(true)}>
-            Login
-          </Text>
-        </Flex>
+        {isHistoryTaking == -1 && (
+          <Flex sx={menuFlex}>
+            <Text sx={signup} onClick={() => onClickSignUp()}>
+              Sign Up
+            </Text>
+            <Text sx={login} onClick={() => setOpen(true)}>
+              Login
+            </Text>
+          </Flex>
+        )}
         <LoginModal isOpen={open} onClose={setOpen} />
       </Flex>
     )

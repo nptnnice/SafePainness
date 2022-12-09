@@ -4,18 +4,10 @@ import {
   BreadcrumbLink,
   BreadcrumbSeparator,
 } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
+import { boldText, blueText } from '../style-props/Sharedstyles'
 import { useRouter } from 'next/router'
 
 export default function BreadcrumbMenu() {
-  let currentPage = {
-    color: Colour.darkBlue,
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: 'bold',
-    fontSize: { base: '16px', md: '18px' },
-  }
-
   const router = useRouter()
   const patientID = router.query.patientID
   const caseID = router.query.caseID
@@ -27,8 +19,8 @@ export default function BreadcrumbMenu() {
           onClick={() => router.push(`/patient/${patientID}/case/${caseID}`)}
           sx={
             router.pathname === '/patient/[patientID]/case/[caseID]'
-              ? currentPage
-              : GlobalStyle.boldText
+              ? blueText
+              : boldText
           }
         >
           Summary
@@ -41,8 +33,8 @@ export default function BreadcrumbMenu() {
           }
           sx={
             router.pathname === '/patient/[patientID]/case/[caseID]/record'
-              ? currentPage
-              : GlobalStyle.boldText
+              ? blueText
+              : boldText
           }
         >
           Records
@@ -55,8 +47,8 @@ export default function BreadcrumbMenu() {
           }
           sx={
             router.pathname === '/patient/[patientID]/case/[caseID]/feedback'
-              ? currentPage
-              : GlobalStyle.boldText
+              ? blueText
+              : boldText
           }
         >
           Feedbacks

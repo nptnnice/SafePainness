@@ -44,6 +44,11 @@ const formBox = {
   borderRadius: '12px',
   marginTop: '16px',
 }
+const headBox = {
+  backgroundColor: Colour.lightBlue,
+  width: '100%',
+  padding: { base: '120px 0 16px', md: '140px 0 24px' },
+}
 
 // icon
 const searchIconStyle = {
@@ -181,6 +186,14 @@ const removeBtn = {
 }
 
 // text
+const headText = {
+  color: Colour.white,
+  fontFamily: 'Lato',
+  fontSize: { base: '24px', md: '32px' },
+  fontWeight: 'bold',
+  textAlign: 'center',
+  textTransform: 'uppercase',
+}
 const headingText = {
   fontFamily: 'Lato',
   fontSize: { base: '22px', md: '28px' },
@@ -236,6 +249,12 @@ const clickText = {
   _hover: {
     textDecoration: 'underline',
   },
+}
+const blueText = {
+  color: Colour.darkBlue,
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: 'bold',
+  fontSize: { base: '16px', md: '18px' },
 }
 
 // hover
@@ -344,12 +363,19 @@ const sliderBox = {
   marginTop: '16px',
 }
 
+// progress
+const progressStyle = {
+  width: '60%',
+  margin: '24px auto',
+}
+
 export {
   bgColor,
   layout,
   contentBox,
   recordBox,
   formBox,
+  headBox,
   searchIconStyle,
   addIconStyle,
   iconInput,
@@ -365,6 +391,7 @@ export {
   yellowBtn,
   paginationBtn,
   removeBtn,
+  headText,
   headingText,
   boldText,
   mediumText,
@@ -375,6 +402,7 @@ export {
   description,
   errorText,
   clickText,
+  blueText,
   hoverStyle,
   hoverStyleSelected,
   profileImg,
@@ -390,4 +418,5 @@ export {
   commonModal,
   bigModal,
   sliderBox,
+  progressStyle,
 }

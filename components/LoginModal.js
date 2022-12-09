@@ -19,9 +19,17 @@ import {
   Alert,
   AlertIcon,
 } from '@chakra-ui/react'
-import { iconInput } from '../style-props/Sharedstyles'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
+import {
+  iconInput,
+  clickText,
+  commonModal,
+  blueBtn,
+  headingText,
+  regularText,
+  mediumText,
+  inputStyle,
+  errorText,
+} from '../style-props/Sharedstyles'
 import { useState } from 'react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { useRouter } from 'next/router'
@@ -29,25 +37,8 @@ import axios from 'axios'
 import { useAppContext } from '../context/UserContext'
 
 export default function LoginModal({ isOpen, onClose }) {
-  let clickText = {
-    color: Colour.lightBlue,
-    fontFamily: 'IBM Plex Sans',
-    fontWeight: '500',
-    fontSize: { base: '16px', md: '18px' },
-    cursor: 'pointer',
-    _hover: {
-      textDecoration: 'underline',
-    },
-  }
-  let footModal = {
-    justifyContent: 'center',
-  }
-
   // set router
   const router = useRouter()
-  const onClickForgotpassword = () => {
-    router.push('./forgot-password')
-  }
 
   // context
   const { user, setUser } = useAppContext()
@@ -80,7 +71,6 @@ export default function LoginModal({ isOpen, onClose }) {
   // handle login
   const onLogin = async () => {
     console.log('username: ' + username, '\npassword: ' + password)
-
     // check if username and password is empty
     if (username && password) {
       setError(false)
@@ -97,15 +87,7 @@ export default function LoginModal({ isOpen, onClose }) {
         } else {
           // if login success, set token and user context
           sessionStorage.setItem('token', res.data.token)
-          // sessionStorage.setItem('userID', res.data.userID)
-          // sessionStorage.setItem('role', res.data.role)
-          // sessionStorage.setItem('image', res.data.image)
-          // sessionStorage.setItem(
-          //   'name',
-          //   res.data.firstName + ' ' + res.data.lastName
-          // )
           setUser({
-            // token: res.data.token,
             userID: res.data.userID,
             role: res.data.role,
             image: res.data.image,
@@ -128,13 +110,18 @@ export default function LoginModal({ isOpen, onClose }) {
     }
   }
 
+  // handle forgot password
+  const onClickForgotpassword = () => {
+    router.push('./forgot-password')
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
-      <ModalContent sx={GlobalStyle.modalStyle}>
+      <ModalContent sx={commonModal}>
         <ModalHeader textAlign="center">
-          <Text sx={GlobalStyle.headingText}>Login</Text>
-          <Text sx={GlobalStyle.regularText}>
+          <Text sx={headingText}>Login</Text>
+          <Text sx={regularText}>
             Not a member yet? Create an account to start tracking symptom!
           </Text>
         </ModalHeader>
@@ -144,30 +131,33 @@ export default function LoginModal({ isOpen, onClose }) {
         <ModalBody>
           <VStack spacing="16px">
             <FormControl isInvalid={error && !username}>
-              <FormLabel sx={GlobalStyle.labelText}>Username</FormLabel>
-              <Input sx={GlobalStyle.inputStyle} onChange={getUsername} />
-              <FormErrorMessage sx={GlobalStyle.errorText}>
+              <FormLabel sx={mediumText}>Username</FormLabel>
+              <Input sx={inputStyle} onChange={getUsername} />
+              <FormErrorMessage sx={errorText}>
                 Please enter your username
               </FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={error && !password}>
-              <FormLabel sx={GlobalStyle.labelText}>Password</FormLabel>
+              <FormLabel sx={mediumText}>Password</FormLabel>
               <InputGroup>
                 <Input
-                  sx={GlobalStyle.inputStyle}
+                  sx={inputStyle}
                   type={show ? 'text' : 'password'}
                   onChange={getPassword}
                 />
                 <InputRightElement>
                   {show ? (
-                    <ViewIcon sx={iconInput} onClick={handlePassword} />
+                    <ViewIcon sx={iconInput} onClick={() => handlePassword()} />
                   ) : (
-                    <ViewOffIcon sx={iconInput} onClick={handlePassword} />
+                    <ViewOffIcon
+                      sx={iconInput}
+                      onClick={() => handlePassword()}
+                    />
                   )}
                 </InputRightElement>
               </InputGroup>
-              <FormErrorMessage sx={GlobalStyle.errorText}>
+              <FormErrorMessage sx={errorText}>
                 Please enter your password
               </FormErrorMessage>
             </FormControl>
@@ -187,9 +177,9 @@ export default function LoginModal({ isOpen, onClose }) {
           </VStack>
         </ModalBody>
 
-        <ModalFooter sx={footModal}>
+        <ModalFooter justifyContent="center">
           <VStack spacing={4}>
-            <Button sx={GlobalStyle.blueBtn} onClick={onLogin}>
+            <Button sx={blueBtn} onClick={() => onLogin()}>
               Log in
             </Button>
             <Text
