@@ -51,6 +51,7 @@ import {
   Image,
   SimpleGrid,
   Textarea,
+  FormErrorMessage,
 } from '@chakra-ui/react'
 
 export default function PatientProfile(props) {
@@ -92,9 +93,56 @@ export default function PatientProfile(props) {
   // set edit mode
   const [isEdit, setIsEdit] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [isErrorUsername, setIsErrorUsername] = useState(false)
+  const [isErrorEmail, setIsErrorEmail] = useState(false)
+  const [isErrorPhone, setIsErrorPhone] = useState(false)
 
   // handle image
   const [preview, setPreview] = useState(form.image)
+
+  //check username is already in database
+  const checkUsername = async (e) => {
+    let username = e.target.value
+    let res = await axios.post('/api/checkUsername', { username: username })
+    if (
+      res.data === 'User already exist' &&
+      username !== previousForm.username
+    ) {
+      setForm({ ...form, username: username })
+      setIsErrorUsername(true)
+    } else {
+      setForm({ ...form, username: username })
+      setIsErrorUsername(false)
+    }
+  }
+
+  // check phone number format
+  const checkPhone = (e) => {
+    let regExp = /^[0-9]+$/g
+    let result = regExp.test(e.target.value)
+    let phone = e.target.value
+
+    if (result && phone.length === 10) {
+      setIsErrorPhone(false)
+      setForm({ ...form, phoneNumber: phone })
+    } else {
+      setIsErrorPhone(true)
+      setForm({ ...form, phoneNumber: phone })
+    }
+  }
+
+  //check email
+  const checkEmail = async (e) => {
+    let email = e.target.value
+    let res = await axios.post('/api/checkEmail', { email: email })
+    if (res.data === 'Email already exist' && email !== previousForm.email) {
+      setForm({ ...form, email: email })
+      setIsErrorEmail(true)
+    } else {
+      setForm({ ...form, email: email })
+      setIsErrorEmail(false)
+    }
+  }
 
   // preview image before save
   const onSelectFile = (e) => {
@@ -190,6 +238,7 @@ export default function PatientProfile(props) {
     setForm(previousForm)
     setPreview(form.image)
     setIsEdit(false)
+    setIsErrorPhone(false)
   }
 
   return (
@@ -260,7 +309,9 @@ export default function PatientProfile(props) {
                   />
                 </FormControl>
 
-                <FormControl isInvalid={isError && !form.username}>
+                <FormControl
+                  isInvalid={isErrorUsername || (isError && !form.username)}
+                >
                   <FormLabel sx={mediumText}>Username</FormLabel>
                   <Input
                     sx={inputStyle}
@@ -268,9 +319,12 @@ export default function PatientProfile(props) {
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
                     onChange={(e) => {
-                      setForm({ ...form, username: e.target.value })
+                      checkUsername(e)
                     }}
                   />
+                  {isErrorUsername ? (
+                    <FormErrorMessage>Username already exists</FormErrorMessage>
+                  ) : null}
                 </FormControl>
 
                 <FormControl isInvalid={isError && !form.password}>
@@ -317,20 +371,28 @@ export default function PatientProfile(props) {
                   </FormControl>
                 </Flex>
 
-                <FormControl isInvalid={isError && !form.phoneNumber}>
+                <FormControl
+                  isInvalid={isErrorPhone || (isError && !form.phoneNumber)}
+                >
                   <FormLabel sx={mediumText}>Phone number</FormLabel>
                   <Input
                     sx={inputStyle}
+                    type="number"
                     value={form.phoneNumber}
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
                     onChange={(e) => {
-                      setForm({ ...form, phoneNumber: e.target.value })
+                      checkPhone(e)
                     }}
                   />
+                  {isErrorPhone ? (
+                    <FormErrorMessage>
+                      Please enter 10 digit numbers
+                    </FormErrorMessage>
+                  ) : null}
                 </FormControl>
 
-                <FormControl>
+                <FormControl isInvalid={isErrorEmail}>
                   <FormLabel sx={mediumText}>Email</FormLabel>
                   <Input
                     sx={inputStyle}
@@ -338,9 +400,12 @@ export default function PatientProfile(props) {
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
                     onChange={(e) => {
-                      setForm({ ...form, email: e.target.value })
+                      checkEmail(e)
                     }}
                   />
+                  {isErrorEmail ? (
+                    <FormErrorMessage>Email already exists</FormErrorMessage>
+                  ) : null}
                 </FormControl>
               </SimpleGrid>
             </Box>
