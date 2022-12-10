@@ -47,7 +47,9 @@ export default function ForgotPassword() {
   const [userLink, setUserLink] = useState(`${url}/forgot-password`)
   const checkEmail = async (e) => {
     let email = e.target.value
-    let res = await axios.get('/api/checkEmail', { headers: { email: email } })
+    let res = await axios.get('/api/userManager/checkEmail', {
+      headers: { email: email },
+    })
     if (res.data === 'Email not found') {
       setIsError(true)
     } else {
