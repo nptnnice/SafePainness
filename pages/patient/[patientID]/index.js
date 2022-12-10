@@ -53,7 +53,7 @@ export default function Patient(props) {
 
   return (
     <Box sx={bgColor}>
-      <HeadInfo name="Patient ID" patientID={patientInfo.patientID} />
+      <HeadInfo />
       <Box sx={layout}>
         {/* ==================== Patient information ==================== */}
         <PatientInfo patientInfo={patientInfo} />

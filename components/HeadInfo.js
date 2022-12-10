@@ -1,6 +1,11 @@
 import { Box, Text, Flex, VStack } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
+import {
+  layout,
+  idText,
+  caseText,
+  doctorText,
+} from '/style-props/Headinfostyles'
+import { headBox } from '../style-props/Sharedstyles'
 import DoctorInfo from './DoctorInfo'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -8,46 +13,20 @@ import axios from 'axios'
 import url from '/url'
 
 export default function HeadInfo() {
+  // router
+  const router = useRouter()
+  const caseID = router.query.caseID
+  const patientID = router.query.patientID
+
+  // handle modal
   const [showModal, setShowModal] = useState(false)
   const handleClick = () => setShowModal(!showModal)
 
-  let layout = {
-    width: '90%',
-    margin: '0 auto',
-    maxWidth: '900px',
-    justifyContent: 'space-between',
-    alignItems: { base: 'start', md: 'end' },
-    flexDirection: { base: 'column', md: 'row' },
-  }
-  let idText = {
-    color: Colour.white,
-    fontFamily: 'Lato',
-    fontSize: { base: '24px', md: '32px' },
-    fontWeight: 'bold',
-  }
-  let caseText = {
-    color: Colour.white,
-    fontFamily: 'Lato',
-    fontSize: { base: '18px', md: '22px' },
-    fontWeight: 'medium',
-  }
-  let doctorText = {
-    color: Colour.cream,
-    fontFamily: 'Lato',
-    fontSize: { base: '16px', md: '20px' },
-    cursor: 'pointer',
-    transition: 'all 0.1s ease',
-    _hover: {
-      color: Colour.lightYellow,
-    },
-  }
-  const router = useRouter()
-  const caseID = router.query.caseID
-  // const { getDoctor } = props
-
+  // set info
   const [caseInfo, setCaseInfo] = useState({})
   const [doctorInfo, setDoctorInfo] = useState({})
 
+  // fetch case info
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -56,7 +35,7 @@ export default function HeadInfo() {
             caseid: caseID,
           },
         })
-        console.log('res', res)
+        // console.log('res', res)
         setCaseInfo(res.data)
         setDoctorInfo({
           doctorID: res.data.doctorID,
@@ -77,12 +56,12 @@ export default function HeadInfo() {
     fetchData()
   }, [])
 
-  console.log('doctor', doctorInfo)
-
   return (
-    <Box sx={GlobalStyle.headBox}>
+    <Box sx={headBox}>
       <Flex sx={layout}>
-        <Text sx={idText}>Patient ID: {caseInfo.patientID}</Text>
+        <Text sx={idText}>
+          Patient ID: {caseID == undefined ? patientID : caseInfo.patientID}
+        </Text>
         {caseID && (
           <VStack align={{ base: 'start', md: 'end' }} spacing={0}>
             <Text sx={caseText}>
@@ -102,16 +81,3 @@ export default function HeadInfo() {
     </Box>
   )
 }
-
-// export async function getServerSideProps(context) {
-//   const result = await axios.get(`${url}/api/caseManager/getCase`, {
-//     headers: {
-//       caseid: context.params.caseID,
-//     },
-//   })
-//   return {
-//     props: {
-//       caseInfo2: result.data,
-//     },
-//   }
-// }

@@ -142,6 +142,23 @@ const whiteBtn = {
     color: Colour.darkBlue,
   },
 }
+const stopTrackBtn = {
+  color: Colour.lightRed,
+  backgroundColor: Colour.white,
+  padding: { base: '16px 24px', md: '24px 32px' },
+  fontFamily: 'Lato',
+  fontSize: { base: '16px', md: '18px' },
+  fontWeight: 'bold',
+  borderRadius: '12px',
+  border: '3px solid',
+  borderColor: Colour.lightRed,
+  transition: 'all 0.2s ease',
+  filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
+  _hover: {
+    borderColor: Colour.red,
+    color: Colour.red,
+  },
+}
 const editBtn = {
   backgroundColor: Colour.lightYellow,
   color: Colour.white,
@@ -255,6 +272,13 @@ const blueText = {
   fontFamily: 'IBM Plex Sans',
   fontWeight: 'bold',
   fontSize: { base: '16px', md: '18px' },
+}
+const lightBlueText = {
+  color: Colour.lightBlue,
+  fontFamily: 'IBM Plex Sans',
+  fontWeight: '500',
+  fontSize: { base: '16px', md: '18px' },
+  marginBottom: '8px',
 }
 
 // hover
@@ -387,6 +411,7 @@ export {
   turquoiseBtn,
   whiteBtn,
   blueBtn,
+  stopTrackBtn,
   editBtn,
   yellowBtn,
   paginationBtn,
@@ -403,6 +428,7 @@ export {
   errorText,
   clickText,
   blueText,
+  lightBlueText,
   hoverStyle,
   hoverStyleSelected,
   profileImg,

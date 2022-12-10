@@ -9,5 +9,16 @@ const tableBox = {
   overflowY: 'scroll',
   height: { base: '320px', md: '400px' },
 }
+const doctorInfoLayout = {
+  gap: '32px',
+  flexDirection: { base: 'column', md: 'row' },
+}
+const doctorInfoModal = {
+  maxWidth: '700px',
+  maxHeight: '400px',
+  width: '90%',
+  borderRadius: '24px',
+  padding: { base: '16px', md: '24px' },
+}
 
-export { tableBox }
+export { tableBox, doctorInfoLayout, doctorInfoModal }

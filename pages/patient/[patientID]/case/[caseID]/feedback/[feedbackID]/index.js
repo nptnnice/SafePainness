@@ -118,13 +118,7 @@ export default function Feedback(props) {
   return (
     <>
       <Box sx={bgColor}>
-        <HeadInfo
-          name="Patient ID"
-          patientID={patientID}
-          caseID={caseID}
-          caseName="Grammar addict"
-          // doctor={user.name}
-        />
+        <HeadInfo />
 
         <VStack sx={layout} align="start" spacing={8}>
           <Text sx={headingText}>Feedback #{feedbackIndex}</Text>

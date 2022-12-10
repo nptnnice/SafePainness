@@ -32,7 +32,7 @@ import {
   blueBtn,
   removeBtn,
 } from '/style-props/Sharedstyles'
-import Colour from '/Colour'
+import Colour from '/style-props/SharedColour'
 import HeadBox from '/components/HeadCenter'
 import { useState, useEffect } from 'react'
 import { CloseIcon } from '@chakra-ui/icons'

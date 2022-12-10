@@ -1,18 +1,22 @@
 import { Text, Box } from '@chakra-ui/react'
-import { useState, useEffect } from 'react'
-import GlobalStyle from '../Style'
-import Colour from '../Colour'
+import Colour from '/style-props/SharedColour'
 import Chart from 'chart.js/auto'
 import { Line } from 'react-chartjs-2'
+import { boldText } from '../style-props/Sharedstyles'
+import { useEffect } from 'react'
 
 export default function Dashboard(props) {
   const { painGraph } = props
-  {
-    new Date(painGraph.datetime).toLocaleString()
-  }
-  console.log('painGraph', painGraph)
+
+  // format timestamp to date
+  useEffect(() => {
+    painGraph.map((item) => {
+      item.datetime = new Date(item.datetime).toDateString()
+    })
+  }, [])
+
   const painGraphValue = painGraph
-  console.log('painGraphValue', painGraphValue)
+
   const data = {
     datasets: [
       {
@@ -31,7 +35,7 @@ export default function Dashboard(props) {
   }
   return (
     <>
-      <Text sx={GlobalStyle.boldText} marginBottom="16px">
+      <Text sx={boldText} marginBottom="16px">
         PAIN SEVERITY SUMMARY
       </Text>
       <Box width="100%" margin="0 auto">

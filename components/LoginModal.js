@@ -75,7 +75,7 @@ export default function LoginModal({ isOpen, onClose }) {
     if (username && password) {
       setError(false)
       try {
-        const res = await axios.post('/api/login', {
+        const res = await axios.post('/api/userManager/login', {
           username: username,
           password: password,
         })

@@ -1,4 +1,4 @@
-import { flexStyle } from '/style-props/Profilestyles'
+import { flexStyle, flexStyle2 } from '/style-props/Profilestyles'
 import {
   layout,
   headingText,
@@ -80,7 +80,7 @@ export default function CreatePatientAccount() {
   //check username is already in database
   const checkUsername = async (e) => {
     let username = e.target.value
-    let res = await axios.get('/api/checkUsername', {
+    let res = await axios.get('/api/userManager/checkUsername', {
       headers: { username: username },
     })
     if (res.data === 'User already exist') {
@@ -108,7 +108,9 @@ export default function CreatePatientAccount() {
   //check email
   const checkEmail = async (e) => {
     let email = e.target.value
-    let res = await axios.get('/api/checkEmail', { headers: { email: email } })
+    let res = await axios.get('/api/userManager/checkEmail', {
+      headers: { email: email },
+    })
     if (res.data === 'Email not found') {
       setIsErrorEmail(false)
       setForm({ ...form, email: email })
@@ -240,7 +242,7 @@ export default function CreatePatientAccount() {
             />
           </FormControl>
 
-          <Flex sx={flexStyle}>
+          <Flex sx={flexStyle2}>
             <FormControl isRequired isInvalid={isError && !form.sex}>
               <FormLabel sx={mediumText}>Sex</FormLabel>
               <Select

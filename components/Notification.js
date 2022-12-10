@@ -22,7 +22,6 @@ import {
   dateText,
 } from '/style-props/Notificationstyles'
 import { BellIcon } from '@chakra-ui/icons'
-import GlobalStyle from '../Style'
 import { useState, useEffect } from 'react'
 import { useAppContext } from '../context/UserContext'
 import url from '../url'
