@@ -20,14 +20,33 @@ import {
 } from '/style-props/Sharedstyles'
 import url from '/url'
 import QRCode from 'react-qr-code'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import jwt_decode from 'jwt-decode'
 
 export default function QRgenerator(props) {
   const { caseInfo } = props
 
+  // router
+  const router = useRouter()
+
+  // check user role
+  const [userRole, setUserRole] = useState('')
+  useEffect(() => {
+    if (sessionStorage.getItem('token') !== null) {
+      setUserRole(jwt_decode(sessionStorage.getItem('token')).role)
+    }
+  }, [])
+
   // handle modal
   const [showModal, setShowModal] = useState(false)
-  const handleClick = () => setShowModal(!showModal)
+  const handleClick = () => {
+    userRole === 'patient'
+      ? router.push(
+          `/patient/${caseInfo.patientID}/case/${caseInfo.caseID}/historytaking/part1`
+        )
+      : setShowModal(!showModal)
+  }
 
   return (
     <>
