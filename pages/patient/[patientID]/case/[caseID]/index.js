@@ -115,33 +115,33 @@ export default function Case(props) {
                   diseaseName={diseaseName}
                 />
               </>
+            ) : caseInfo.status == true ? (
+              <>
+                {/* ==================== Show stop tracking if already diagnosed ==================== */}
+                <Flex sx={breadcrumbFlex}>
+                  <BreadcrumbMenu />
+                  {userRole == 'doctor' ? (
+                    <Button sx={stopTrackBtn} onClick={() => onStopTracking()}>
+                      Stop Tracking
+                    </Button>
+                  ) : null}
+                </Flex>
+                <StopTrackModal
+                  isOpen={showStopModal}
+                  onClose={onStopTracking}
+                  setConfirm={setConfirm}
+                  caseInfo={caseInfo}
+                />
+              </>
             ) : (
-              caseInfo.status == true && (
-                <>
-                  {/* ==================== Show stop tracking if already diagnosed ==================== */}
-                  <Flex sx={breadcrumbFlex}>
-                    <BreadcrumbMenu />
-                    {userRole == 'doctor' ? (
-                      <Button
-                        sx={stopTrackBtn}
-                        onClick={() => onStopTracking()}
-                      >
-                        Stop Tracking
-                      </Button>
-                    ) : null}
-                  </Flex>
-                  <StopTrackModal
-                    isOpen={showStopModal}
-                    onClose={onStopTracking}
-                    setConfirm={setConfirm}
-                    caseInfo={caseInfo}
-                  />
-                </>
-              )
+              <>
+                {/* ==================== Doctor view when stop tracking ==================== */}
+                <BreadcrumbMenu />
+              </>
             )
           ) : (
             <>
-              {/* ==================== Show just breadcrumb if already stopped tracking ==================== */}
+              {/* ==================== Patient view ==================== */}
               <BreadcrumbMenu />
             </>
           )}
