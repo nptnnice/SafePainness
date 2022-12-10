@@ -98,12 +98,14 @@ export default function PatientProfile(props) {
   const [isErrorPhone, setIsErrorPhone] = useState(false)
 
   // handle image
-  const [preview, setPreview] = useState(form.image)
+  const [selectedFile, setSelectedFile] = useState(null)
 
   //check username is already in database
   const checkUsername = async (e) => {
     let username = e.target.value
-    let res = await axios.post('/api/checkUsername', { username: username })
+    let res = await axios.get('/api/userManager/checkUsername', {
+      headers: { username: username },
+    })
     if (
       res.data === 'User already exist' &&
       username !== previousForm.username
@@ -134,38 +136,41 @@ export default function PatientProfile(props) {
   //check email
   const checkEmail = async (e) => {
     let email = e.target.value
-    let res = await axios.post('/api/checkEmail', { email: email })
-    if (res.data === 'Email already exist' && email !== previousForm.email) {
-      setForm({ ...form, email: email })
-      setIsErrorEmail(true)
-    } else {
+    let res = await axios.get('/api/userManager/checkEmail', {
+      headers: { email: email },
+    })
+    if (res.data === 'Email not found' || email == previousForm.email) {
       setForm({ ...form, email: email })
       setIsErrorEmail(false)
+    } else {
+      setForm({ ...form, email: email })
+      setIsErrorEmail(true)
     }
   }
 
   // preview image before save
   const onSelectFile = (e) => {
     if (form.image == '' || form.image == null) {
-      // upload to firebase if no image
       uploadImage(e.target.files[0])
     } else {
       // preview with blob first if there is image
       const objectUrl = URL.createObjectURL(e.target.files[0])
-      setPreview(objectUrl)
+      setForm({ ...form, image: objectUrl })
+      setSelectedFile(e.target.files[0])
     }
   }
 
   // remove image in edit mode
   const removeImage = () => {
-    setPreview('')
+    setForm({ ...form, image: '' })
+    setSelectedFile(null)
   }
 
   // save image to firebase
   const uploadImage = async (file) => {
     const storageRef = ref(storage, `/images/patient/${patientID}`)
     const uploadTask = uploadBytesResumable(storageRef, file)
-    await uploadTask.on(
+    uploadTask.on(
       'state_changed',
       (snapshot) => {
         const percent = Math.round(
@@ -185,7 +190,7 @@ export default function PatientProfile(props) {
       (err) => console.log(err),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          setPreview(url)
+          setForm({ ...form, image: url })
         })
       }
     )
@@ -210,17 +215,25 @@ export default function PatientProfile(props) {
 
   // save form
   const onClickSave = async () => {
-    Object.assign(form, { image: preview })
+    // if form.image is objecturl, upload image to firebase
+    if (form.image.search('blob') != -1) {
+      uploadImage(selectedFile)
+      Object.assign(form, { image: previousForm.image })
+    }
     console.log('form', form)
     if (
       form.firstName &&
       form.lastName &&
       form.username &&
       form.password &&
-      form.phoneNumber
+      form.phoneNumber &&
+      !isErrorEmail &&
+      !isErrorUsername &&
+      !isErrorPhone
     ) {
       await saveDatabase()
       setIsEdit(false)
+      setIsError(false)
     } else {
       setIsError(true)
       toast({
@@ -236,9 +249,10 @@ export default function PatientProfile(props) {
   // cancel edit
   const onClickCancel = () => {
     setForm(previousForm)
-    setPreview(form.image)
     setIsEdit(false)
     setIsErrorPhone(false)
+    setIsErrorUsername(false)
+    setIsErrorEmail(false)
   }
 
   return (
@@ -258,8 +272,8 @@ export default function PatientProfile(props) {
               ) : (
                 <>
                   <FormLabel>
-                    {preview != '' ? (
-                      <Avatar sx={profileImg} src={preview} />
+                    {form.image != '' ? (
+                      <Avatar sx={profileImg} src={form.image} />
                     ) : (
                       <Box sx={fileBtn}>
                         <Text sx={upload}>Upload photo</Text>

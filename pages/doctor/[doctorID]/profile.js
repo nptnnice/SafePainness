@@ -97,12 +97,14 @@ export default function DoctorProfile(props) {
   const [isErrorPhone, setIsErrorPhone] = useState(false)
 
   // handle image
-  const [preview, setPreview] = useState(form.image)
+  const [selectedFile, setSelectedFile] = useState(null)
 
   //check username is already in database
   const checkUsername = async (e) => {
     let username = e.target.value
-    let res = await axios.post('/api/checkUsername', { username: username })
+    let res = await axios.get('/api/userManager/checkUsername', {
+      headers: { username: username },
+    })
     if (
       res.data === 'User already exist' &&
       username !== previousForm.username
@@ -110,6 +112,7 @@ export default function DoctorProfile(props) {
       setForm({ ...form, username: username })
       setIsErrorUsername(true)
     } else {
+      console.log('username available')
       setForm({ ...form, username: username })
       setIsErrorUsername(false)
     }
@@ -133,13 +136,15 @@ export default function DoctorProfile(props) {
   //check email
   const checkEmail = async (e) => {
     let email = e.target.value
-    let res = await axios.post('/api/checkEmail', { email: email })
-    if (res.data === 'Email already exist' && email !== previousForm.email) {
-      setForm({ ...form, email: email })
-      setIsErrorEmail(true)
-    } else {
+    let res = await axios.get('/api/userManager/checkEmail', {
+      headers: { email: email },
+    })
+    if (res.data === 'Email not found' || email == previousForm.email) {
       setForm({ ...form, email: email })
       setIsErrorEmail(false)
+    } else {
+      setForm({ ...form, email: email })
+      setIsErrorEmail(true)
     }
   }
 
@@ -151,13 +156,15 @@ export default function DoctorProfile(props) {
     } else {
       // preview with blob first if there is image
       const objectUrl = URL.createObjectURL(e.target.files[0])
-      setPreview(objectUrl)
+      setForm({ ...form, image: objectUrl })
+      setSelectedFile(e.target.files[0])
     }
   }
 
   // remove image in edit mode
   const removeImage = () => {
-    setPreview('')
+    setForm({ ...form, image: '' })
+    setSelectedFile(null)
   }
 
   // save image to firebase
@@ -184,7 +191,7 @@ export default function DoctorProfile(props) {
       (err) => console.log(err),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          setPreview(url)
+          setForm({ ...form, image: url })
         })
       }
     )
@@ -209,17 +216,26 @@ export default function DoctorProfile(props) {
 
   // save form
   const onClickSave = async () => {
-    Object.assign(form, { image: preview })
+    // if form.image is objecturl, upload image to firebase
+    if (form.image.search('blob') != -1) {
+      uploadImage(selectedFile)
+      Object.assign(form, { image: previousForm.image })
+    }
+    console.log('form', form)
     if (
       form.firstName &&
       form.lastName &&
       form.username &&
       form.password &&
       form.phoneNumber &&
-      form.department
+      form.department &&
+      !isErrorEmail &&
+      !isErrorUsername &&
+      !isErrorPhone
     ) {
       await saveDatabase()
       setIsEdit(false)
+      setIsError(false)
     } else {
       setIsError(true)
       toast({
@@ -235,9 +251,10 @@ export default function DoctorProfile(props) {
   // cancel edit
   const onClickCancel = () => {
     setForm(previousForm)
-    setPreview(form.image)
     setIsEdit(false)
     setIsErrorPhone(false)
+    setIsErrorUsername(false)
+    setIsErrorEmail(false)
   }
 
   return (
@@ -258,8 +275,8 @@ export default function DoctorProfile(props) {
               ) : (
                 <>
                   <FormLabel>
-                    {preview != '' ? (
-                      <Avatar sx={profileImg} src={preview} />
+                    {form.image != '' ? (
+                      <Avatar sx={profileImg} src={form.image} />
                     ) : (
                       <Box sx={fileBtn}>
                         <Text sx={upload}>Upload photo</Text>

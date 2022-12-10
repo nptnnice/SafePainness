@@ -23,16 +23,28 @@ import {
   regularText,
 } from '/style-props/Sharedstyles'
 import HeadCenter from '/components/HeadCenter'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/react'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 
 export default function ResetPassword() {
   // router
   const router = useRouter()
-  const userID = router.query.patientID
+  const token = router.query.userToken
+
+  // set userID
+  const [userID, setUserID] = useState('')
+
+  // get userID from token
+  useEffect(() => {
+    if (token) {
+      let decoded = jwt_decode(token)
+      setUserID(decoded.userID)
+    }
+  }, [token])
 
   // toast
   const toast = useToast()
@@ -55,7 +67,6 @@ export default function ResetPassword() {
   // set password
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [patientID, setPatientID] = useState(userID)
 
   // check password
   const checkpassword = (e) => {
@@ -64,7 +75,6 @@ export default function ResetPassword() {
     } else {
       setIsMatch(true)
       setConfirmPassword(e.target.value)
-      setPatientID(userID)
     }
   }
 
@@ -74,9 +84,9 @@ export default function ResetPassword() {
       setIsError(false)
       setIsMatch(true)
       try {
-        const res = await axios.post('/api/patientManager/resetPassword', {
+        const res = await axios.put('/api/userManager/reset-password', {
           password: password,
-          patientID: patientID,
+          userID: userID,
         })
         console.log('res', res)
         toast({

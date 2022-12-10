@@ -26,6 +26,7 @@ import { useToast } from '@chakra-ui/react'
 import emailjs from 'emailjs-com'
 import axios from 'axios'
 import url from '../url'
+import jwt from 'jsonwebtoken'
 
 export default function ForgotPassword() {
   // router
@@ -49,15 +50,16 @@ export default function ForgotPassword() {
     let res = await axios.get('/api/checkEmail', { headers: { email: email } })
     if (res.data === 'Email not found') {
       setIsError(true)
-      console.log('isError')
     } else {
       setIsError(false)
-      console.log('data', res.data)
-      if (res.data.role == 'doctor') {
-        setUserLink(`${url}/doctor/${res.data.userID}/reset-password`)
-      } else if (res.data.role == 'patient') {
-        setUserLink(`${url}/patient/${res.data.userID}/reset-password`)
-      }
+      const userToken = jwt.sign(
+        {
+          userID: res.data.userID,
+        },
+        'secret',
+        { expiresIn: '1h' }
+      )
+      setUserLink(`${url}/reset-password/${userToken}`)
     }
   }
 

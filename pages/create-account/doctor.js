@@ -76,7 +76,7 @@ export default function CreateDoctorAccount() {
   // check username is already in database
   const checkUsername = async (e) => {
     let username = e.target.value
-    let res = await axios.get('/api/checkUsername', {
+    let res = await axios.get('/api/userManager/checkUsername', {
       headers: { username: username },
     })
     if (res.data === 'User already exist') {
@@ -106,7 +106,9 @@ export default function CreateDoctorAccount() {
   // check email
   const checkEmail = async (e) => {
     let email = e.target.value
-    let res = await axios.get('/api/checkEmail', { headers: { email: email } })
+    let res = await axios.get('/api/userManager/checkEmail', {
+      headers: { email: email },
+    })
     if (res.data === 'Email not found') {
       setIsErrorEmail(false)
       setForm({ ...form, email: email })

@@ -7,65 +7,52 @@ import {
   ModalBody,
   ModalCloseButton,
   Text,
-  Box,
   Center,
   VStack,
   Button,
 } from '@chakra-ui/react'
-import GlobalStyle from '../Style'
-import Colour from '/Colour'
+import { takeHistoryBtn } from '/style-props/Casepagestyles'
+import {
+  headingText,
+  greyMediumText,
+  regularText,
+  commonModal,
+} from '/style-props/Sharedstyles'
 import url from '/url'
 import QRCode from 'react-qr-code'
 import { useState } from 'react'
 
 export default function QRgenerator(props) {
-  let takeHistoryBtn = {
-    backgroundColor: Colour.lightBlue,
-    color: Colour.white,
-    padding: { base: '16px 24px', md: '24px 40px' },
-    fontFamily: 'Lato',
-    fontSize: { base: '16px', md: '18px' },
-    fontWeight: 'bold',
-    borderRadius: '12px',
-    border: '3px solid',
-    borderColor: Colour.lightBlue,
-    transition: 'all 0.2s ease',
-    filter: 'drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25))',
-    _hover: {
-      backgroundColor: Colour.darkBlue,
-      borderColor: Colour.darkBlue,
-    },
-  }
+  const { caseInfo } = props
 
+  // handle modal
   const [showModal, setShowModal] = useState(false)
   const handleClick = () => setShowModal(!showModal)
-  const patientID = props.caseInfo.patientID
 
   return (
     <>
+      {/* ==================== Button ==================== */}
       <VStack>
-        <Text sx={GlobalStyle.greyMediumText}>
-          No record of pain experience
-        </Text>
-        <Button sx={takeHistoryBtn} onClick={handleClick}>
+        <Text sx={greyMediumText}>No record of pain experience</Text>
+        <Button sx={takeHistoryBtn} onClick={() => handleClick()}>
           Take history
         </Button>
       </VStack>
+
+      {/* ==================== Modal ==================== */}
       <Modal isOpen={showModal} onClose={handleClick} isCentered>
         <ModalOverlay />
-        <ModalContent sx={GlobalStyle.modalStyle} textAlign="center">
-          <ModalHeader sx={GlobalStyle.headingText}>
-            History taking form
-          </ModalHeader>
+        <ModalContent sx={commonModal} textAlign="center">
+          <ModalHeader sx={headingText}>History taking form</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text sx={GlobalStyle.regularText}>
+            <Text sx={regularText}>
               Get your patient scan the QR code to fill in the history taking
               form.
             </Text>
             <Center marginTop="16px">
               <QRCode
-                value={`${url}/patient/${patientID}/historytaking/part1`}
+                value={`${url}/patient/${caseInfo.patientID}/case/${caseInfo.caseID}/historytaking/part1`}
               />
             </Center>
           </ModalBody>

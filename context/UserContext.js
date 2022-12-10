@@ -9,7 +9,7 @@ export function AppWrapper({ children }) {
 
   useEffect(() => {
     const getUser = async () => {
-      let userData = await axios.get('/api/getUser', {
+      let userData = await axios.get('/api/userManager/getUser', {
         headers: {
           userid: jwt_decode(sessionStorage.getItem('token')).userID,
         },
@@ -26,7 +26,7 @@ export function AppWrapper({ children }) {
       getUser()
     }
   }, [])
-  console.log('user', user)
+  // console.log('user', user)
 
   return (
     <AppContext.Provider value={{ user, setUser }}>

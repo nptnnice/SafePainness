@@ -5,6 +5,7 @@ const section = {
   margin: '0 auto',
   maxWidth: '900px',
   padding: '80px 0',
+  backgroundColor: Colour.white,
 }
 const headBox = {
   backgroundColor: Colour.lightBlue,
@@ -85,7 +86,6 @@ const teamImg = {
 }
 const teamSection = {
   textAlign: 'center',
-  backgroundColor: Colour.lightGrey,
   padding: '80px 0',
   width: '90%',
   margin: '0 auto',

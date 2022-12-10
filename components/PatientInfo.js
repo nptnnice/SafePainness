@@ -5,6 +5,7 @@ import {
   spanFlex,
   mediumText,
   profileImg,
+  spanFlex2,
 } from '../style-props/Sharedstyles'
 import {
   patientInfoFlex,
@@ -51,12 +52,12 @@ export default function PatientInfo(props) {
             </Flex>
           </Flex>
 
-          <Flex sx={spanFlex}>
+          <Flex sx={spanFlex2}>
             <Text sx={mediumText}>Medical Conditions: </Text>
             <Text sx={regularText}>{info.medCondition}</Text>
           </Flex>
 
-          <Flex sx={spanFlex}>
+          <Flex sx={spanFlex2}>
             <Text sx={mediumText}>Allergy: </Text>
             <Text sx={regularText}>{info.allergy}</Text>
           </Flex>

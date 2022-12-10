@@ -15,6 +15,13 @@ import url from '/url'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/react'
+import {
+  commonModal,
+  headingText,
+  regularText,
+  whiteBtn,
+  blueBtn,
+} from '../style-props/Sharedstyles'
 
 export default function QR(props) {
   const { isOpen, onClose, patientName, doctorID, patientID } = props
@@ -61,20 +68,18 @@ export default function QR(props) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
-      <ModalContent sx={GlobalStyle.modalStyle} textAlign="center">
-        <ModalHeader sx={GlobalStyle.headingText}>
-          Confirm to create case
-        </ModalHeader>
+      <ModalContent sx={commonModal} textAlign="center">
+        <ModalHeader sx={headingText}>Confirm to create case</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text sx={GlobalStyle.regularText}>
+          <Text sx={regularText}>
             You selected "{patientName}" for this case.
           </Text>
           <ButtonGroup marginTop="40px">
-            <Button sx={GlobalStyle.cancelBtn} onClick={onClose}>
+            <Button sx={whiteBtn} onClick={onClose}>
               Cancel
             </Button>
-            <Button sx={GlobalStyle.saveBtn} onClick={() => onClickConfirm()}>
+            <Button sx={blueBtn} onClick={() => onClickConfirm()}>
               Confirm
             </Button>
           </ButtonGroup>
