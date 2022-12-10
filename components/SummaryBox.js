@@ -78,7 +78,7 @@ export default function SummaryBox(props) {
         </Flex>
         <Flex sx={spanFlex2}>
           <Text sx={mediumText}>Worse Time: </Text>
-          <Text sx={regularText}>{caseInfo.worstTime}</Text>
+          <Text sx={regularText}>{caseInfo.worseTime}</Text>
         </Flex>
         <Flex sx={spanFlex2}>
           <Text sx={mediumText}>Experience: </Text>
