@@ -70,7 +70,10 @@ export default function AddRecord() {
       }, 500)
     } else {
       if (jwt_decode(sessionStorage.getItem('token')).role != 'patient') {
-        alert('You cannot access this page')
+        router.push('/')
+        setTimeout(() => {
+          alert('You cannot access this page')
+        }, 500)
       }
     }
   }, [])

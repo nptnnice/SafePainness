@@ -69,6 +69,7 @@ export default function MyPatients(props) {
     } else {
       if (jwt_decode(sessionStorage.getItem('token')).role != 'doctor') {
         alert('You cannot access this page')
+        router.push('/')
       }
     }
   }, [])
