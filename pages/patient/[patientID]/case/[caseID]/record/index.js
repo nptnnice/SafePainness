@@ -5,6 +5,7 @@ import BreadcrumbMenu from '/components/BreadcrumbMenu'
 import Record from '/components/Record'
 import { useAppContext } from '/context/UserContext'
 import axios from 'axios'
+import url from '/url'
 import jwt_decode from 'jwt-decode'
 import { useState, useEffect } from 'react'
 import {
@@ -109,7 +110,7 @@ export default function Case(props) {
 
 export async function getServerSideProps(context) {
   const allrecordResult = await axios.get(
-    'http://localhost:3000/api/recordManager/getAllRecords',
+    `${url}/api/recordManager/getAllRecords`,
     {
       headers: {
         caseid: context.params.caseID,

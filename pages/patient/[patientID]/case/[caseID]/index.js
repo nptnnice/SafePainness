@@ -51,7 +51,7 @@ export default function Case(props) {
     } else {
       setUserRole(jwt_decode(sessionStorage.getItem('token')).role)
     }
-  }, [])
+  }, [user])
 
   // set disease name
   const [diseaseName, setDiseaseName] = useState('')
@@ -78,70 +78,66 @@ export default function Case(props) {
   const [showStopModal, setShowStopModal] = useState(false)
   const onStopTracking = () => setShowStopModal(!showStopModal)
 
-  return (
-    <Box sx={bgColor}>
-      <HeadInfo />
-      {/* ==================== No pain experience ==================== */}
-      {caseInfo.site == null ? (
+  if (caseInfo.site == null) {
+    return (
+      <Box sx={bgColor}>
+        <HeadInfo />
         <Box sx={layout2}>
           <QRgenerator caseInfo={caseInfo} />
         </Box>
-      ) : (
+      </Box>
+    )
+  } else if (caseInfo.site != null && userRole == 'doctor') {
+    return (
+      <Box sx={bgColor}>
+        <HeadInfo />
         <Box sx={layout}>
-          {/* ==================== Confirm diagnosis if already take history ==================== */}
-          {userRole == 'doctor' ? (
-            !isConfirm && caseInfo.caseName == null ? (
-              <>
-                <Flex sx={diagnosisFlex}>
-                  <FormControl id="disease" isInvalid={isError}>
-                    <Input
-                      placeholder="Disease name"
-                      onChange={(e) => setDiseaseName(e.target.value)}
-                      sx={inputStyle}
-                    />
-                    <FormErrorMessage>
-                      Please fill in the disease name
-                    </FormErrorMessage>
-                  </FormControl>
-                  <Button sx={yellowBtn} onClick={() => onConfirmDiagnosis()}>
-                    Confirm diagnosis
-                  </Button>
-                </Flex>
-                <ConfirmModal
-                  isOpen={showModal}
-                  onClose={onConfirmDiagnosis}
-                  setConfirm={setConfirm}
-                  caseInfo={caseInfo}
-                  diseaseName={diseaseName}
-                />
-              </>
-            ) : caseInfo.status == true ? (
-              <>
-                {/* ==================== Show stop tracking if already diagnosed ==================== */}
-                <Flex sx={breadcrumbFlex}>
-                  <BreadcrumbMenu />
-                  {userRole == 'doctor' ? (
-                    <Button sx={stopTrackBtn} onClick={() => onStopTracking()}>
-                      Stop Tracking
-                    </Button>
-                  ) : null}
-                </Flex>
-                <StopTrackModal
-                  isOpen={showStopModal}
-                  onClose={onStopTracking}
-                  setConfirm={setConfirm}
-                  caseInfo={caseInfo}
-                />
-              </>
-            ) : (
-              <>
-                {/* ==================== Doctor view when stop tracking ==================== */}
+          {!isConfirm && caseInfo.caseName == null ? (
+            <>
+              <Flex sx={diagnosisFlex}>
+                <FormControl id="disease" isInvalid={isError}>
+                  <Input
+                    placeholder="Disease name"
+                    onChange={(e) => setDiseaseName(e.target.value)}
+                    sx={inputStyle}
+                  />
+                  <FormErrorMessage>
+                    Please fill in the disease name
+                  </FormErrorMessage>
+                </FormControl>
+                <Button sx={yellowBtn} onClick={() => onConfirmDiagnosis()}>
+                  Confirm diagnosis
+                </Button>
+              </Flex>
+              <ConfirmModal
+                isOpen={showModal}
+                onClose={onConfirmDiagnosis}
+                setConfirm={setConfirm}
+                caseInfo={caseInfo}
+                diseaseName={diseaseName}
+              />
+            </>
+          ) : caseInfo.status == true ? (
+            <>
+              {/* ==================== Show stop tracking if already diagnosed ==================== */}
+              <Flex sx={breadcrumbFlex}>
                 <BreadcrumbMenu />
-              </>
-            )
+                {userRole == 'doctor' ? (
+                  <Button sx={stopTrackBtn} onClick={() => onStopTracking()}>
+                    Stop Tracking
+                  </Button>
+                ) : null}
+              </Flex>
+              <StopTrackModal
+                isOpen={showStopModal}
+                onClose={onStopTracking}
+                setConfirm={setConfirm}
+                caseInfo={caseInfo}
+              />
+            </>
           ) : (
             <>
-              {/* ==================== Patient view ==================== */}
+              {/* ==================== Doctor view when stop tracking ==================== */}
               <BreadcrumbMenu />
             </>
           )}
@@ -152,9 +148,22 @@ export default function Case(props) {
             <Dashboard painGraph={painGraph} />
           </Box>
         </Box>
-      )}
-    </Box>
-  )
+      </Box>
+    )
+  } else if (caseInfo.site != null && userRole == 'patient') {
+    return (
+      <Box sx={bgColor}>
+        <HeadInfo />
+        <Box sx={layout}>
+          <BreadcrumbMenu />
+          <Box sx={section}>
+            <SummaryBox caseInfo={caseInfo} />
+            <Dashboard painGraph={painGraph} />
+          </Box>
+        </Box>
+      </Box>
+    )
+  }
 }
 
 export async function getServerSideProps(context) {
