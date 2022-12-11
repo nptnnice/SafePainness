@@ -8,6 +8,7 @@ import url from '../../../url'
 import jwt_decode from 'jwt-decode'
 import { storage } from '/firebaseConfig'
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
+import ReactLoading from 'react-loading'
 import {
   flexStyle,
   flexStyle2,
@@ -99,6 +100,7 @@ export default function PatientProfile(props) {
 
   // handle image
   const [selectedFile, setSelectedFile] = useState(null)
+  const [isUploading, setIsUploading] = useState(false)
 
   //check username is already in database
   const checkUsername = async (e) => {
@@ -173,6 +175,7 @@ export default function PatientProfile(props) {
     uploadTask.on(
       'state_changed',
       (snapshot) => {
+        setIsUploading(true)
         const percent = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         )
@@ -189,6 +192,7 @@ export default function PatientProfile(props) {
       // Handle unsuccessful uploads
       (err) => console.log(err),
       () => {
+        setIsUploading(false)
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setForm({ ...form, image: url })
         })
@@ -227,6 +231,7 @@ export default function PatientProfile(props) {
       form.username &&
       form.password &&
       form.phoneNumber &&
+      form.email &&
       !isErrorEmail &&
       !isErrorUsername &&
       !isErrorPhone
@@ -294,7 +299,17 @@ export default function PatientProfile(props) {
                   />
                 </>
               )}
+              {/* show uploading progress */}
+              {isUploading && (
+                <ReactLoading
+                  type={'spin'}
+                  color={'#000'}
+                  height={'20px'}
+                  width={'20px'}
+                />
+              )}
             </FormControl>
+
             <Box flex="1">
               <SimpleGrid columns={{ base: 1, sm: 2 }} sx={gridStyle}>
                 <FormControl isInvalid={isError && !form.firstName}>
@@ -406,7 +421,9 @@ export default function PatientProfile(props) {
                   ) : null}
                 </FormControl>
 
-                <FormControl isInvalid={isErrorEmail}>
+                <FormControl
+                  isInvalid={isErrorEmail || (isError && !form.email)}
+                >
                   <FormLabel sx={mediumText}>Email</FormLabel>
                   <Input
                     sx={inputStyle}

@@ -55,7 +55,7 @@ export default function Notification() {
       }
     }
     fetchNotification()
-  }, [user])
+  }, [router.query])
 
   // click notification to mark as read
   const onClickNotification = async (notification) => {

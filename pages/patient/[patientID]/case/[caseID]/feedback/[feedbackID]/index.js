@@ -47,7 +47,7 @@ export default function Feedback(props) {
         setFeedbackIndex(feedbacklist.length - i)
       }
     }
-  }, [])
+  }, [feedbacklist])
 
   // context
   const { user, setUser } = useAppContext()

@@ -69,31 +69,41 @@ export default function ForgotPassword() {
   function sendEmail(e) {
     e.preventDefault()
 
-    emailjs
-      .sendForm(
-        'service_8yifotl',
-        'template_716g5tb',
-        e.target,
-        'zxExuYmzKG4wq22-p'
-      )
-      .then(
-        (result) => {
-          toast({
-            title: 'Send email successfully.',
-            description:
-              'Password reset instruction has been sent, please check your email.',
-            status: 'success',
-            duration: 3000,
-            isClosable: true,
-          })
-          setTimeout(() => {
-            window.location.reload()
-          }, 3000) //This is if you still want the page to reload (since e.preventDefault() cancelled that behavior)
-        },
-        (error) => {
-          console.log(error.text)
-        }
-      )
+    if (isError) {
+      toast({
+        title: 'Email not found',
+        description: 'Please enter your email again.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
+    } else {
+      emailjs
+        .sendForm(
+          'service_8yifotl',
+          'template_716g5tb',
+          e.target,
+          'zxExuYmzKG4wq22-p'
+        )
+        .then(
+          (result) => {
+            toast({
+              title: 'Send email successfully.',
+              description:
+                'Password reset instruction has been sent, please check your email.',
+              status: 'success',
+              duration: 3000,
+              isClosable: true,
+            })
+            setTimeout(() => {
+              window.location.reload()
+            }, 3000) //This is if you still want the page to reload (since e.preventDefault() cancelled that behavior)
+          },
+          (error) => {
+            console.log(error.text)
+          }
+        )
+    }
   }
 
   return (

@@ -172,9 +172,9 @@ export default function History1() {
       form.site.length !== 0 &&
       form.onset &&
       form.onsetType &&
-      form.characteristic.length !== 0 &&
+      (form.characteristic.length !== 0 || form.otherCharacteristic) &&
       form.radiation &&
-      form.associatedSymp.length !== 0 &&
+      (form.associatedSymp.length !== 0 || form.otherSymptom) &&
       form.painScaleNow &&
       form.painScalePast
     ) {
