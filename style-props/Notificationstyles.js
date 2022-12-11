@@ -2,7 +2,8 @@ import Colour from './SharedColour'
 
 const notificationWidth = {
   width: '400px',
-  height: '500px',
+  height: 'auto',
+  maxHeight: '500px',
   overflow: 'scroll',
 }
 const iconButton = {
