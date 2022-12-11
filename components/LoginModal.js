@@ -68,6 +68,16 @@ export default function LoginModal({ isOpen, onClose }) {
   const [isUsernameValid, setIsUsernameValid] = useState(true)
   const [isPasswordValid, setIsPasswordValid] = useState(true)
 
+  // set onCLose
+  const onCloseModal = () => {
+    onClose()
+    setUsername('')
+    setPassword('')
+    setError(false)
+    setIsUsernameValid(true)
+    setIsPasswordValid(true)
+  }
+
   // handle login
   const onLogin = async () => {
     console.log('username: ' + username, '\npassword: ' + password)
@@ -116,7 +126,7 @@ export default function LoginModal({ isOpen, onClose }) {
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal isOpen={isOpen} onClose={onCloseModal} isCentered>
       <ModalOverlay />
       <ModalContent sx={commonModal}>
         <ModalHeader textAlign="center">

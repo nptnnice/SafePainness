@@ -8,6 +8,7 @@ import url from '../../../url'
 import jwt_decode from 'jwt-decode'
 import { storage } from '/firebaseConfig'
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
+import ReactLoading from 'react-loading'
 import {
   flexStyle,
   fileBtn,
@@ -98,6 +99,7 @@ export default function DoctorProfile(props) {
 
   // handle image
   const [selectedFile, setSelectedFile] = useState(null)
+  const [isUploading, setIsUploading] = useState(false)
 
   //check username is already in database
   const checkUsername = async (e) => {
@@ -171,9 +173,10 @@ export default function DoctorProfile(props) {
   const uploadImage = async (file) => {
     const storageRef = ref(storage, `/images/doctor/${doctorID}`)
     const uploadTask = uploadBytesResumable(storageRef, file)
-    await uploadTask.on(
+    uploadTask.on(
       'state_changed',
       (snapshot) => {
+        setIsUploading(true)
         const percent = Math.round(
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         )
@@ -190,6 +193,7 @@ export default function DoctorProfile(props) {
       // Handle unsuccessful uploads
       (err) => console.log(err),
       () => {
+        setIsUploading(false)
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setForm({ ...form, image: url })
         })
@@ -228,6 +232,7 @@ export default function DoctorProfile(props) {
       form.username &&
       form.password &&
       form.phoneNumber &&
+      form.email &&
       form.department &&
       !isErrorEmail &&
       !isErrorUsername &&
@@ -296,6 +301,15 @@ export default function DoctorProfile(props) {
                     onClick={() => removeImage()}
                   />
                 </>
+              )}
+              {/* show uploading progress */}
+              {isUploading && (
+                <ReactLoading
+                  type={'spin'}
+                  color={'#000'}
+                  height={'20px'}
+                  width={'20px'}
+                />
               )}
             </FormControl>
 
@@ -398,7 +412,9 @@ export default function DoctorProfile(props) {
 
                 <GridItem colSpan={{ base: 1, sm: 2 }}>
                   {/* ==================== Email ==================== */}
-                  <FormControl isInvalid={isErrorEmail}>
+                  <FormControl
+                    isInvalid={isErrorEmail || (isError && !form.email)}
+                  >
                     <FormLabel sx={mediumText}>Email</FormLabel>
                     <Input
                       sx={inputStyle}

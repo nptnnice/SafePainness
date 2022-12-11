@@ -51,7 +51,7 @@ export default function ResetPassword() {
 
   // check error
   const [isError, setIsError] = useState(false)
-  const [isMatch, setIsMatch] = useState(false)
+  const [isMatch, setIsMatch] = useState(true)
 
   // click cancel
   const onClickCancel = () => {
@@ -80,7 +80,7 @@ export default function ResetPassword() {
 
   // click reset password
   const onClickReset = async () => {
-    if (password && confirmPassword) {
+    if (password && confirmPassword && isMatch) {
       setIsError(false)
       setIsMatch(true)
       try {
@@ -106,6 +106,7 @@ export default function ResetPassword() {
       }
     } else {
       setIsError(true)
+      setIsMatch(false)
       toast({
         title: 'An error occurred.',
         description: 'Please fill in all required fields.',
@@ -158,11 +159,7 @@ export default function ResetPassword() {
                   </InputRightElement>
                 </InputGroup>
               </FormControl>
-              <FormControl
-                padding="0px 40px"
-                isRequired
-                isInvalid={isError && !confirmPassword && !isMatch}
-              >
+              <FormControl padding="0px 40px" isRequired isInvalid={!isMatch}>
                 <InputGroup>
                   <Input
                     sx={inputStyle}

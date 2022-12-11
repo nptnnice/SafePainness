@@ -77,6 +77,9 @@ export default function AddFeedbackModal(props) {
           duration: 3000,
           isClosable: true,
         })
+        setTimeout(() => {
+          window.location.reload()
+        }, 3000)
       } catch (err) {
         console.log(err)
       }

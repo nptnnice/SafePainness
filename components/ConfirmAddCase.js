@@ -73,7 +73,7 @@ export default function QR(props) {
         <ModalCloseButton />
         <ModalBody>
           <Text sx={regularText}>
-            You selected "{patientName}" for this case.
+            You selected &quot;{patientName}&quot; for this case.
           </Text>
           <ButtonGroup marginTop="40px">
             <Button sx={whiteBtn} onClick={onClose}>
