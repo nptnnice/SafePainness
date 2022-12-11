@@ -234,7 +234,6 @@ export default function DoctorProfile(props) {
       uploadImage(selectedFile)
       Object.assign(form, { image: previousForm.image })
     }
-    console.log('form', form)
     let isUsernameValid = await checkUsername()
     let isEmailValid = await checkEmail()
     let isPhoneNumValid = checkPhone()
