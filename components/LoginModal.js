@@ -80,7 +80,7 @@ export default function LoginModal({ isOpen, onClose }) {
 
   // handle login
   const onLogin = async () => {
-    console.log('username: ' + username, '\npassword: ' + password)
+    // console.log('username: ' + username, '\npassword: ' + password)
     // check if username and password is empty
     if (username && password) {
       setError(false)

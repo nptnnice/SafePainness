@@ -104,7 +104,6 @@ export default function PatientProfile(props) {
 
   //check username is already in database
   const checkUsername = async () => {
-    // let username = e.target.value
     let res = await axios.get('/api/userManager/checkUsername', {
       headers: { username: form.username },
     })
@@ -114,11 +113,9 @@ export default function PatientProfile(props) {
     ) {
       setIsErrorUsername(true)
       return 0
-      // setForm({ ...form, username: username })
     } else {
       setIsErrorUsername(false)
       return 1
-      // setForm({ ...form, username: username })
     }
   }
 
@@ -126,31 +123,25 @@ export default function PatientProfile(props) {
   const checkPhone = () => {
     let regExp = /^[0-9]+$/g
     let result = regExp.test(form.phoneNumber)
-    // let phone = e.target.value
 
     if (result && form.phoneNumber.length === 10) {
       setIsErrorPhone(false)
       return 1
-      // setForm({ ...form, phoneNumber: phone })
     } else {
       setIsErrorPhone(true)
       return 0
-      // setForm({ ...form, phoneNumber: phone })
     }
   }
 
   //check email
   const checkEmail = async () => {
-    // let email = e.target.value
     let res = await axios.get('/api/userManager/checkEmail', {
       headers: { email: form.email },
     })
     if (res.data === 'Email not found' || form.email == previousForm.email) {
-      // setForm({ ...form, email: email })
       setIsErrorEmail(false)
       return 1
     } else {
-      // setForm({ ...form, email: email })
       setIsErrorEmail(true)
       return 0
     }
@@ -234,9 +225,6 @@ export default function PatientProfile(props) {
     let isUsernameValid = await checkUsername()
     let isEmailValid = await checkEmail()
     let isPhoneNumValid = checkPhone()
-    console.log('isEmailValid', isEmailValid)
-    console.log('isUsernameValid', isUsernameValid)
-    console.log('isPhoneNumValid', isPhoneNumValid)
     if (
       form.firstName &&
       form.lastName &&
@@ -248,7 +236,6 @@ export default function PatientProfile(props) {
       isEmailValid &&
       isPhoneNumValid
     ) {
-      // console.log('save')
       await saveDatabase()
       setIsEdit(false)
       setIsError(false)
@@ -361,7 +348,6 @@ export default function PatientProfile(props) {
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
                     onChange={(e) => {
-                      // checkUsername(e)
                       setForm({ ...form, username: e.target.value })
                     }}
                   />
@@ -425,7 +411,6 @@ export default function PatientProfile(props) {
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
                     onChange={(e) => {
-                      // checkPhone(e)
                       setForm({ ...form, phoneNumber: e.target.value })
                     }}
                   />
@@ -446,7 +431,6 @@ export default function PatientProfile(props) {
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
                     onChange={(e) => {
-                      // checkEmail(e)
                       setForm({ ...form, email: e.target.value })
                     }}
                   />

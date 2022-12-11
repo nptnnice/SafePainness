@@ -102,51 +102,47 @@ export default function DoctorProfile(props) {
   const [isUploading, setIsUploading] = useState(false)
 
   //check username is already in database
-  const checkUsername = async (e) => {
-    let username = e.target.value
+  const checkUsername = async () => {
     let res = await axios.get('/api/userManager/checkUsername', {
-      headers: { username: username },
+      headers: { username: form.username },
     })
     if (
       res.data === 'User already exist' &&
-      username !== previousForm.username
+      form.username !== previousForm.username
     ) {
-      setForm({ ...form, username: username })
       setIsErrorUsername(true)
+      return 0
     } else {
-      console.log('username available')
-      setForm({ ...form, username: username })
       setIsErrorUsername(false)
+      return 1
     }
   }
 
   // check phone number format
-  const checkPhone = (e) => {
+  const checkPhone = () => {
     let regExp = /^[0-9]+$/g
-    let result = regExp.test(e.target.value)
-    let phone = e.target.value
+    let result = regExp.test(form.phoneNumber)
 
-    if (result && phone.length === 10) {
+    if (result && form.phoneNumber.length === 10) {
       setIsErrorPhone(false)
-      setForm({ ...form, phoneNumber: phone })
+      return 1
     } else {
       setIsErrorPhone(true)
-      setForm({ ...form, phoneNumber: phone })
+      return 0
     }
   }
 
   //check email
-  const checkEmail = async (e) => {
-    let email = e.target.value
+  const checkEmail = async () => {
     let res = await axios.get('/api/userManager/checkEmail', {
-      headers: { email: email },
+      headers: { email: form.email },
     })
-    if (res.data === 'Email not found' || email == previousForm.email) {
-      setForm({ ...form, email: email })
+    if (res.data === 'Email not found' || form.email == previousForm.email) {
       setIsErrorEmail(false)
+      return 1
     } else {
-      setForm({ ...form, email: email })
       setIsErrorEmail(true)
+      return 0
     }
   }
 
@@ -226,6 +222,9 @@ export default function DoctorProfile(props) {
       Object.assign(form, { image: previousForm.image })
     }
     console.log('form', form)
+    let isUsernameValid = await checkUsername()
+    let isEmailValid = await checkEmail()
+    let isPhoneNumValid = checkPhone()
     if (
       form.firstName &&
       form.lastName &&
@@ -234,9 +233,9 @@ export default function DoctorProfile(props) {
       form.phoneNumber &&
       form.email &&
       form.department &&
-      !isErrorEmail &&
-      !isErrorUsername &&
-      !isErrorPhone
+      isUsernameValid &&
+      isEmailValid &&
+      isPhoneNumValid
     ) {
       await saveDatabase()
       setIsEdit(false)
@@ -354,7 +353,7 @@ export default function DoctorProfile(props) {
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
                     onChange={(e) => {
-                      checkUsername(e)
+                      setForm({ ...form, username: e.target.value })
                     }}
                   />
                   {isErrorUsername ? (
@@ -400,7 +399,7 @@ export default function DoctorProfile(props) {
                     isDisabled={!isEdit}
                     _disabled={{ opacity: 0.8 }}
                     onChange={(e) => {
-                      checkPhone(e)
+                      setForm({ ...form, phoneNumber: e.target.value })
                     }}
                   />
                   {isErrorPhone ? (
@@ -422,7 +421,7 @@ export default function DoctorProfile(props) {
                       isDisabled={!isEdit}
                       _disabled={{ opacity: 0.8 }}
                       onChange={(e) => {
-                        checkEmail(e)
+                        setForm({ ...form, email: e.target.value })
                       }}
                     />
                     {isErrorEmail ? (
