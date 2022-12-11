@@ -78,51 +78,53 @@ export default function CreatePatientAccount() {
   })
 
   //check username is already in database
-  const checkUsername = async (e) => {
-    let username = e.target.value
+  const checkUsername = async () => {
     let res = await axios.get('/api/userManager/checkUsername', {
-      headers: { username: username },
+      headers: { username: form.username },
     })
     if (res.data === 'User already exist') {
       setIsErrorUsername(true)
-      setForm({ ...form, username: '' })
+      return 0
     } else {
       setIsErrorUsername(false)
-      setForm({ ...form, username: username })
+      return 1
     }
   }
-  // check phone number format
-  const checkPhone = (e) => {
-    let regExp = /^[0-9]+$/g
-    let result = regExp.test(e.target.value)
-    let phone = e.target.value
 
-    if (result && phone.length === 10) {
-      setForm({ ...form, phoneNumber: phone })
+  // check phone number format
+  const checkPhone = () => {
+    let regExp = /^[0-9]+$/g
+    let result = regExp.test(form.phoneNumber)
+
+    if (result && form.phoneNumber.length === 10) {
       setIsErrorPhone(false)
+      return 1
     } else {
-      setForm({ ...form, phoneNumber: '' })
       setIsErrorPhone(true)
+      return 0
     }
   }
+
   //check email
-  const checkEmail = async (e) => {
-    let email = e.target.value
+  const checkEmail = async () => {
     let res = await axios.get('/api/userManager/checkEmail', {
-      headers: { email: email },
+      headers: { email: form.email },
     })
     if (res.data === 'Email not found') {
       setIsErrorEmail(false)
-      setForm({ ...form, email: email })
+      return 1
     } else {
       setIsErrorEmail(true)
-      setForm({ ...form, email: '' })
+      return 0
     }
   }
 
   //Create Patient Account
   const onCreatePatient = async () => {
     console.log('form', form)
+    let isUsernameValid = await checkUsername()
+    let isEmailValid = await checkEmail()
+    let isPhoneNumValid = checkPhone()
     if (
       form.firstName &&
       form.lastName &&
@@ -135,7 +137,10 @@ export default function CreatePatientAccount() {
       form.medCondition &&
       form.allergy &&
       form.phoneNumber &&
-      form.email
+      form.email &&
+      isUsernameValid &&
+      isEmailValid &&
+      isPhoneNumValid
     ) {
       setIsError(false)
       try {
@@ -197,12 +202,13 @@ export default function CreatePatientAccount() {
 
           <FormControl
             isRequired
-            isInvalid={
-              (isErrorUsername && !form.username) || (isError && !form.username)
-            }
+            isInvalid={isErrorUsername || (isError && !form.username)}
           >
             <FormLabel sx={mediumText}>Username</FormLabel>
-            <Input sx={inputStyle} onChange={(e) => checkUsername(e)} />
+            <Input
+              sx={inputStyle}
+              onChange={(e) => setForm({ ...form, username: e.target.value })}
+            />
             {isErrorUsername ? (
               <FormErrorMessage sx={errorText}>
                 Username already exists
@@ -334,16 +340,15 @@ export default function CreatePatientAccount() {
         <Flex sx={flexStyle}>
           <FormControl
             isRequired
-            isInvalid={
-              (isErrorPhone && !form.phoneNumber) ||
-              (isError && !form.phoneNumber)
-            }
+            isInvalid={isErrorPhone || (isError && !form.phoneNumber)}
           >
             <FormLabel sx={mediumText}>Phone Number</FormLabel>
             <Input
               type="number"
               sx={inputStyle}
-              onChange={(e) => checkPhone(e)}
+              onChange={(e) =>
+                setForm({ ...form, phoneNumber: e.target.value })
+              }
             />
             {isErrorPhone ? (
               <FormErrorMessage sx={errorText}>
@@ -354,16 +359,14 @@ export default function CreatePatientAccount() {
 
           <FormControl
             isRequired
-            isInvalid={
-              (isErrorEmail && !form.email) || (isError && !form.email)
-            }
+            isInvalid={isErrorEmail || (isError && !form.email)}
           >
             <FormLabel sx={mediumText}>Email</FormLabel>
             <Input
               type="email"
               sx={inputStyle}
               onChange={(e) => {
-                checkEmail(e)
+                setForm({ ...form, email: e.target.value })
               }}
             />
             {isErrorEmail ? (

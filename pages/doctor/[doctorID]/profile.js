@@ -89,6 +89,7 @@ export default function DoctorProfile(props) {
   // set form data
   const [form, setForm] = useState(doctorInfo)
   const [previousForm, setPreviousForm] = useState(doctorInfo)
+  const [tempImg, setTempImg] = useState('')
 
   // set edit mode
   const [isEdit, setIsEdit] = useState(false)
@@ -156,12 +157,14 @@ export default function DoctorProfile(props) {
       const objectUrl = URL.createObjectURL(e.target.files[0])
       setForm({ ...form, image: objectUrl })
       setSelectedFile(e.target.files[0])
+      setTempImg(objectUrl)
     }
   }
 
   // remove image in edit mode
   const removeImage = () => {
     setForm({ ...form, image: '' })
+    setTempImg('')
     setSelectedFile(null)
   }
 
@@ -192,6 +195,7 @@ export default function DoctorProfile(props) {
         setIsUploading(false)
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setForm({ ...form, image: url })
+          setTempImg(url)
         })
       }
     )
@@ -213,6 +217,15 @@ export default function DoctorProfile(props) {
       console.log('err', err)
     }
   }
+
+  // reload page after upload image
+  useEffect(() => {
+    if (tempImg.search('blob') != -1 && !isUploading) {
+      setTimeout(() => {
+        window.location.reload()
+      }, 3000)
+    }
+  }, [isUploading])
 
   // save form
   const onClickSave = async () => {
@@ -240,6 +253,11 @@ export default function DoctorProfile(props) {
       await saveDatabase()
       setIsEdit(false)
       setIsError(false)
+      if (tempImg.search('blob') == -1) {
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+      }
     } else {
       setIsError(true)
       toast({
@@ -255,6 +273,7 @@ export default function DoctorProfile(props) {
   // cancel edit
   const onClickCancel = () => {
     setForm(previousForm)
+    setTempImg('')
     setIsEdit(false)
     setIsErrorPhone(false)
     setIsErrorUsername(false)
